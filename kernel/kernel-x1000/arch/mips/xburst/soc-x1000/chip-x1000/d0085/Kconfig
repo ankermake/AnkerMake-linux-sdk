@@ -1,0 +1,15 @@
+choice
+
+prompt "BOARD version"
+depends on PRODUCT_X1000_D0085
+default BOARD_X1000_D0085_V10
+
+config BOARD_X1000_D0085_V10
+bool "board x1000 d0085 v10"
+depends on PRODUCT_X1000_D0085
+
+endchoice
+
+config BOARD_NAME
+string
+default "d0085_v10" if BOARD_X1000_D0085_V10

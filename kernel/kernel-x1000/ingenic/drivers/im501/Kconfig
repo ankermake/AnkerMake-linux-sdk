@@ -1,0 +1,5 @@
+config SPI_IM501
+    tristate "FM IM501 SPI interface"
+    help
+        This selects im501 spi support.
+

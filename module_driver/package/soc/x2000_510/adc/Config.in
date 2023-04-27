@@ -1,0 +1,8 @@
+menuconfig MD_X2000_510_ADC
+    bool "adc 驱动(电压采样功能)"
+
+config MD_X2000_510_ADC_VREF
+    int "参考电压mv"
+    default 1800
+
+endmenu

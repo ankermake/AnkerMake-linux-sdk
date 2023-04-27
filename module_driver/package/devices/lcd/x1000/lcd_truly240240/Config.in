@@ -1,0 +1,28 @@
+menuconfig MD_X1000_SLCD_TRULY240240
+    bool "truly240240 (X1000)"
+    select MD_X1000_FB
+    depends on MD_SOC_X1000
+
+config MD_X1000_TRULY240240_TE
+    string "gpio tearing effect(lcd 图像防裂屏引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1000_TRULY240240_CS
+    string "gpio chip select(lcd 片选引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1000_TRULY240240_RD
+    string "gpio lcd read signal(lcd 读引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1000_TRULY240240_RST
+    string "gpio reset(lcd 复位引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+
+
+endmenu

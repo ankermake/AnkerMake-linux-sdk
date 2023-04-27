@@ -1,0 +1,18 @@
+
+menuconfig APP_br_adb_server
+    bool "adb 服务脚本"
+    default y
+
+config APP_br_adb_server_start
+    bool "开机启动adb服务"
+    default y
+
+config APP_br_adb_server_name
+    string "adb 设备名"
+    default "ingenic"
+
+config APP_br_adb_server_add_mac
+    bool "使用wifi mac地址作为设备名后缀"
+    default y
+
+endmenu

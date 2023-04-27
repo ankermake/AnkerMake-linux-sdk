@@ -1,0 +1,18 @@
+menuconfig SOC_X1520_DRIVERS
+    tristate "X1520 drivers&boards"
+    depends on SOC_X1520
+    help
+        x1520 drivers & boards
+
+source "ingenic/x1520/boards/Kconfig"
+source "ingenic/x1520/Kconfig.gpiofunc"
+
+config X1520_MIC
+    bool "x1520 mic driver"
+    help
+        X1520 mic driver
+
+config X1520_MIC_SND_INTERNAL_CODEC
+     bool "x1520 snd internal codec"
+     help
+        x1520 internal codec with alsa in mic driver

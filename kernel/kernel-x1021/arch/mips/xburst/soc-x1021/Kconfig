@@ -1,0 +1,17 @@
+
+choice
+	prompt "Chip type"
+	depends on SOC_X1021
+	default CHIP_X1021
+
+config CHIP_X1021
+       bool "chip-x1021"
+       select TRACEPOINTS
+       select SYS_SUPPORTS_HIGHMEM
+       select GENERIC_CLOCKEVENTS_BROADCAST
+
+endchoice
+
+if CHIP_X1021
+source "arch/mips/xburst/soc-x1021/chip-x1021/Kconfig"
+endif

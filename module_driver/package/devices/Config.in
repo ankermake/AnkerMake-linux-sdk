@@ -1,0 +1,18 @@
+menu "外设"
+
+source package/devices/keyboard/Config.in
+source package/devices/keyboard/keyboard_keys.in
+source package/devices/lcd/Config.in
+source package/devices/backlight/Config.in
+source package/devices/touchscreen/Config.in
+source package/devices/camera/Config.in
+source package/devices/isp_camera/Config.in
+source package/devices/codec/Config.in
+source package/devices/wireless/Config.in
+source package/devices/Ethernet/Config.in
+source package/devices/alsa-sound-card/Config.in
+source package/devices/pmu/Config.in
+source package/devices/regulator/Config.in
+source package/devices/other/Config.in
+
+endmenu

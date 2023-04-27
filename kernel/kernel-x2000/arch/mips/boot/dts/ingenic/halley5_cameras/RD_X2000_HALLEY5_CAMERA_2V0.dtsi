@@ -1,0 +1,33 @@
+
+&i2c3 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pa>;
+	ov4689_1:ov4689@0x21 {
+		status = "ok";
+		compatible = "ovti,ov4689";
+		reg = <0x21>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cim_vic_mclk_pe_24M>;
+
+		avdd-supply = <&cam_avdd>;
+		dvdd-supply = <&cam_dvdd>;
+		dovdd-supply = <&cam_dovdd>;
+		ingenic,rst-gpio = <&gpb 4 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		ingenic,ircutp-gpio = <&gpb 3 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		ingenic,ircutn-gpio = <&gpb 0 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+
+		port {
+			ov4689_ep1:endpoint {
+				remote-endpoint = <&isp1_ep>;
+			};
+		};
+	};
+
+&isp1_ep {
+	remote-endpoint = <&ov4689_ep1>;
+	data-lanes = <3 4>;
+	clk-lanes = <5>;
+};

@@ -1,0 +1,41 @@
+diff --git a/madplay.c b/madplay.c
+index 2ffcf1d..a550869 100644
+--- a/madplay.c
++++ b/madplay.c
+@@ -71,6 +71,7 @@ struct option const options[] = {
+   { "bit-depth",	required_argument,	0,		 'b' },
+   { "display-time",	required_argument,	0,		-'t' },
+   { "downsample",	no_argument,		0,		-'d' },
++  { "device",  required_argument,		0,		'D' },
+   { "fade-in",		optional_argument,	0,		-'i' },
+   { "help",		no_argument,		0,		 'h' },
+   { "ignore-crc",	no_argument,		0,		 'i' },
+@@ -150,6 +151,8 @@ void show_usage(int verbose)
+   EPUTS(_("\nAudio output:\n"));
+   EPUTS(_("  -o, --output=[TYPE:]PATH     "
+ 	  "write output to PATH with format TYPE (below)\n"));
++  EPUTS(_("  -D, --device=NAME            "
++    "select PCM by name\n"));
+   EPUTS(_("  -b, --bit-depth=DEPTH        request DEPTH bits per sample\n"));
+   EPUTS(_("  -R, --sample-rate=HERTZ      "
+ 	  "request HERTZ samples per second\n"));
+@@ -499,7 +502,7 @@ void get_options(int argc, char *argv[], struct player *player)
+   while ((opt = getopt_long(argc, argv,
+ 			    "vqQ"		/* verbosity options */
+ 			    "i"			/* decoding options */
+-			    "o:b:R:da:A:G::"	/* audio output options */
++			    "o:D:b:R:da:A:G::"	/* audio output options */
+ # if 0
+ 			    "g:x"
+ # endif
+@@ -624,6 +627,10 @@ void get_options(int argc, char *argv[], struct player *player)
+ 	player->options &= ~PLAYER_OPTION_TTYCONTROL;
+       break;
+ 
++    case 'D':
++      player->output.path = optarg;
++      break;
++
+ # if 0
+     case -'o':
+       player->fade_out = get_time(optarg ? optarg : FADE_DEFAULT, 1,

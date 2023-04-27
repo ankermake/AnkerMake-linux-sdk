@@ -1,0 +1,4 @@
+menuconfig MD_X1000_MCU
+    bool "mcu(片内xburst mcu)"
+
+endmenu

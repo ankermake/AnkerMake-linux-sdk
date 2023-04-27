@@ -1,0 +1,263 @@
+comment "tx-isp camera sensor drivers v130"
+
+
+config TX_ISP_CAMERA_SC2235
+	tristate "sc2235 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the sc2235 sensor
+if TX_ISP_CAMERA_SC2235
+	choice
+	    prompt "sc2235 resolution select"
+	    default SC2235_1920X1080
+
+	    config SC2235_640X1072
+			bool "640*1072"
+
+	    config SC2235_1440X1080
+			bool "1440*1080"
+
+	    config SC2235_1920X1080
+			bool "1920*1080"
+	endchoice
+endif
+
+config TX_ISP_CAMERA_SC2235_DOUBLE
+	tristate "sc2235 double camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the sc2235 double sensor
+if TX_ISP_CAMERA_SC2235_DOUBLE
+	choice
+	    prompt "sc2235 resolution select"
+	    default SC2235_DOUBLE_1920X1080
+
+	    config SC2235_DOUBLE_480X800
+			bool "480*800"
+
+	    config SC2235_DOUBLE_640X1072
+			bool "640*1072"
+
+	    config SC2235_DOUBLE_1920X1080
+			bool "1920*1080"
+	endchoice
+endif
+
+config TX_ISP_CAMERA_GC0328
+	tristate "gc0328 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the gc0328 sensor
+
+config TX_ISP_CAMERA_GC1034
+	tristate "gc1034 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the gc1034 sensor
+
+config TX_ISP_CAMERA_GC2375A
+	tristate "gc2375a camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the gc2375a sensor
+if TX_ISP_CAMERA_GC2375A
+	choice
+	    prompt "gc2375a resolution select"
+	    default GC2375A_1600X1200
+
+	    config GC2375A_480X800
+			bool "480*800"
+
+	    config GC2375A_720X1200
+			bool "720*1200"
+
+	    config GC2375A_1600X1200
+			bool "1600*1200"
+	endchoice
+endif
+
+config TX_ISP_CAMERA_GC2385
+	tristate "gc2385 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the gc2385 sensor
+if TX_ISP_CAMERA_GC2385
+	choice
+	    prompt "gc2385 resolution select"
+	    default GC2385_1600X1200
+
+	    config GC2385_480X800
+			bool "480*800"
+
+	    config GC2385_720X1200
+			bool "720*1200"
+
+	    config GC2385_1600X1200
+			bool "1600*1200"
+	endchoice
+endif
+
+config TX_ISP_CAMERA_GC2375A_DOUBLE
+	tristate "gc2375a double camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the gc2375a double sensor
+if TX_ISP_CAMERA_GC2375A_DOUBLE
+	choice
+	    prompt "gc2375a resolution select"
+	    default GC2375A_DOUBLE_1600X1200
+
+	    config GC2375A_DOUBLE_480X800
+			bool "480*800"
+
+	    config GC2375A_DOUBLE_720X1200
+			bool "720*1200"
+
+	    config GC2375A_DOUBLE_1600X1200
+			bool "1600*1200"
+	endchoice
+endif
+
+config TX_ISP_CAMERA_OV2735
+	tristate "ov2735 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the ov2735 sensor
+if TX_ISP_CAMERA_OV2735
+	choice
+	    prompt "ov2735 resolution select"
+	    default OV2735_1920X1080
+
+	    config OV2735_640X1072
+			bool "640*1072"
+
+	    config OV2735_1280X1080
+			bool "1280*1080"
+
+	    config OV2735_1440X1080
+			bool "1440*1080"
+
+	    config OV2735_1920X1080
+			bool "1920*1080"
+	endchoice
+endif
+
+config TX_ISP_CAMERA_OV9732
+	tristate "ov9732 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the ov9732 sensor
+if TX_ISP_CAMERA_OV9732
+	choice
+	    prompt "ov9732 resolution select"
+	    default OV9732_1280X720
+
+	    config OV9732_640X480
+			bool "640*480"
+
+	    config OV9732_1280X720
+			bool "1280*720"
+	endchoice
+endif
+
+config TX_ISP_CAMERA_OV7740
+	tristate "ov7740 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the ov7740 sensor
+
+config TX_ISP_CAMERA_JXF37
+	tristate "jxf37 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the jxf37 sensor
+
+config TX_ISP_CAMERA_AR0230
+	tristate "ar0230 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the ar0230 sensor
+if TX_ISP_CAMERA_AR0230
+	choice
+	    prompt "ar0230 resolution select"
+	    default AR0230_1920X1080
+
+	    config AR0230_640X1072
+			bool "640*1072"
+
+	    config AR0230_1920X1080
+			bool "1920*1080"
+	endchoice
+	choice
+	    prompt "ar0230 mode select"
+	    default AR0230_LINEAR
+
+	    config AR0230_LINEAR
+			bool "linear mode"
+
+	    config AR0230_HDR
+			bool "HDR mode"
+	endchoice
+endif
+
+
+config TX_ISP_CAMERA_AR0522
+	tristate "ar0522 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the ar0522 sensor
+if TX_ISP_CAMERA_AR0522
+	choice
+	    prompt "ar0522 resolution select"
+	    default AR0522_2560X1080
+
+	    config AR0522_2592X1944
+			bool "2592X1944"
+
+	    config AR0522_2560X1080
+			bool "2560X1080"
+	endchoice
+endif
+
+config TX_ISP_CAMERA_IMX307
+	tristate "imx307 camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the imx307 sensor
+
+config TX_ISP_CAMERA_NEXTCHIP
+	tristate "nextchip camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the nextchip sensor
+
+config TX_ISP_CAMERA_AR0144_DVP
+	tristate "ar0144 dvp camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the ar0144 sensor
+
+config TX_ISP_CAMERA_AR0144_MIPI
+	tristate "ar0144 mipi camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the ar0144 sensor
+
+config TX_ISP_CAMERA_AR0234_MIPI
+	tristate "ar0234 mipi camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the ar0234 sensor
+
+config TX_ISP_CAMERA_BF2253L_MIPI
+	tristate "bf2253l mipi camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the bf2253l sensor
+
+config TX_ISP_CAMERA_S5K6A1_MIPI
+	tristate "s5k6a1 mipi camera support"
+	depends on I2C && VIDEO_TX_ISP_V130
+	help
+	  This is a tx-isp camera driver for the s5k6a1 sensor
+

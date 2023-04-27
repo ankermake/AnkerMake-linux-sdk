@@ -1,0 +1,8 @@
+menuconfig MD_X2000_CONN
+    bool "conn(核间通信功能)"
+
+config MD_X2000_CONN_MAX_LINK_COUNT
+    int "conn 可用的最大连接数"
+    default 16
+
+endmenu

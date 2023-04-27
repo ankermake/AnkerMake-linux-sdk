@@ -1,0 +1,2 @@
+config DT_X1520_EVB_V10
+	bool "x1520 evb v10"

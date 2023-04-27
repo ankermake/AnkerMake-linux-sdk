@@ -1,0 +1,44 @@
+menuconfig MD_PWM_BATTERY
+    bool "pwm检测电压"
+
+config MD_PWM_BATTERY_PWM_GPIO
+    string "pwm输入引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_PWM_BATTERY_STATUS_GPIO
+    string "状态引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_PWM_BATTERY_STATUS_GPIO_ACTIVE
+    int "状态引脚的使能电平"
+    default 0
+
+config MD_PWM_BATTERY_POWER_GPIO
+    string "电源引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_PWM_BATTERY_POWER_GPIO_ACTIVE
+    int "电源引脚的使能电平"
+    default 0
+
+config MD_PWM_BATTERY_PWM_MAX_LEVEL
+    int "pwm最大级数"
+    default 170
+
+config MD_PWM_BATTERY_PWM_MAX_VOLTAGE
+    int "pwm最大电压"
+    default 0
+
+config MD_PWM_BATTERY_RES1_VALUE
+    int "分压电阻1（请按照实际电阻填写，单位：kΩ）"
+
+config MD_PWM_BATTERY_RES2_VALUE
+    int "分压电阻2（请按照实际电阻填写，单位：kΩ）"
+
+config MD_PWM_BATTERY_DEVIATION
+    int "翻转误差(mv)"
+
+endmenu

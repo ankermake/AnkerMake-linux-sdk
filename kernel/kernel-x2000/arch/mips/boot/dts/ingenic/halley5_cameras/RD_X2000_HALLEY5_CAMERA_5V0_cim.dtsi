@@ -1,0 +1,39 @@
+
+&i2c3 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pa>;
+
+	/*RD_X2000_HALLEY5_CAMERA_V3.2*/
+	AR0144:AR0144@0x18 {
+		status = "ok";
+		compatible = "onsemi,ar0144";
+		reg = <0x18>;
+		pinctrl-names = "default","cim";
+		pinctrl-0 = <&cim_vic_mclk_pe>, <&cim_pa>;
+
+
+		resetb-gpios = <&gpa 11 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		pwdn-gpios = <&gpa 10 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+
+
+		port {
+			AR0144_0:endpoint {
+				remote-endpoint = <&cim_0>;
+			};
+		};
+	};
+};
+
+&cim {
+	status = "okay";
+	port {
+		cim_0: endpoint@0 {
+			remote-endpoint = <&AR0144_0>;
+			bus-width = <8>;
+		};
+	};
+};
+

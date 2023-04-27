@@ -1,0 +1,34 @@
+choice
+prompt "Core Board Version"
+depends on PRODUCT_X1000_FIR
+default FIR_CORE_V10
+
+config FIR_CORE_V10
+	bool "fir core board v10"
+
+config FIR_CORE_V20
+	bool "fir core board v20"
+endchoice
+
+choice
+prompt "Ext BOARD version"
+	depends on PRODUCT_X1000_FIR
+	default BOARD_X1000_FIR_V10
+
+config BOARD_X1000_FIR_V10
+	bool "board x1000 fir v10"
+	depends on PRODUCT_X1000_FIR
+
+config BOARD_X1000_FIR_V20
+	bool "board x1000 fir v20"
+	depends on PRODUCT_X1000_FIR
+
+endchoice
+
+config BOARD_NAME
+	string
+	default "fir_v10" if BOARD_X1000_FIR_V10
+
+config BOARD_NAME
+	string
+	default "fir_v20" if BOARD_X1000_FIR_V20

@@ -1,0 +1,14 @@
+package-$(MD_X1021_SPI) += package/soc/x1021/spi/spi.mk
+package-$(MD_X1021_ADC) += package/soc/x1021/adc/adc.mk
+package-$(MD_X1021_EFUSE) += package/soc/x1021/efuse/efuse.mk
+package-$(MD_X1021_PWM) += package/soc/x1021/pwm/pwm.mk
+package-$(MD_X1021_WATCHDOG) += package/soc/x1021/watchdog/watchdog.mk
+package-$(MD_X1021_I2C) += package/soc/x1021/i2c/i2c.mk
+package-$(MD_X1021_UTILS) += package/soc/x1021/utils/utils.mk
+package-$(MD_X1021_MAC_INNERAL_PHY) += package/soc/x1021/mac/mac_inneral_phy.mk
+package-$(MD_X1021_MAC_EXTERNAL_PHY) += package/soc/x1021/mac/mac_external_phy.mk
+package-$(MD_X1021_FB) += package/soc/x1021/fb/fb.mk
+package-$(MD_X1021_CAMERA) += package/soc/x1021/camera/camera.mk
+package-$(MD_X1021_GPIO) += package/soc/x1021/gpio/gpio.mk
+package-$(MD_X1021_ICODEC) += package/soc/x1021/icodec/icodec.mk
+package-$(MD_X1021_AIC) += package/soc/x1021/aic/aic.mk

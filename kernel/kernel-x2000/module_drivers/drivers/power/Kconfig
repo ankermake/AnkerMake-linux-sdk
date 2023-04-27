@@ -1,0 +1,155 @@
+menuconfig BATTERY_RICOH619
+	tristate "Ricoh R5T619 PMIC battery driver"
+	depends on MFD_RICOH619 && I2C
+	help
+	  Say Y to enable support for the battery control of the Ricoh R5T619
+	  Power Management device.
+if BATTERY_RICOH619
+
+config LARGE_CAPACITY_BATTERY
+	  bool "Large capacity battery for 2000mA 4000mA"
+	  help
+	  Say "Y" to enable large capacity battery.
+
+config 10000MAH_ZBRZFY_C_CAPACITY_BATTERY
+	  bool "10000mAh zbrzfy_c capacity battery for 10000mA"
+	  help
+	  Say "Y" to enable 10000mAh zbrzfy capacity battery.
+
+config 2000MAH_ZBRZFY_CAPACITY_BATTERY
+	  bool "2000mAh zbrzfy capacity battery for 2000mA"
+	  help
+	  Say "Y" to enable 2000mAh zbrzfy capacity battery.
+
+config 2200MAH_ZBRZFY_CAPACITY_BATTERY
+	  bool "2200mAh zbrzfy capacity battery for 2200mA"
+	  help
+	  Say "Y" to enable 2200mAh zbrzfy capacity battery.
+
+config 2300MAH_ZBRZFY_CAPACITY_BATTERY
+	  bool "2300mAh zbrzfy capacity battery for 2300mA"
+	  help
+	  Say "Y" to enable 2300mAh zbrzfy capacity battery.
+
+config 2500MAH_ZYCZZFY_CAPACITY_BATTERY
+	  bool "2500mAh zyczzfy capacity battery for 2500mA"
+	  help
+	  Say "Y" to enable 2500mAh zyczzfy capacity battery.
+
+config 2500MAH_HJ_CAPACITY_BATTERY
+	  bool "2500mAh hongjing capacity battery for 2500mA"
+	  help
+	  Say "Y" to enable 2500mAh zbrzfy capacity battery.
+
+config 780MAH_RAYPAI_CAPACITY_BATTERY
+       bool "780 mAh regularity capacity battery for 780mA"
+       help
+       Say "Y" to enable 780mAh regularity capacity battery.
+
+config 600MAH_REGULARITY_CAPACITY_BATTERY
+	  bool "600mAh regularity capacity battery for 600mA"
+	  help
+	  Say "Y" to enable 600mAh regularity capacity battery.
+
+config 500MAH_DOOR_CAPACITY_BATTERY
+	  bool "500mAh door capacity battery for 500mA"
+	  help
+	  Say "Y" to enable 500mAh door capacity battery.
+
+config 500MAH_CRUISE_CAPACITY_BATTERY
+	  bool "500mAh cruise capacity battery for 500mA"
+	  help
+	  Say "Y" to enable 500mAh cruise capacity battery.
+
+config 500MAH_LG1_CAPACITY_BATTERY
+	  bool "500mAh longjing1 capacity battery for 500mA"
+	  help
+	  Say "Y" to enable 500mAh longjing1 capacity battery.
+
+config 430MAH_CRUISE_CAPACITY_BATTERY
+	  bool "430mAh cruise capacity battery for 430mA"
+	  help
+	  Say "Y" to enable 430mAh cruise capacity battery.
+
+config 400MAH_WESEEING_CAPACITY_BATTERY
+	  bool "400mAh weseeing capacity battery for 400mA"
+	  help
+	  Say "Y" to enable 400mAh weseeing capacity battery.
+
+config 400MAH_PARAMOUNT_CAPACITY_BATTERY
+	  bool "400mAh paramount capacity battery for 400mA"
+	  help
+	  Say "Y" to enable 400mAh paramount capacity battery.
+
+config 400MAH_KEPTER_CAPACITY_BATTERY
+	  bool "400mAh kepter capacity battery for 400mA"
+	  help
+	  Say "Y" to enable 400mAh kepter capacity battery.
+
+config 320MAH_CAPACITY_BATTERY
+	  bool "320mAh capacity battery for 320mA"
+	  help
+	  Say "Y" to enable 320mAh capacity battery.
+
+config 310MAH_JZZHG9_CAPACITY_BATTERY
+	  bool "310mAh capacity battery for jzzhg9 310mA"
+	  help
+	  Say "Y" to enable jzzhg9 310mAh capacity battery.
+
+config 160MAH_DV010_CAPACITY_BATTERY
+	  bool "160mAh capacity battery for dv010"
+	  help
+	  Say "Y" to enable dv010 160mAh capacity battery.
+
+config 300MAH_CAPACITY_BATTERY
+	  bool "300mAh capacity battery for 300mA"
+	  help
+	  Say "Y" to enable 300mAh capacity battery.
+
+config 300MAH_RAYPAI_CAPACITY_BATTERY
+	  bool "300mAh capacity battery for raypai"
+	  help
+	  Say "Y" to enable raypai 300mAh capacity battery.
+
+config 350MAH_DISATCH_CAPACITY_BATTERY
+	  bool "350mAh capacity battery for disatch"
+	  help
+	  Say "Y" to enable disatch 350mAh capacity battery.
+
+config 370MAH_CLOFY_CAPACITY_BATTERY
+	  bool "370mAh capacity battery for clofy"
+	  help
+	  Say "Y" to enable clofy 350mAh capacity battery.
+
+config 400MAH_DISATCH_CAPACITY_BATTERY
+	  bool "400mAh capacity battery for disatch"
+	  help
+	  Say "Y" to enable disatch 400mAh capacity battery.
+
+config 480MAH_DISATCH_CAPACITY_BATTERY
+	  bool "480mAh capacity battery for disatch"
+	  help
+	  Say "Y" to enable disatch 480mAh capacity battery.
+
+config 140MAH_ZBRGLASS_CAPACITY_BATTERY
+	  bool "140mAh capacity battery for zbrglass"
+	  help
+	  Say "Y" to enable zbrglass 140mAh capacity battery.
+
+config 130MAH_FSHD_CAPACITY_BATTERY
+	  bool "130mAh capacity battery for fshd"
+	  help
+	  Say "Y" to enable fshd 130mAh capacity battery.
+config 250MAH_CIRCLEV2_CAPACITY_BATTERY
+	  bool "250mAh capacity battery for circlev2"
+	  help
+	  Say "Y" to enable circlev2 250mAh capacity battery.
+config SMALL_CAPACITY_BATTERY
+	  bool "Small capacity battery for 260mA 500mA"
+	  help
+	  Say "Y" to enable small capacity battery.
+
+endif
+
+
+source "$OUTSIDE_DRIVERS/drivers/power/axp_power/Kconfig"

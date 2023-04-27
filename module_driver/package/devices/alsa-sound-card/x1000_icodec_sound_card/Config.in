@@ -1,0 +1,2 @@
+config MD_X1000_ICODEC_SOUND_CARD
+    bool "使用 x1000 icodec(内部codec) 创建一个声卡"

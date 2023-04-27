@@ -1,0 +1,13 @@
+
+menuconfig JZ_EFUSE
+	bool "ingenic efuse support"
+	default n
+if JZ_EFUSE
+config JZ_EFUSE_WRITE
+	bool "Jz efuse write interface support"
+	default n
+	help
+	  Say 'Y' to enable efuse write interface, only enable in
+	  slt test or debugging, in other instances,
+	  strongly recommended to turn off this option.
+endif

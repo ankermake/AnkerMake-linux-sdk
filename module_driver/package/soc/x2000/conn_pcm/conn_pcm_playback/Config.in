@@ -1,0 +1,3 @@
+config MD_X2000_CONN_PCM_PLAYBACK
+    bool "使用playback驱动(核间通信)"
+

@@ -1,0 +1,25 @@
+menu "驱动"
+
+source package/drivers/utils/Config.in
+
+source package/drivers/rmem_manager/Config.in
+
+source package/drivers/spi_gpio/Config.in
+
+source package/drivers/spi_fb/Config.in
+
+source package/drivers/i2c_gpio/Config.in
+
+source package/drivers/spidev_helper/Config.in
+
+source package/drivers/spidev/Config.in
+
+source package/drivers/hci_uart_h5_kernel_4_4_94/Config.in
+
+source package/drivers/hci_uart_h5_kernel_3_10_14/Config.in
+
+source package/drivers/ps2_gpio/Config.in
+
+source package/drivers/pwm_audio/Config.in
+
+endmenu

@@ -1,0 +1,12 @@
+menuconfig JZ_FACTORY_TEST
+	bool "jz factory test"
+	default n
+	help
+		support for ingenic slt test
+choice
+	prompt "halley2 coreboard factory test choice"
+	depends on JZ_FACTORY_TEST
+	default  JZ_X1000_HALLEY2_COREBOARD_TEST_V10
+config	JZ_X1000_HALLEY2_COREBOARD_TEST_V10
+	bool "jz x1000 halley2 coreboard test v10"
+endchoice

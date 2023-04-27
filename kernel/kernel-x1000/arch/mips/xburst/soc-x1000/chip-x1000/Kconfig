@@ -1,0 +1,88 @@
+
+
+choice
+	prompt "Board type"
+	depends on CHIP_X1000
+	default PRODUCT_X1000_PHOENIX
+
+config  PRODUCT_X1000_PHOENIX
+    bool "product x1000 phoenix"
+
+config	PRODUCT_X1000_HALLEY2
+	bool "product x1000 halley2"
+
+config  PRODUCT_X1000_CANNA
+    bool "product x1000 canna"
+
+config	PRODUCT_X1000_PANSY
+	bool "product x1000 pansy"
+
+config	PRODUCT_X1000_D0085
+	bool "product x1000 d0085"
+
+config	PRODUCT_X1000_D0038
+	bool "product x1000 d0038"
+
+config	PRODUCT_X1000_D00129
+	bool "product x1000 d00129"
+
+config	PRODUCT_X1000_MODULE_BASE
+	bool "product x1000 module base"
+
+endchoice
+
+if PRODUCT_X1000_PHOENIX
+config PRODUCT_NAME
+string
+default "phoenix"
+source "arch/mips/xburst/soc-x1000/chip-x1000/phoenix/Kconfig"
+endif
+
+if PRODUCT_X1000_CANNA
+config PRODUCT_NAME
+string
+default "canna"
+source "arch/mips/xburst/soc-x1000/chip-x1000/canna/Kconfig"
+endif
+
+if PRODUCT_X1000_HALLEY2
+config PRODUCT_NAME
+string
+default "halley2"
+source "arch/mips/xburst/soc-x1000/chip-x1000/halley2/Kconfig"
+endif
+
+if PRODUCT_X1000_PANSY
+config PRODUCT_NAME
+string
+default "pansy"
+source "arch/mips/xburst/soc-x1000/chip-x1000/pansy/Kconfig"
+endif
+
+if PRODUCT_X1000_D0085
+config PRODUCT_NAME
+string
+default "d0085"
+source "arch/mips/xburst/soc-x1000/chip-x1000/d0085/Kconfig"
+endif
+
+if PRODUCT_X1000_D0038
+config PRODUCT_NAME
+string
+default "d0038"
+source "arch/mips/xburst/soc-x1000/chip-x1000/d0038/Kconfig"
+endif
+
+if PRODUCT_X1000_D00129
+config PRODUCT_NAME
+string
+default "d00129"
+source "arch/mips/xburst/soc-x1000/chip-x1000/d00129/Kconfig"
+endif
+
+if PRODUCT_X1000_MODULE_BASE
+config PRODUCT_NAME
+string
+default "module_base"
+source "arch/mips/xburst/soc-x1000/chip-x1000/module_base/Kconfig"
+endif

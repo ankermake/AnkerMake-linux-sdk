@@ -1,0 +1,46 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+#include "x1630.dtsi"
+
+&uart1 {
+	pinctrl-names = "default";
+	status = "okay";
+	pinctrl-0 = <&uart0_pb>;
+};
+
+&uart1 {
+	pinctrl-names = "default";
+	status = "okay";
+	pinctrl-0 = <&uart1_pb>;
+};
+
+&sfc {
+	status = "okay";
+	ingenic,sfc-max-frequency = <150000000>;
+	ingenic,use_board_info      = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0x6800>;
+};
+
+&otg {
+	g-use-dma;
+	status = "okay";
+};
+
+&otg_phy {
+	dr_mode = "otg";
+};
+
+/ {
+	model = "x1630_darwin";
+
+	memory {
+		device_type = "memory";
+		linux,usable-memory = <0x00000000 0x2000000>;
+	};
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+};

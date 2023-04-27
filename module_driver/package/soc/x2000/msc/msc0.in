@@ -1,0 +1,161 @@
+menuconfig MD_X2000_MSC0
+    bool "选择 msc0"
+
+array SOC_X2000_MSC0_CD_METHOD
+    string "msc0 探测方式"
+    item "cd-internal cd/dat3信号探测" cd-internal
+    item "cd-inverted 外部引脚探测" cd-inverted
+    item "broken-cd  没有探测电路，使用轮询探测" broken-cd
+    item "non-removable 没有探测电路，外设固化在主板" non-removable
+
+array SOC_X2000_MSC0_BUS_WIDTH
+    int "msc0 总线宽度"
+    item "1 bits" 1
+    item "4 bits" 4
+    item "8 bits" 8
+
+array SOC_X2000_MSC0_SPEED
+    string "msc0 传输协议"
+    item "sd 卡" sd_card
+    item "sdio 外设" sdio
+    item "emmc 外设" emmc
+
+array SOC_X2000_MSC0_MAX_FREQUENCY
+    int "msc0 最大频率"
+    item "200000000 hz" 200000000
+    item "100000000 hz" 100000000
+    item "50000000 hz" 50000000
+
+config MD_X2000_MSC0_MAX_FREQUENCY
+    int "msc0 最高频率"
+    choice from SOC_X2000_MSC0_MAX_FREQUENCY
+    default 50000000
+
+config MD_X2000_MSC0_CD_METHOD
+    string "msc0 探测方式"
+    default cd-internal
+    choice from SOC_X2000_MSC0_CD_METHOD
+
+config MD_X2000_MSC0_BUS_WIDTH
+    int "msc0 总线宽度"
+    choice from SOC_X2000_MSC0_BUS_WIDTH
+    default 8
+
+config MD_X2000_MSC0_SPEED
+    string "msc0 外设选择"
+    choice from SOC_X2000_MSC0_SPEED
+    default emmc
+
+config MD_X2000_MSC0_CAP_POWER_OFF_CARD
+    bool "msc0 上电后可以关闭电源"
+    default n
+
+config MD_X2000_MSC0_CAP_MMC_HW_RESET
+    bool "msc0 可以硬件复位"
+    default n
+
+config MD_X2000_MSC0_CAP_SDIO_IRQ
+    bool "msc0 使能sdio总线中断"
+    default n
+
+config MD_X2000_MSC0_FULL_PWR_CYCLE
+    bool "msc0 支持设备卡的整个电源周期"
+    default n
+
+config MD_X2000_MSC0_KEEP_POWER_IN_SUSPEND
+    bool "msc0 待机时不掉电"
+    default n
+
+config MD_X2000_MSC0_ENABLE_SDIO_WAKEUP
+    bool "msc0  使能SDIO中断唤醒系统"
+    default n
+
+config MD_X2000_MSC0_DSR
+    int "msc0  配置输出驱动能力[0x0000-0xffff]"
+    default 0x404
+
+config MD_X2000_MSC0_PIO_MODE
+    bool "msc0 io 模式"
+    default n
+
+config MD_X2000_MSC0_ENABLE_AUTOCMD12
+    bool "msc0 多块数据传输时，传输完毕后要发送停止命令CMD12"
+    default n
+
+config MD_X2000_MSC0_ENABLE_CPM_RX_TUNING
+    bool "msc0 调节msc0接收时的时钟相位"
+    default n
+
+config MD_X2000_MSC0_ENABLE_CPM_TX_TUNING
+    bool "msc0 调节msc0发送时的时钟相位"
+    default n
+
+config MD_X2000_MSC0_SDIO_CLK
+    bool "msc0 切换为sdio模式"
+    default n
+
+config MD_X2000_MSC0_RST
+    bool "msc0 使能复位引脚"
+    default n
+
+config MD_X2000_MSC0_RST_GPIO
+    string "    msc0 复位引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X2000_MSC0_RST
+
+config MD_X2000_MSC0_RST_ENABLE_LEVEL
+    int "    msc0 复位引脚工作电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+    depends on MD_X2000_MSC0_RST
+
+config MD_X2000_MSC0_WP
+    bool "msc0 使能写保护引脚"
+    default n
+
+config MD_X2000_MSC0_WP_GPIO
+    string "    msc0 写保护引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X2000_MSC0_WP
+
+config MD_X2000_MSC0_WP_ENABLE_LEVEL
+    int "    msc0 写保护引脚工作电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+    depends on MD_X2000_MSC0_WP
+
+config MD_X2000_MSC0_PWR
+    bool "msc0 使能供电引脚"
+    default n
+
+config MD_X2000_MSC0_PWR_GPIO
+    string "    msc0 供电引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X2000_MSC0_PWR
+
+config MD_X2000_MSC0_PWR_ENABLE_LEVEL
+    int "    msc0 供电工作电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+    depends on MD_X2000_MSC0_PWR
+
+config MD_X2000_MSC0_CD
+    bool "msc0 使能探测引脚"
+    default n
+
+config MD_X2000_MSC0_CD_GPIO
+    string "    msc0 探测引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X2000_MSC0_CD
+
+config MD_X2000_MSC0_CD_ENABLE_LEVEL
+    int "    msc0 探测引脚工作电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+    depends on MD_X2000_MSC0_CD
+
+endmenu # MSC0 总线

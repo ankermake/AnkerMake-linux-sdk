@@ -1,0 +1,9 @@
+menu "触摸屏设备列表"
+
+source package/devices/touchscreen/focaltech_touch/Config.in
+
+source package/devices/touchscreen/gt9xx_touch/Config.in
+source package/devices/touchscreen/cst3xx_touch/Config.in
+source package/devices/touchscreen/ft6236_touch/Config.in
+
+endmenu

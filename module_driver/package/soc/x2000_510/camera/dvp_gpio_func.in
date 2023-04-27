@@ -1,0 +1,7 @@
+array SENSOR_DVP_GPIO_FUNC
+    string "sensor_dvp_gpio_func"
+    item "DVP_PA_LOW_10BIT" DVP_PA_LOW_10BIT
+    item "DVP_PA_HIGH_10BIT" DVP_PA_HIGH_10BIT
+    item "DVP_PA_12BIT" DVP_PA_12BIT
+    item "DVP_PA_LOW_8BIT" DVP_PA_LOW_8BIT
+    item "DVP_PA_HIGH_8BIT" DVP_PA_HIGH_8BIT

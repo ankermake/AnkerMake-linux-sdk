@@ -1,0 +1,35 @@
+&i2c3 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pa>;
+
+	sc230ai_0:sc230ai@0x30 {
+		status = "ok";
+		compatible = "smartsens,sc230ai";
+		reg = <0x30>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cim_vic_mclk_pe>;
+
+		avdd-supply = <&cam_avdd>;
+		dvdd-supply = <&cam_dvdd>;
+		dovdd-supply = <&cam_dovdd>;
+
+		ingenic,pwdn-gpio = <&gpb 00 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		ingenic,xshutdn-gpio = <&gpb 03 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		ingenic,efsync-gpio = <&gpb 07 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+
+		port {
+			sc230ai_ep0:endpoint {
+				remote-endpoint = <&isp0_ep>;
+			};
+		};
+	};
+};
+
+&isp0_ep {
+	remote-endpoint = <&sc230ai_ep0>;
+	data-lanes = <0 1>;
+	clk-lanes = <2>;
+};

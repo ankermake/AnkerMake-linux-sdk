@@ -1,0 +1,2 @@
+config DT_X1021_SEPAL_V10
+	bool "x1021 sepal v10"

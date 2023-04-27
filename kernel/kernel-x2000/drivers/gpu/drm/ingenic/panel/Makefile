@@ -1,0 +1,7 @@
+obj-$(CONFIG_PANEL_V12_Y88249) += panel-y88249.o
+obj-$(CONFIG_PANEL_V12_KD050HDFIA019) += panel-kd050hdfia019.o
+obj-$(CONFIG_PANEL_V12_MA0060) += panel-ma0060.o
+obj-$(CONFIG_PANEL_V12_YLYM286A) += panel-ylym286a.o
+obj-$(CONFIG_PANEL_V12_TL040WVS03CT) += panel-tl040wvs03ct.o
+obj-$(CONFIG_PANEL_V12_TL040HDS01CT) += panel-tl040hds01ct.o
+obj-$(CONFIG_PANEL_V12_JD9161Z) += panel-jd9161z.o

@@ -1,0 +1,17 @@
+
+choice
+	prompt "Board type"
+	depends on CHIP_X1021
+	default PRODUCT_X1021_SEPAL
+
+config PRODUCT_X1021_SEPAL
+	bool "product x1021 sepal"
+
+endchoice
+
+if PRODUCT_X1021_SEPAL
+config PRODUCT_NAME
+string
+default "sepal"
+source "arch/mips/xburst/soc-x1021/chip-x1021/sepal/Kconfig"
+endif

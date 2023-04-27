@@ -1,0 +1,37 @@
+menuconfig MD_GPIO_PS2
+    bool "gpio模拟PS2接口"
+    default n
+
+config MD_GPIO_PS2_0
+    bool "模拟PS2接口节点0"
+    default n
+
+config MD_GPIO_PS2_0_CLK
+    string "PS2 时钟引脚"
+    choice from SOC_GPIO_PINS
+    depends on MD_GPIO_PS2_0
+    default -1
+
+config MD_GPIO_PS2_0_DATA
+    string "PS2 数据引脚"
+    choice from SOC_GPIO_PINS
+    depends on MD_GPIO_PS2_0
+    default -1
+
+config MD_GPIO_PS2_1
+    bool "模拟PS2接口节点1"
+    default n
+
+config MD_GPIO_PS2_1_CLK
+    string "PS2 时钟引脚"
+    choice from SOC_GPIO_PINS
+    depends on MD_GPIO_PS2_1
+    default -1
+
+config MD_GPIO_PS2_1_DATA
+    string "PS2 数据引脚"
+    choice from SOC_GPIO_PINS
+    depends on MD_GPIO_PS2_1
+    default -1
+
+endmenu

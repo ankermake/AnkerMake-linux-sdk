@@ -1,0 +1,163 @@
+menuconfig MD_KEYBOARD_ADC
+    bool "ADC按键驱动"
+
+config MD_ADC_DEVIATION
+    int "ADC允许误差范围"
+    default 50
+    help
+        "例如：误差范围为正负50,这里就填50,单位 mv"
+
+config MD_ADC_CHANNEL
+    int "ADC输入通道号"
+    default 0
+    help
+        "填写adc按键使用的adc通道，如使用的是adc通道0这里就填0"
+
+config MD_ADC_INIT_VALUE
+    int "没有按键按下时的电压值"
+    default 1800
+    help
+        "没有按键按下时获取到的电压值,单位 mv"
+
+config MD_ADC_KEY_DETECTIME
+    int "按键检测间隔"
+    default 100
+    help
+        "按键检测的间隔，单位ms"
+
+config MD_ADC_KEY_DEBUG
+    int "开启ADC按鍵DEBUG打印"
+    default 0
+    help
+        "是否开启DEBUG打印 0:不打印 1:打印"
+
+
+
+config MD_ADC_KEY1
+    bool "ADC按键1"
+    default n
+
+config MD_ADC_KEY1_CODE
+    string "  按键值"
+    default -1
+    choice from MD_KEYBOARD_GPIO_KEYS
+    depends on MD_ADC_KEY1
+
+config MD_ADC_KEY1_VALUE
+    int "  按键电压值"
+    default 0
+    depends on MD_ADC_KEY1
+
+
+config MD_ADC_KEY2
+    bool "ADC按键2"
+    default n
+
+config MD_ADC_KEY2_CODE
+    string "  按键值"
+    default -1
+    choice from MD_KEYBOARD_GPIO_KEYS
+    depends on MD_ADC_KEY2
+
+config MD_ADC_KEY2_VALUE
+    int "  按键电压值"
+    default 300
+    depends on MD_ADC_KEY2
+
+
+config MD_ADC_KEY3
+    bool "ADC按键3"
+    default n
+
+config MD_ADC_KEY3_CODE
+    string "  按键值"
+    default -1
+    choice from MD_KEYBOARD_GPIO_KEYS
+    depends on MD_ADC_KEY3
+
+config MD_ADC_KEY3_VALUE
+    int "  按键电压值"
+    default 600
+    depends on MD_ADC_KEY3
+
+
+config MD_ADC_KEY4
+    bool "ADC按键4"
+    default n
+
+config MD_ADC_KEY4_CODE
+    string "  按键值"
+    default -1
+    choice from MD_KEYBOARD_GPIO_KEYS
+    depends on MD_ADC_KEY4
+
+config MD_ADC_KEY4_VALUE
+    int "  按键电压值"
+    default 900
+    depends on MD_ADC_KEY4
+
+
+config MD_ADC_KEY5
+    bool "ADC按键5"
+    default n
+
+config MD_ADC_KEY5_CODE
+    string "  按键值"
+    default -1
+    choice from MD_KEYBOARD_GPIO_KEYS
+    depends on MD_ADC_KEY5
+
+config MD_ADC_KEY5_VALUE
+    int "  按键电压值"
+    default 1200
+    depends on MD_ADC_KEY5
+
+
+config MD_ADC_KEY6
+    bool "ADC按键6"
+    default n
+
+config MD_ADC_KEY6_CODE
+    string "  按键值"
+    default -1
+    choice from MD_KEYBOARD_GPIO_KEYS
+    depends on MD_ADC_KEY6
+
+config MD_ADC_KEY6_VALUE
+    int "  按键电压值"
+    default 1500
+    depends on MD_ADC_KEY6
+
+
+config MD_ADC_KEY7
+    bool "ADC按键7"
+    default n
+
+config MD_ADC_KEY7_CODE
+    string "  按键值"
+    default -1
+    choice from MD_KEYBOARD_GPIO_KEYS
+    depends on MD_ADC_KEY7
+
+config MD_ADC_KEY7_VALUE
+    int "  按键电压值"
+    default -1
+    depends on MD_ADC_KEY7
+
+
+config MD_ADC_KEY8
+    bool "ADC按键8"
+    default n
+
+config MD_ADC_KEY8_CODE
+    string "  按键值"
+    default -1
+    choice from MD_KEYBOARD_GPIO_KEYS
+    depends on MD_ADC_KEY8
+
+config MD_ADC_KEY8_VALUE
+    int "  按键电压值"
+    default -1
+    depends on MD_ADC_KEY8
+
+endmenu # MD_KEYBOARD_ADC

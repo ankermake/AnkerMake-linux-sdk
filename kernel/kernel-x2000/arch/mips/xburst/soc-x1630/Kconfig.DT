@@ -1,0 +1,2 @@
+config DT_X1630_DARWIN_v12
+	bool "x1630 darwin v12"

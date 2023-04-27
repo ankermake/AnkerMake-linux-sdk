@@ -1,0 +1,36 @@
+choice
+	prompt "Board type"
+	depends on SOC_X1830_DRIVERS
+	default BOARD_AUDIO
+
+config BOARD_AUDIO
+	bool	"audio-30 (x1830)"
+
+config BOARD_SUNING_ALARM
+	bool	"suning-alarm (x1830)"
+
+config BOARD_MINIS1_BOX_V2
+	bool	"miniS1-box-v2 (x1830)"
+
+config BOARD_X1830_IM501_DEVEL
+	bool	"im501 development board (x1830)"
+
+config BOARD_X1830_HUAZHEN_IM501
+	bool	"huazhen im501 board (x1830)"
+
+endchoice
+
+config BOARD_NAME
+	string
+	default "audio-30" if BOARD_AUDIO
+	default "suning-alarm" if BOARD_SUNING_ALARM
+	default "miniS1-box-v2" if BOARD_MINIS1_BOX_V2
+	default "im501-devel" if BOARD_X1830_IM501_DEVEL
+	default "huazhen-im501" if BOARD_X1830_HUAZHEN_IM501
+
+config PRODUCT_NAME
+	string
+	default "audio" if BOARD_AUDIO
+	default "suning-alarm" if BOARD_SUNING_ALARM
+	default "miniS1-box-v2" if BOARD_MINIS1_BOX_V2
+	default "huazhen-im501" if BOARD_X1830_HUAZHEN_IM501

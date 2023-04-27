@@ -1,0 +1,18 @@
+choice "终端登录方式"
+    default APP_br_root_login
+
+config APP_br_root_login
+    bool "root无密码登录console"
+
+config APP_br_root_login_no_console
+    bool "不做登录设置"
+
+config APP_br_root_login_keep_buildroot
+    bool "保持buildroot的设置"
+
+endchoice
+
+config APP_br_root_login_tty_port
+    string "console对应的节点"
+    depends on APP_br_root_login
+    default console

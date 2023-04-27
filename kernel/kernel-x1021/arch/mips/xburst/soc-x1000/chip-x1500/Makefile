@@ -1,0 +1,4 @@
+
+
+obj-$(CONFIG_PRODUCT_X1500_YAK)		+= yak/
+obj-$(CONFIG_PRODUCT_X1500L_WOLF)		+= wolf/

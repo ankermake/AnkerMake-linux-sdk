@@ -1,0 +1,17 @@
+
+choice
+	prompt "Chip type"
+	depends on SOC_X1830
+	default CHIP_X1830
+
+config CHIP_X1830
+       bool "chip-x1830"
+       select TRACEPOINTS
+       select SYS_SUPPORTS_HIGHMEM
+       select GENERIC_CLOCKEVENTS_BROADCAST
+
+endchoice
+
+if CHIP_X1830
+#source "arch/mips/xburst/soc-x1830/chip-x1830/Kconfig"
+endif

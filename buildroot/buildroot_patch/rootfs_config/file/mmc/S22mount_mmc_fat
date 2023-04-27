@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+
+case "$1" in
+  start)
+	mount_mmc_fat.sh rtosdata /usr/rtosdata/
+	conn_fs_service /dev/conn_fs  /usr/rtosdata/ &
+	;;
+  stop)
+	;;
+  restart|reload)
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?

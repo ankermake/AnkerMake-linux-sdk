@@ -1,0 +1,8 @@
+config DT_GEWU
+	bool "m300 gewu"
+
+config DT_M300_ZEBRA
+	bool "m300 zebra"
+
+config DT_GEWU_V12
+	bool "m300 gewu_v12"

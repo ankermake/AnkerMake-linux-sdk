@@ -1,0 +1,32 @@
+menuconfig MD_X2000_SENSOR_AR0230
+    bool "sensor ar0230 (dvp,raw10)"
+    select MD_X2000_CAMERA_VIC
+    depends on MD_SOC_X2000_BASE
+
+source package/soc/x2000/camera/dvp_gpio_func.in
+
+config MD_X2000_AR0230_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_AR0230_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_AR0230_GPIO_POWER
+    string "gpio power(sensor 电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_AR0230_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+config MD_X2000_AR0230_DVP_DATE_FMT
+    string "dvp_gpio_func(dvp 接口选择使用的位数)"
+    choice from SENSOR_DVP_GPIO_FUNC
+    default -1
+
+endmenu # MD_X2000_SENSOR_AR0230

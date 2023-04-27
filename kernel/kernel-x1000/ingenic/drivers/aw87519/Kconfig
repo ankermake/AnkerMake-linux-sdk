@@ -1,0 +1,7 @@
+config AW87519
+    bool "aw87519"
+    help
+        AW87519 is specifically designed to improve the musical
+        output dynamic range, enhance the overall sound quality. It
+        is a new high efficiency, high PSRR,low noise, constant
+        large volume, 3rd generation Smart K audio amplifier.

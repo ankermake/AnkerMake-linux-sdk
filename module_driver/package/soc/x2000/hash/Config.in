@@ -1,0 +1,3 @@
+config MD_X2000_HASH
+    bool "hash 驱动(数据加密)"
+    default n

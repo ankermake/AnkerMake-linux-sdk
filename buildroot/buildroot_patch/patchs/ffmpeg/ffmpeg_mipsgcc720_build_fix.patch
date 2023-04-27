@@ -1,0 +1,11 @@
+diff -ru ffmpeg-4.2.2/configure ffmpeg-4.2.2_2/configure
+--- ffmpeg-4.2.2/configure	2020-01-01 05:35:22.000000000 +0800
++++ ffmpeg-4.2.2_2/configure	2020-09-09 16:36:16.742296360 +0800
+@@ -5904,7 +5904,6 @@
+ check_cc intrinsics_neon arm_neon.h "int16x8_t test = vdupq_n_s16(0)"
+ 
+ check_ldflags -Wl,--as-needed
+-check_ldflags -Wl,-z,noexecstack
+ 
+ if ! disabled network; then
+     check_func getaddrinfo $network_extralibs

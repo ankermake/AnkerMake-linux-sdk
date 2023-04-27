@@ -1,0 +1,8 @@
+menuconfig MD_X1830_MSCALER
+    bool "mscaler 驱动(图像缩放功能)"
+
+config MD_X1830_MSCALER_DETAIL
+    int "mscaler 清晰度调试（0-100）"
+    default 50
+
+endmenu

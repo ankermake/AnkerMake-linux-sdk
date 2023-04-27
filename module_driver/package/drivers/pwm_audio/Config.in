@@ -1,0 +1,28 @@
+
+config MD_PWM_AUDIO
+    bool "PMW 模拟声卡驱动"
+    default n
+
+config MD_PWM_AUDIO_PWM_GPIO_1
+    string "声卡1 pwm 引脚"
+    choice from SOC_GPIO_PINS
+    depends on MD_PWM_AUDIO
+    default -1
+
+config MD_PWM_AUDIO_AMP_POWER_GPIO_1
+    string "声卡1 功放使能引脚"
+    choice from SOC_GPIO_PINS
+    depends on MD_PWM_AUDIO
+    default -1
+
+config MD_PWM_AUDIO_PWM_GPIO_2
+    string "声卡2 pwm 引脚"
+    choice from SOC_GPIO_PINS
+    depends on MD_PWM_AUDIO
+    default -1
+
+config MD_PWM_AUDIO_AMP_POWER_GPIO_2
+    string "声卡2 功放使能引脚"
+    choice from SOC_GPIO_PINS
+    depends on MD_PWM_AUDIO
+    default -1

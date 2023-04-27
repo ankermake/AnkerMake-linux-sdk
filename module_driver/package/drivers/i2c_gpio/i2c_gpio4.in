@@ -1,0 +1,26 @@
+config MD_I2C_GPIO4
+    bool "添加一个i2c总线"
+    default n
+
+config MD_I2C_GPIO4_BUS_NUM
+    int "  bus num(唯一总线号)"
+    default 7
+    depends on MD_I2C_GPIO4
+
+config MD_I2C_GPIO4_RATE
+    int "  I2C(GPIO) 速度"
+    default 100000
+    depends on MD_I2C_GPIO4
+
+config MD_I2C_GPIO4_SCL
+    string "  scl pin(时钟引脚)"
+    choice from SOC_GPIO_PINS
+    depends on MD_I2C_GPIO4
+    default -1
+
+config MD_I2C_GPIO4_SDA
+    string "  sda pin(数据引脚)"
+    choice from SOC_GPIO_PINS
+    depends on MD_I2C_GPIO4
+    default -1
+

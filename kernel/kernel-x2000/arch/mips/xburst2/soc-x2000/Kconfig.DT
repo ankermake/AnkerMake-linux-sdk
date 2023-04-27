@@ -1,0 +1,2 @@
+config DT_SEAL
+	bool "x2000 seal"

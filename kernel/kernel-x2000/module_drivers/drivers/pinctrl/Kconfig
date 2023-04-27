@@ -1,0 +1,33 @@
+config PINCTRL_INGENIC
+	bool "Pinctrl driver for ingenic"
+	select PINMUX
+	select PINCONF
+	select GENERIC_PINCONF
+
+config DISABLE_GPIOA_IRQ_CONTROLLER
+	bool "disable GPIO A GROUP IRQ CONTROLLER"
+	depends on PINCTRL_INGENIC
+	default n
+
+config DISABLE_GPIOB_IRQ_CONTROLLER
+	bool "disable GPIO B GROUP IRQ CONTROLLER"
+	depends on PINCTRL_INGENIC
+	default n
+
+config DISABLE_GPIOC_IRQ_CONTROLLER
+	bool "disable GPIO C GROUP IRQ CONTROLLER"
+	depends on PINCTRL_INGENIC
+	default n
+
+config DISABLE_GPIOD_IRQ_CONTROLLER
+	bool "disable GPIO D GROUP IRQ CONTROLLER"
+	depends on PINCTRL_INGENIC
+	default n
+
+config DISABLE_GPIOE_IRQ_CONTROLLER
+	bool "disable GPIO E GROUP IRQ CONTROLLER"
+	depends on PINCTRL_INGENIC
+	default n
+
+config MULTI_VGPIO_INGENIC
+	   bool "multiple input lineout to signle output"

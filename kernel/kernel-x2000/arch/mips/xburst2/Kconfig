@@ -1,0 +1,150 @@
+if MACH_XBURST2
+
+menu "SOC Type Selection"
+	depends on MACH_XBURST2
+
+
+choice
+	prompt "SOC types"
+	depends on MACH_XBURST2
+	default SOC_X2000
+
+config SOC_X2000
+	bool "x2000"
+	select IRQ_INGENIC_CPU
+	select CLK_X2000
+	select INGENIC_INTC_CHIP
+	select PINCTRL
+	select PINCTRL_INGENIC
+	select CLKSRC_OF
+	select CLKDEV_LOOKUP
+	select CLKSRC_INGENIC_CORE_OST
+
+
+config SOC_X2000_V12
+	bool "x2000-v12"
+	select IRQ_INGENIC_CPU
+	select CLK_X2000_V12
+	select INGENIC_INTC_CHIP
+	select PINCTRL
+	select PINCTRL_INGENIC
+	select CLKSRC_OF
+	select CLKDEV_LOOKUP
+	select CLKSRC_INGENIC_CORE_OST
+	select MMU_NOTIFIER
+
+config SOC_X2100
+	bool "x2100"
+	select IRQ_INGENIC_CPU
+	select CLK_X2100
+	select INGENIC_INTC_CHIP
+	select PINCTRL
+	select PINCTRL_INGENIC
+	select CLKSRC_OF
+	select CLKDEV_LOOKUP
+	select CLKSRC_INGENIC_CORE_OST
+	select MMU_NOTIFIER
+
+config SOC_M300
+	bool "m300"
+	select IRQ_INGENIC_CPU
+	select CLK_M300
+	select INGENIC_INTC_CHIP
+	select PINCTRL
+	select PINCTRL_INGENIC
+	select CLKSRC_OF
+	select CLKDEV_LOOKUP
+	select CLKSRC_INGENIC_CORE_OST
+	select MMU_NOTIFIER
+
+config SOC_X2500
+	bool "x2500"
+	select IRQ_INGENIC_CPU
+	select CLK_X2500
+	select INGENIC_INTC_CHIP
+	select PINCTRL
+	select PINCTRL_INGENIC
+	select CLKSRC_OF
+	select CLKDEV_LOOKUP
+	select CLKSRC_INGENIC_CORE_OST
+	select MMU_NOTIFIER
+
+endchoice
+
+config INGENIC_BUILTIN_DTB
+	select BUILTIN_DTB
+	depends on MACH_XBURST2
+	bool "Ingenic Device Tree build into Kernel."
+	default y
+
+choice
+	prompt "device tree select"
+	default DT_NONE_V12
+
+config DT_NONE_V12
+	bool "dt_none_v12"
+
+config DT_EXTERNAL_BOARD
+	bool "x2000-v12 external board."
+
+if SOC_X2000
+source "arch/mips/xburst2/soc-x2000/Kconfig.DT"
+endif
+
+if SOC_X2000_V12
+source "arch/mips/xburst2/soc-x2000-v12/Kconfig.DT"
+endif
+
+if SOC_X2100
+source "arch/mips/xburst2/soc-x2100/Kconfig.DT"
+endif
+
+if SOC_M300
+source "arch/mips/xburst2/soc-m300/Kconfig.DT"
+endif
+
+if SOC_X2500
+source "arch/mips/xburst2/soc-x2500/Kconfig.DT"
+endif
+
+endchoice
+
+config DT_X2000_MODULE_BASE_DTS_FILE
+	string "dts file for x2000 module driver"
+	depends on DT_X2000_MODULE_BASE
+	default x2000_module_base.dts
+	help
+		the dts file location is arch/mips/boot/dts/ingenic/
+
+config RAW_BOOT
+	bool "Raw Boot Kernel"
+	select BOOT_RAW
+	default n
+
+config EXTAL_CLOCK
+	depends on MACH_XBURST2
+	int "extal clock in MHz"
+	default 24
+
+config FPGA_TEST
+	depends on MACH_XBURST2
+	bool "FPGA_TEST"
+	default n
+
+config INGENIC_GPT_CHECK
+	depends on MACH_XBURST2
+	bool "The physical space is larger than the virtual space"
+	default y
+
+config XBURST2_CPU_TEST
+	depends on MACH_XBURST2
+	bool "xburst2 cpu ddr test"
+	default n
+
+
+config FASTBOOT
+	bool "FastBoot"
+
+endmenu
+
+endif

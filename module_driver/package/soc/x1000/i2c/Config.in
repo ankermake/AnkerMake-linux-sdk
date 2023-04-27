@@ -1,0 +1,63 @@
+menuconfig MD_X1000_I2C
+    bool "i2c 控制器驱动"
+
+
+config MD_X1000_I2C0_BUS
+    bool "选择I2C0"
+
+choice "              选择I2C0 GPIO"
+    default MD_X1000_I2C0_PB
+    depends on MD_X1000_I2C0_BUS
+
+config MD_X1000_I2C0_PB
+    bool "SCL:GPIO_PB(23) SDA:GPIO_PB(24)"
+
+endchoice
+
+config MD_X1000_I2C0_RATE
+    int "       I2C0 速度 "
+    default 400000
+    depends on MD_X1000_I2C0_BUS
+
+
+
+config MD_X1000_I2C1_BUS
+    bool "选择I2C1"
+
+choice "              选择I2C1 GPIO"
+    default MD_X1000_I2C1_PA
+    depends on MD_X1000_I2C1_BUS
+
+config MD_X1000_I2C1_PA
+    bool "SCL:GPIO_PA(0) SDA:GPIO_PA(1)"
+
+config MD_X1000_I2C1_PC
+    bool "SCL:GPIO_PC(26) SDA:GPIO_PC(27)"
+
+endchoice
+
+config MD_X1000_I2C1_RATE
+    int "        I2C1 速度 "
+    default 400000
+    depends on MD_X1000_I2C1_BUS
+
+
+
+config MD_X1000_I2C2_BUS
+    bool "选择I2C2"
+
+choice "              选择I2C2 GPIO"
+    default MD_X1000_I2C2_PD
+    depends on MD_X1000_I2C2_BUS
+
+config MD_X1000_I2C2_PD
+    bool "SCL:GPIO_PD(0) SDA:GPIO_PD(1)"
+
+endchoice
+
+config MD_X1000_I2C2_RATE
+    int "       I2C2 速度 "
+    default 400000
+    depends on MD_X1000_I2C2_BUS
+
+endmenu

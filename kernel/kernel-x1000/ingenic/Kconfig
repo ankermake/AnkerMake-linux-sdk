@@ -1,0 +1,15 @@
+menu "ingenic drivers"
+
+if SOC_X1520
+source "ingenic/x1520/Kconfig"
+endif
+
+if SOC_X1830
+source "ingenic/x1830/Kconfig"
+endif
+
+source "ingenic/drivers/Kconfig"
+
+source "ingenic/for_module/Kconfig"
+
+endmenu

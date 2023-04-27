@@ -1,0 +1,365 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "x2000-v12.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	compatible = "img,zebra", "ingenic,x2000";
+};
+
+&uart0 {
+	status = "disable";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_pd>;
+};
+
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pd>;
+};
+
+&pinctrl {
+	ingenic,gpa_voltage = <GPIO_VOLTAGE_1V8>;
+};
+
+&felix {
+	status = "okay";
+};
+
+&helix {
+	status = "okay";
+};
+
+&pdma {
+	status = "okay";
+};
+
+&msc0 {
+	status = "disable";
+	pinctrl-names ="default";
+	pinctrl-0 = <&msc0_8bit>;
+	/*mmc-hs200-1_8v;*/
+	cap-mmc-highspeed;
+	non-removable;
+	max-frequency = <50000000>;
+	bus-width = <4>;
+	non-removable;
+	voltage-ranges = <1800 3300>;
+
+	/* special property */
+	ingenic,wp-gpios = <0>;
+	ingneic,cd-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+};
+
+&msc1 {
+	status = "okay";
+	pinctrl-names ="default","enable", "disable";
+	pinctrl-0 = <&msc1_4bit>;
+	pinctrl-1 = <&rtc32k_enable>;
+	pinctrl-2 = <&rtc32k_disable>;
+
+	max-frequency = <50000000>;
+	bus-width = <4>;
+	voltage-ranges = <1800 3300>;
+	/*non-removable;*/
+
+	ingenic,sdio_clk = <1>;
+	keep-power-in-suspend;
+
+	/* special property */
+	ingenic,wp-gpios = <0>;
+	ingneic,cd-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+	ingenic,removal-manual; /*removal-dontcare, removal-nonremovable, removal-removable, removal-manual*/
+
+	bcmdhd_wlan: bcmdhd_wlan {
+		 compatible = "android,bcmdhd_wlan";
+		 ingenic,sdio-irq = <&gpd 20 IRQ_TYPE_LEVEL_HIGH INGENIC_GPIO_NOBIAS>;
+		 ingenic,sdio-reset = <&gpd 19 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	};
+};
+
+&msc2 {
+	status = "okay";
+	pinctrl-names ="default";
+	pinctrl-0 = <&msc2_4bit>;
+	/*mmc-hs200-1_8v;*/
+	cap-mmc-highspeed;
+	non-removable;
+	max-frequency = <50000000>;
+	bus-width = <4>;
+	non-removable;
+	voltage-ranges = <1800 3300>;
+
+	/* special property */
+	ingenic,wp-gpios = <0>;
+	ingneic,cd-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+};
+
+&mac0 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac0_rgmii_p0_normal>, <&mac0_rgmii_p1_normal>;
+	pinctrl-1 = <&mac0_rgmii_p0_rst>, <&mac0_rgmii_p1_normal>;
+	status = "okay";
+	ingenic,rst-gpio = <&gpb 0 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RGMII>;
+	ingenic,mode-reg = <0xb00000e4>;
+};
+
+&mac1 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac1_rgmii_p0_normal>, <&mac1_rgmii_p1_normal>;
+	pinctrl-1 = <&mac1_rgmii_p0_rst>, <&mac1_rgmii_p1_normal>;
+	status = "okay";
+	ingenic,rst-gpio = <&gpb 26 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RGMII>;
+	ingenic,mode-reg = <0xb00000e8>;
+};
+
+&sfc {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&sfc_pe>;
+	ingenic,sfc-max-frequency = <320000000>;
+	ingenic,use_board_info      = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0>;
+
+
+};
+
+&otg {
+	g-use-dma;
+	dr_mode = "otg"; // host,peripheral,otg
+	status = "okay";
+};
+
+&otg_phy {
+	compatible = "ingenic,innophy", "syscon";
+	reg = <0x10000000 0x100>;
+	ingenic,drvvbus-gpio = <&gpe 22 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	status = "okay";
+};
+
+
+&as_be_baic {
+	pinctrl-names = "default";
+	pinctrl-0 = <&baic1_tmclk_pc>, <&baic1_rmclk_pc>, <&baic1_pc>, <&baic2_mclk_pa>, <&baic2_pa>,
+		<&baic3_mclk_pa>, <&baic3_pa>, <&baic4_pd>;
+};
+
+&as_spdif {
+	pinctrl-names = "default";
+	pinctrl-0 = <&spdif_pc>;
+};
+
+&as_dmic {
+	pinctrl-names = "default";
+	pinctrl-0 = <&dmic_pc>;
+};
+
+&i2c2 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c2_pb>;
+
+	ak4458: dac@0x10 {
+		compatible = "asahi-kasei,ak4458";
+		status = "okay";
+		reg = <0x10>;
+		reset-gpios = <&gpb 13 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		mute-gpios = <&gpb 15 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	};
+	wm8594: adc@0x1a {
+		compatible = "wlf,wm8594";
+		status = "okay";
+		reg = <0x1a>;
+		reset-gpios = <&gpb 9 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		mute-gpios = <&gpb 10 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		pwdn-gpios = <&gpb 11 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	};
+};
+
+&i2c3 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pa>;
+
+	ov7725: dac@0x21 {
+		compatible = "ovti,ov772x";
+		status = "okay";
+		reg = <0x21>;
+		pinctrl-names = "default","cim";
+		pinctrl-0 = <&cim_vic_mclk_pe>, <&cim_pa>;
+
+		resetb-gpios = <&gpa 9 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		vcc-en-gpios = <&gpa 15 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		pwdn-gpios = <&gpa 11 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+
+		port {
+			ov7725_0: endpoint {
+				remote-endpoint = <&cim_0>;
+			};
+		};
+	};
+};
+
+
+&i2c4 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c4_pd>;
+
+	ov5645: ov5645@0x3c {
+		status = "okay";
+		compatible = "ovti,ov5645";
+		reg = <0x3c>;
+		pinctrl-names = "default","cim";
+		pinctrl-0 = <&cim_vic_mclk_pe>, <&cim_pa>;
+		/*
+		resetb-gpios 	= <&gpd 5 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		pwdn-gpios 	= <&gpd 4 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		vcc-en-gpios	= <&gpd 3 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		*/
+		port {
+			ov5645_0: endpoint {
+				remote-endpoint = <&cim_0>;
+			};
+		};
+	};
+};
+
+&cim {
+	status = "okay";
+	port {
+		cim_0: endpoint@0 {
+		/*	remote-endpoint = <&ov7725_0>;*/
+			remote-endpoint = <&ov5645_0>;
+			bus-width = <8>;
+		};
+	};
+};
+
+&dpu {
+	status = "okay";
+	port {
+		dpu_out_ep: endpoint {
+			remote-endpoint = <&panel_y88249_ep>;
+			/*remote-endpoint = <&panel_kd050hdfia019_ep>;*/
+		};
+	};
+};
+
+&spi0 {
+	/*status = "disabled";*/
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0_pb>;
+
+	spi-max-frequency = <54000000>;
+	num-cs = <2>;
+	cs-gpios = <0>, <0>;
+	/*cs-gpios = <&gpa 27 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>, <&gpa 27 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;*/
+	ingenic,chnl = <0>;
+	ingenic,allow_cs_same = <1>;
+	ingenic,bus_num = <0>;
+	ingenic,has_dma_support = <0>;
+	ingenic,spi-src-clk = <1>;/*0.ext; 1.ssi*/
+
+	dac0: dac8881@0 {
+		compatible = "spidev";
+		reg = <2>;
+		chip_select= <0>;
+		spi-max-frequency = <10000000>;
+	};
+};
+
+&pwm {
+	status = "okay";
+	pinctrl-names = "default","pwm15_pc";
+	pinctrl-0 = <&pwm0_pc> ,<&pwm15_pc>; 
+};
+
+/ {
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+
+	gpio_keys: gpio_keys {
+		   compatible = "gpio-keys";
+
+		   power {
+			   label = "Power";
+			   linux,code = <KEY_POWER>;
+			   gpios = <&gpe 31 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			   gpio-key,wakeup;
+		   };
+	   };
+	sound {
+		compatible = "ingenic,x2000-sound";
+		ingenic,model = "zebra";
+	};
+
+	i2c@0 {
+		compatible = "i2c-gpio";
+		gpios = <&gpc 12 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS /* sda */>,
+			<&gpb 8 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS /* scl */>;
+		//i2c-gpio,sda-open-drain;
+		//i2c-gpio,scl-open-drain;
+		i2c-gpio,scl-output-only;
+		i2c-gpio,delay-us = <2>; /* ~100 kHz */
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ak5558: adc@0x13 {
+			compatible = "asahi-kasei,ak5558";
+			status = "okay";
+			reg = <0x13>;
+			reset-gpios = <&gpb 21 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		};
+	};
+
+	display-dbi {
+		compatible = "simple-bus";
+		#interrupt-cells = <1>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges = <>;
+		panel_y88249@0 {
+			compatible = "ingenic,y88249";
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&tft_lcd_pb_rgb888>;
+			ingenic,vdd-en-gpio = <&gpc 12 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+			ingenic,rst-gpio = <&gpc 1 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			ingenic,pwm-gpio = <&gpc 15 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			port {
+				panel_y88249_ep: endpoint {
+					remote-endpoint = <&dpu_out_ep>;
+				};
+			};
+		};
+		panel_kd050hdfia019@0 {
+			compatible = "ingenic,kd050hdfia019";
+			status = "okay";
+			pinctrl-names = "default";
+			port {
+				panel_kd050hdfia019_ep: endpoint {
+					remote-endpoint = <&dpu_out_ep>;
+				};
+			};
+		};
+	};
+};

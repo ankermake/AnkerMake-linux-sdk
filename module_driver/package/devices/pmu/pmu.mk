@@ -1,0 +1,1 @@
+package-$(MD_X2000_AXP_POWER) += package/devices/pmu/axp-216/axp-216.mk

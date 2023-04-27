@@ -1,0 +1,71 @@
+array CST_I2C_ADDR_LIST
+    int "CST 触摸屏设备地址列表"
+    item "1" 0x1A
+    item "2" 0x55
+
+menuconfig MD_TOUCHSCREEN_CST3XX
+    bool "hyn_cst3xx"
+
+config MD_CST_I2C_BUSNUM
+    int "i2c bus num(触摸屏挂接的i2c总线号)"
+    default -1
+
+config MD_CST_I2C_ADDR
+    int "i2c addr(触摸屏设备地址)"
+    choice from CST_I2C_ADDR_LIST
+
+config MD_CST_REGULATOR_NAME
+    string "regulator name(通过名字获取 tp module 电源管理器)"
+    default -1
+
+config MD_CST_I2C_POWER_ENABLE_LEVEL
+    string "gpio active level (tp power 使能电平)"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+
+config MD_CST_I2C_POWER_ENABLE_GPIO
+    string "gpio power enable(tp power 使能引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_CST_RESET_GPIO
+    string "gpio reset(touchscreen 复位脚)"
+    choice from SOC_GPIO_PINS
+
+config MD_CST_IRQ_GPIO
+    string "gpio irq(touchscreen 中断引脚)"
+    choice from SOC_GPIO_PINS
+
+config MD_CST_X_COORDS_MIN
+    int "最小X轴坐标值"
+    default 0
+
+config MD_CST_Y_COORDS_MIN
+    int "最小Y轴坐标值"
+    default 0
+
+config MD_CST_X_COORDS_MAX
+    int "最大X轴坐标值"
+    default 170
+
+config MD_CST_Y_COORDS_MAX
+    int "最大Y轴坐标值"
+    default 320
+
+config MD_CST_X_COORDS_FLIP
+    bool "X轴是否翻转"
+    default n
+
+config MD_CST_Y_COORDS_FLIP
+    bool "Y轴是否翻转"
+    default n
+
+config MD_CST_X_Y_COORDS_EXCHANGE
+    bool "X,Y轴是否对调"
+    default n
+
+config MD_CST_MAX_TOUCH_NUMBER
+    int "能检测的最大触摸点个数(最大为10,最小为2，小于2计为2,大于10计为10)"
+    default 2
+
+endmenu

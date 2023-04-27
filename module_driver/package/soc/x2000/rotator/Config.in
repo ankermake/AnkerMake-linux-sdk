@@ -1,0 +1,2 @@
+config MD_X2000_ROTATOR
+    bool "rotator 驱动(frame buffer 旋转功能)"

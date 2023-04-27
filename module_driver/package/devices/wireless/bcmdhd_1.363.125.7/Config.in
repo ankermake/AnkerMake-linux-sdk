@@ -1,0 +1,93 @@
+menuconfig MD_BCMDHD_1_363_125_7
+	bool "Cypress Module AW-NB197SM(43438) wireless cards support"
+	help
+	  This module adds support for wireless adapters based on
+	  Cypress AW-NB197SM(43438) chipset.
+
+config MD_BCMDHD_1_363_125_7_SDIO
+	bool "SDIO bus interface support"
+	default y
+
+config MD_BCMDHD_1_363_125_7_MMC_NUM
+	int "wlan_mmc_num (mmc/sdio 总线号)"
+	default -1
+	help
+	  wifi 挂接在哪个 mmc 总线,比如 0, 1
+
+config MD_BCMDHD_1_363_125_7_BT_WIFI_POWER
+	string "gpio_bt_wifi_power(控制整个bt,wifi模块的供电)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_7_BT_WIFI_POWER_VALID_LEVEL
+	string "gpio_bt_wifi_power_valid_level(bt,wifi模块供电引脚的有效电平)"
+	default 0
+	choice from MD_GPIO_ACTIVE_LEVEL
+
+config MD_BCMDHD_1_363_125_7_WLAN_REG_ON
+	string "gpio_wlan_reg_on(wifi的使能引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_7_WLAN_WAKE_HOST
+	string "gpio_wlan_wake_host(wifi 唤醒/中断 cpu 的引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_7_BT_REG_ON
+	string "gpio_bt_reg_on(bt的使能引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_7_HOST_WAKE_BT
+	string "gpio_host_wake_bt(cpu 唤醒/中断 bt 的引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_7_BT_WAKE_HOST
+	string "gpio_bt_wake_host(bt 唤醒/中断 cpu 的引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_7_FW_PATH
+	string "Firmware path"
+	default "/lib/firmware/wifi_bcm/fw_bcm43438a1.bin"
+	help
+	  Path to the firmware file.
+
+config MD_BCMDHD_1_363_125_7_NVRAM_PATH
+	string "NVRAM path"
+	default "/lib/firmware/wifi_bcm/BCM43438_A1.cal"
+	help
+	  Path to the calibration file.
+
+config MD_BCM4354
+	bool "BCM4354 support"
+
+config MD_BCM4356
+	bool "BCM4356 support"
+
+config MD_BCMDHD_1_363_125_7_WEXT
+	bool "Enable WEXT support"
+	help
+	  Enables WEXT support
+
+config MD_DHD_USE_STATIC_BUF
+	bool "Enable memory preallocation"
+	default n
+	help
+	  Use memory preallocated in platform
+
+config MD_DHD_USE_SCHED_SCAN
+	bool "Use CFG80211 sched scan"
+	default n
+	help
+	  Use CFG80211 sched scan
+
+config MD_DHD_SET_RANDOM_MAC_VAL
+	int "Vendor OUI"
+	default 0x001A11
+	help
+	  Set vendor OUI for SoftAP
+
+endmenu

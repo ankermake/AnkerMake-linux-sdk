@@ -1,0 +1,1 @@
+obj-$(CONFIG_INGENIC_POLL_SPI)               += ingenic_spi_poll.o ingenic_spi_hal.o

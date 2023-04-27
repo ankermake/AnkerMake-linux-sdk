@@ -1,0 +1,15 @@
+package-$(MD_X1600_510_ADC) += package/soc/x1600_510/adc/adc.mk
+package-$(MD_X1600_510_GPIO) += package/soc/x1600_510/gpio/gpio.mk
+package-$(MD_X1600_510_WATCHDOG) += package/soc/x1600_510/watchdog/watchdog.mk
+package-$(MD_X1600_510_SPI) += package/soc/x1600_510/spi/spi.mk
+package-$(MD_X1600_510_UTILS) += package/soc/x1600_510/utils/utils.mk
+package-$(MD_X1600_510_I2C) += package/soc/x1600_510/i2c/i2c.mk
+package-$(MD_X1600_510_CAMERA) += package/soc/x1600_510/camera/camera.mk
+package-$(MD_X1600_510_FB) += package/soc/x1600_510/fb/fb.mk
+package-$(MD_X1600_510_PWM) += package/soc/x1600_510/pwm/pwm.mk
+package-$(MD_X1600_510_MAC) += package/soc/x1600_510/mac/mac.mk
+package-$(MD_X1600_510_DTRNG) += package/soc/x1600_510/dtrng/dtrng.mk
+package-$(MD_X1600_510_HASH) += package/soc/x1600_510/hash/hash.mk
+package-$(MD_X1600_510_AIC) += package/soc/x1600_510/aic/aic.mk
+package-$(MD_X1600_510_MSC) += package/soc/x1600_510/msc/msc.mk
+package-$(MD_X1600_510_EFUSE) += package/soc/x1600_510/efuse/efuse.mk

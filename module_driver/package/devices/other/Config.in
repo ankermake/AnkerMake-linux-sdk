@@ -1,0 +1,3 @@
+menu "其它类型设备列表"
+source /package/devices/other/pwm_battery/Config.in
+endmenu

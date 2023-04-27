@@ -1,0 +1,6 @@
+menuconfig MD_X2000_CONN_FS
+    bool "接收RTOS端的FS驱动操作(核间通信)"
+    help
+        "使用核间通讯接收RTOS读/写相关操作,将操作内容同步到文件系统中"
+
+endmenu

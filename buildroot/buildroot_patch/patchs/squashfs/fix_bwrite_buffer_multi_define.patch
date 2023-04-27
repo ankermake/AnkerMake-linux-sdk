@@ -1,0 +1,12 @@
+diff -ru squashfs-tools-4.4/squashfs-tools/mksquashfs.h squashfs-tools-4.4-2/squashfs-tools/mksquashfs.h
+--- squashfs-tools-4.4/squashfs-tools/mksquashfs.h	2019-08-29 09:58:04.000000000 +0800
++++ squashfs-tools-4.4-2/squashfs-tools/mksquashfs.h	2020-11-23 19:40:31.689883572 +0800
+@@ -143,7 +143,7 @@
+ #endif
+ 
+ extern struct cache *reader_buffer, *fragment_buffer, *reserve_cache;
+-struct cache *bwriter_buffer, *fwriter_buffer;
++extern struct cache *bwriter_buffer, *fwriter_buffer;
+ extern struct queue *to_reader, *to_deflate, *to_writer, *from_writer,
+ 	*to_frag, *locked_fragment, *to_process_frag;
+ extern struct append_file **file_mapping;

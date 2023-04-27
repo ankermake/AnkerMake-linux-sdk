@@ -1,0 +1,16 @@
+#
+# Focaltech Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_FT5X16
+    bool "Focaltech ft5x16 Touchscreen"
+    default n
+    help
+      Say Y here if you have Focaltech touch panel.
+      If unsure, say N.
+
+config TOUCHSCREEN_FTS_DIRECTORY
+    string "Focaltech ft5x16 ts directory name"
+    default "focaltech_ft5x16_touch"
+    depends on TOUCHSCREEN_FT5X16
+

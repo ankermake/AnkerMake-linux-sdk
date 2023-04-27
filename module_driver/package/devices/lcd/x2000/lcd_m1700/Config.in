@@ -1,0 +1,31 @@
+menuconfig MD_X2000_LCD_M1700
+    bool "TFT M1700 (640x480) (X2000)"
+    select MD_X2000_FB
+    depends on MD_SOC_X2000_BASE
+
+config MD_X2000_M1700_RST
+    string "gpio reset(lcd 复位引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_M1700_POWER_EN
+    string "gpio power enable(lcd power使能引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_M1700_SPI_SCL
+    string "spi clk(时钟引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_M1700_SPI_SDA
+    string "spi sda(mosi 输出引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_M1700_SPI_CS
+    string "spi cs(片选脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+endmenu # MD_X2000_LCD_M1700

@@ -1,0 +1,15 @@
+
+choice
+	prompt "Chip type"
+	depends on SOC_X1520
+	default CHIP_X1520
+
+config CHIP_X1520
+	bool "chip-x1520"
+	select TRACEPOINTS
+	select SYS_SUPPORTS_HIGHMEM
+	select GENERIC_CLOCKEVENTS_BROADCAST
+
+endchoice
+
+

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+case "$1" in
+    start)
+        if [ ! -d /tmp/sdcard/ ]; then
+            mkdir -p /tmp/sdcard/
+        fi
+
+        sh /etc/usb_mtp_server.sh start
+    ;;
+    *)
+        exit 1
+esac
+
+exit 0

@@ -1,0 +1,15 @@
+
+choice
+prompt "Ext BOARD version"
+depends on PRODUCT_X1000_MODULE_BASE
+default BOARD_X1000_MODULE_BASE_BOARD0
+
+config BOARD_X1000_MODULE_BASE_BOARD0
+bool "board0"
+depends on PRODUCT_X1000_MODULE_BASE
+
+endchoice
+
+config BOARD_NAME
+string
+default "board0" if BOARD_X1000_MODULE_BASE_BOARD0

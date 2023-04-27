@@ -1,0 +1,51 @@
+array SOC_X1000_SPI0_MISO_IO
+    string "SPI MISO(DR) 引脚"
+    item "GPIO_NULL  " -1
+    item "PA23" PA23
+    item "PA28" PA28
+    item "PD3" PD3
+
+array SOC_X1000_SPI0_MOSI_IO
+    string "SPI MOSI(DT) 引脚"
+    item "GPIO_NULL  " -1
+    item "PA22" PA22
+    item "PA29" PA29
+    item "PD2" PD2
+
+array SOC_X1000_SPI0_CLK_IO
+    string "SPI CLK 引脚"
+    item "GPIO_NULL  " -1
+    item "PA24" PA24
+    item "PA26" PA26
+    item "PD0" PD0
+
+menu "SPI 总线"
+    help
+        "依赖于 SPI 驱动"
+
+config MD_X1000_SPI
+    bool "选择 SPI0"
+
+config MD_X1000_SPI0_MISO
+    string "        MISO(输入引脚)"
+    default PA23
+    choice from SOC_X1000_SPI0_MISO_IO
+    depends on MD_X1000_SPI
+    help
+        "MISO= -1,表示不使用MISO引脚"
+
+config MD_X1000_SPI0_MOSI
+    string "        MOSI(输出引脚)"
+    default PA22
+    choice from SOC_X1000_SPI0_MOSI_IO
+    depends on MD_X1000_SPI
+    help
+        "MOSI= -1,表示不使用MOSI引脚"
+
+config MD_X1000_SPI0_CLK
+    string "        CLK(时钟引脚)"
+    default PA24
+    choice from SOC_X1000_SPI0_CLK_IO
+    depends on MD_X1000_SPI
+
+endmenu # SPI 总线

@@ -1,0 +1,28 @@
+menuconfig MD_AX88796C_SPI
+    bool "AX88796C SPI ETHERNET"
+    select MD_UTILS_SPI
+
+config MD_AX88796C_SPI_SPI_BUS_NUM
+    int "spi bus num(挂接在哪个spi 总线)"
+    default -1
+
+config MD_AX88796C_SPI_GPIO_CS
+    string "cs gpio(spi 片选)"
+    default -1
+    choice from SOC_GPIO_PINS
+
+config MD_AX88796C_SPI_GPIO_IRQ
+    string "irq gpio(接收ax88796c-spi的中断)"
+    default -1
+    choice from SOC_GPIO_PINS
+
+config MD_AX88796C_SPI_GPIO_RESET
+    string "reset gpio(复位脚)"
+    default -1
+    choice from SOC_GPIO_PINS
+
+config MD_AX88796C_SPI_DEBUG
+    bool "开启网卡debug打印"
+    default n
+
+endmenu

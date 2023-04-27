@@ -1,0 +1,149 @@
+menuconfig SOC_TYPE
+	tristate "SOC type"
+	depends on MACH_XBURST
+	default y
+
+if SOC_TYPE
+choice
+	prompt "SOC types"
+	depends on MACH_XBURST
+	default SOC_X1000
+
+config SOC_X1000
+	bool "x1000 socs"
+	select INGENIC_INTC
+	select CLK_X1000
+	select CLKSRC_OF
+	select PINCTRL
+	select BUILTIN_DTB
+	select CLKDEV_LOOKUP
+	select PINCTRL_INGENIC
+	select CLKSRC_INGENIC_SYS_OST
+
+config SOC_X1800
+	bool "x1800 socs"
+	select INGENIC_INTC
+	select CLK_X1800
+	select CLKSRC_OF
+	select PINCTRL
+	select BUILTIN_DTB
+	select CLKDEV_LOOKUP
+	select PINCTRL_INGENIC
+	select PINCTRL_INGENIC_LEGACY_GPIO
+	select CLKSRC_INGENIC_SYS_OST
+	select XBURST_MXUV2
+
+config SOC_X1021
+	bool "x1021 socs"
+	select INGENIC_INTC
+	select CLK_X1021
+	select CLKSRC_OF
+	select PINCTRL
+	select BUILTIN_DTB
+	select CLKDEV_LOOKUP
+	select PINCTRL_INGENIC
+	select PINCTRL_INGENIC_LEGACY_GPIO
+	select CLKSRC_INGENIC_SYS_OST
+	select XBURST_MXUV2
+
+config SOC_X1520
+	bool "x1520 socs"
+	select INGENIC_INTC
+	select CLK_X1520
+	select CLKSRC_OF
+	select PINCTRL
+	select BUILTIN_DTB
+	select CLKDEV_LOOKUP
+	select PINCTRL_INGENIC
+	select PINCTRL_INGENIC_LEGACY_GPIO
+	select CLKSRC_INGENIC_SYS_OST
+	select XBURST_MXUV2
+
+config SOC_X1630
+	bool "x1630 socs"
+	select INGENIC_INTC
+	select CLK_X1630
+	select CLKSRC_OF
+	select PINCTRL
+	select BUILTIN_DTB
+	select CLKDEV_LOOKUP
+	select PINCTRL_INGENIC
+	select PINCTRL_INGENIC_LEGACY_GPIO
+	select CLKSRC_INGENIC_SYS_OST
+	select XBURST_MXUV2
+
+config SOC_X1600
+	bool "x1600 socs"
+	select INGENIC_INTC
+	select CLK_X1600
+	select CLKSRC_OF
+	select PINCTRL
+	select BUILTIN_DTB
+	select CLKDEV_LOOKUP
+	select PINCTRL_INGENIC
+	select PINCTRL_INGENIC_LEGACY_GPIO
+	select CLKSRC_INGENIC_SYS_OST
+	select MMU_NOTIFIER
+endchoice
+
+
+choice
+	prompt "device tree select"
+	default DT_NONE
+config DT_NONE
+
+config DT_XBURST_EXTERNAL_BOARD
+	bool "xburst external board."
+
+
+if SOC_X1000
+source "arch/mips/xburst/soc-x1000/Kconfig.DT"
+endif
+if SOC_X1800
+source "arch/mips/xburst/soc-x1800/Kconfig.DT"
+endif
+if SOC_X1021
+source "arch/mips/xburst/soc-x1021/Kconfig.DT"
+endif
+if SOC_X1520
+source "arch/mips/xburst/soc-x1520/Kconfig.DT"
+endif
+if SOC_X1630
+source "arch/mips/xburst/soc-x1630/Kconfig.DT"
+endif
+if SOC_X1600
+source "arch/mips/xburst/soc-x1600/Kconfig.DT"
+endif
+endchoice
+
+config DT_X1600_MODULE_BASE_DTS_FILE
+    string "dts file for x1600 module driver"
+    depends on DT_X1600_MODULE_BASE
+    default x1600_module_base.dts
+    help
+        the dts file location is arch/mips/boot/dts/ingenic/
+
+config EXTAL_CLOCK
+	depends on MACH_XBURST
+	int "extal clock in MHz"
+	default 24
+
+config INGENIC_GPT_CHECK
+	depends on MACH_XBURST
+	bool "The physical space is larger than the virtual space"
+	default y
+
+config SUSPEND_TEST
+	bool "auto suspend test"
+	default n
+
+config SUSPEND_ALARM_TIME
+	int "suspend alarm time(second)"
+	depends on SUSPEND_TEST
+	default 2
+
+config XBURST_MXUV2
+	bool
+	default n
+
+endif

@@ -1,0 +1,8 @@
+menuconfig APP_br_h264_server
+    bool "h264 服务的相关配置"
+
+config APP_br_h264_server_file
+    bool "开机自动启动硬件h264后台服务"
+    default y
+
+endmenu

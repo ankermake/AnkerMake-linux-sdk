@@ -1,0 +1,9 @@
+package-$(MD_BCMDHD_1_363_125_7) += package/devices/wireless/bcmdhd_1.363.125.7/bcmdhd_1.363.125.7.mk
+package-$(MD_BCMDHD_1_363_125_19) += package/devices/wireless/bcmdhd_1.363.125.19_infineon/bcmdhd_1.363.125.19.mk
+package-$(MD_BCMDHD) += package/devices/wireless/bcmdhd/bcmdhd.mk
+package-$(MD_BCMDHD_1_363_59_144) += package/devices/wireless/bcmdhd_1.363.59.144/bcmdhd_1.363.59.144.mk
+package-$(MD_RTL8723DS) += package/devices/wireless/rtl8723DS_WiFi_linux_v5.10/rtl8723DS_WiFi_linux_v5.10.mk
+package-$(MD_RTL8189FS) += package/devices/wireless/rtl8189FS_linux_v5.7.10/rtl8189FS_linux_v5.7.10.mk
+package-$(MD_HI3861) += package/devices/wireless/hi3861v031_linux/hi3861v031_linux.mk
+package-$(MD_ESP8089) += package/devices/wireless/esp8089_linux/esp8089_linux.mk
+package-$(MD_SSV6X5X) += package/devices/wireless/ssv6x5x_linux/ssv6x5x_linux.mk

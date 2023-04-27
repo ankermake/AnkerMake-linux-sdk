@@ -1,0 +1,10 @@
+menuconfig APP_br_display_logo
+    bool "开机显示logo"
+
+config APP_br_logo_path
+    string "    jpeg 图片本地路径"
+    default rootfs_config/file/display_logo/test.jpeg
+    help
+        "jpeg 图片路径  例:rootfs_config/file/display_logo/test.jpegg"
+
+endmenu

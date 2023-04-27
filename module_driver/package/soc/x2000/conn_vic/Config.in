@@ -1,0 +1,4 @@
+menuconfig MD_X2000_CONN_VIC
+    bool "使用RTOS端的VIC驱动(核间通信)"
+
+endmenu

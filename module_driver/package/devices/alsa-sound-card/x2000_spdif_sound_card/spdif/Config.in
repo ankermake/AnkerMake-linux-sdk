@@ -1,0 +1,2 @@
+config MD_X2000_SPDIF_SOUND_CARD
+    bool "使用 x2000 spdif 创建一个声卡"

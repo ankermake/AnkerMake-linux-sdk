@@ -1,0 +1,27 @@
+menuconfig MD_X2000_510_MSC
+    bool "msc 控制器驱动"
+
+config MD_X2000_510_WIFI_POWER_ON
+    string "    wifi 模块供电引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_510_WIFI_POWER_LEVEL
+	string "wifi_power_on_level (msc 模块加载前设置 wifi 供电引脚的电平,使 wifi 断电)"
+	default 0
+	choice from MD_GPIO_ACTIVE_LEVEL
+
+config MD_X2000_510_WIFI_REG_ON
+    string "    wifi 使能引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_510_WIFI_REG_LEVEL
+	string "wifi_reg_on_level (msc 模块加载前设置 wifi 使能引脚的电平,使 wifi 断电)"
+	default 0
+	choice from MD_GPIO_ACTIVE_LEVEL
+
+source package/soc/x2000_510/msc/msc0.in
+source package/soc/x2000_510/msc/msc1.in
+source package/soc/x2000_510/msc/msc2.in
+endmenu # MSC 总线

@@ -1,0 +1,15 @@
+package-$(MD_X1830_SPI) += package/soc/x1830/spi/spi.mk
+package-$(MD_X1830_ADC) += package/soc/x1830/adc/adc.mk
+package-$(MD_X1830_PWM) += package/soc/x1830/pwm/pwm.mk
+package-$(MD_X1830_EFUSE) += package/soc/x1830/efuse/efuse.mk
+package-$(MD_X1830_WATCHDOG) += package/soc/x1830/watchdog/watchdog.mk
+package-$(MD_X1830_I2C) += package/soc/x1830/i2c/i2c.mk
+package-$(MD_X1830_DMIC) += package/soc/x1830/dmic/dmic.mk
+package-$(MD_X1830_UTILS) += package/soc/x1830/utils/utils.mk
+package-$(MD_X1830_FB) += package/soc/x1830/fb/fb.mk
+package-$(MD_X1830_CAMERA) += package/soc/x1830/camera/camera.mk
+package-$(MD_X1830_MSCALER) += package/soc/x1830/mscaler/mscaler.mk
+package-$(MD_X1830_GPIO) += package/soc/x1830/gpio/gpio.mk
+package-$(MD_X1830_MAC) += package/soc/x1830/mac/mac.mk
+package-$(MD_X1830_ICODEC) += package/soc/x1830/icodec/icodec.mk
+package-$(MD_X1830_AIC) += package/soc/x1830/aic/aic.mk

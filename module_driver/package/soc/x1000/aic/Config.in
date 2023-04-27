@@ -1,0 +1,3 @@
+config MD_X1000_AIC
+    bool "aic(i2s 接口)"
+

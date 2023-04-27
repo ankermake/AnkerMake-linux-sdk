@@ -1,0 +1,64 @@
+menuconfig MD_BCMDHD_1_363_125_19
+	bool "Cypress Module AW-NB197SM new(43438) wireless cards support"
+	help
+	  This module adds support for wireless adapters based on
+	  Cypress AW-NB197SM(43438) chipset.
+
+config MD_BCMDHD_1_363_125_19_SDIO
+	bool "SDIO bus interface support"
+	default y
+
+config MD_BCMDHD_1_363_125_19_MMC_NUM
+	int "wlan_mmc_num (mmc/sdio 总线号)"
+	default -1
+	help
+	  wifi 挂接在哪个 mmc 总线,比如 0, 1
+
+config MD_BCMDHD_1_363_125_19_BT_WIFI_POWER
+	string "gpio_bt_wifi_power(控制整个bt,wifi模块的供电)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_19_BT_WIFI_POWER_VALID_LEVEL
+	string "gpio_bt_wifi_power_valid_level(bt,wifi模块供电引脚的有效电平)"
+	default 0
+	choice from MD_GPIO_ACTIVE_LEVEL
+
+config MD_BCMDHD_1_363_125_19_WLAN_REG_ON
+	string "gpio_wlan_reg_on(wifi的使能引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_19_WLAN_WAKE_HOST
+	string "gpio_wlan_wake_host(wifi 唤醒/中断 cpu 的引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_19_BT_REG_ON
+	string "gpio_bt_reg_on(bt的使能引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_19_HOST_WAKE_BT
+	string "gpio_host_wake_bt(cpu 唤醒/中断 bt 的引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_19_BT_WAKE_HOST
+	string "gpio_bt_wake_host(bt 唤醒/中断 cpu 的引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_1_363_125_19_FW_PATH
+	string "Firmware path"
+	default "/lib/firmware/wifi_bcm/cyw43438-7.46.58.13.bin"
+	help
+	  Path to the firmware file.
+
+config MD_BCMDHD_1_363_125_19_NVRAM_PATH
+	string "NVRAM path"
+	default "/lib/firmware/wifi_bcm/nvram_azw372.txt"
+	help
+	  Path to the calibration file.
+
+endmenu

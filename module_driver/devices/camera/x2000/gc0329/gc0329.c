@@ -1,0 +1,1543 @@
+/*
+ * Copyright (C) 2020 Ingenic Semiconductor Co., Ltd.
+ *
+ * GC0329
+ *
+ */
+
+#include <linux/module.h>
+#include <utils/gpio.h>
+#include <utils/i2c.h>
+#include <common.h>
+#include <camera/hal/camera_sensor.h>
+#include <camera/hal/dvp_gpio_func.h>
+
+#define GC0329_DEVICE_NAME              "gc0329"
+#define GC0329_DEVICE_I2C_ADDR          0x31
+#define GC0329_CHIP_ID                  0xc0
+
+#define GC0329_REG_END                  0xffff
+#define GC0329_REG_DELAY                0xfffe
+#define GC0329_SUPPORT_SCLK             (24000000)
+
+static int power_gpio   = -1;       //PA10
+static int reset_gpio   = -1;       //PA09
+static int pwdn_gpio    = -1;       //PA11
+static int i2c_bus_num  = -1;       //3
+static int dvp_gpio_func = -1;      //low 8
+static int camera_index = 0;
+
+module_param_gpio(power_gpio, 0644);
+module_param_gpio(reset_gpio, 0644);
+module_param_gpio(pwdn_gpio, 0644);
+module_param(i2c_bus_num, int, 0644);
+module_param(camera_index, int, 0644);
+
+static char *dvp_gpio_func_str = "DVP_PA_LOW_8BIT";
+module_param(dvp_gpio_func_str, charp, 0644);
+MODULE_PARM_DESC(dvp_gpio_func_str, "Sensor GPIO function");
+
+static char *resolution = "GC0329_640_480_25FPS";
+module_param(resolution, charp, 0644);
+MODULE_PARM_DESC(resolution, "gc0329_resolution");
+
+static struct i2c_client *i2c_dev;
+
+
+static char *resolution_array[] = {
+    "GC0329_640_480_25FPS",
+    "GC0329_320_240_60FPS",
+    "GC0329_320_320_93FPS_GRAY",
+};
+
+static struct sensor_attr gc0329_sensor_attr;
+
+struct regval_list {
+    unsigned short reg_num;
+    unsigned char value;
+};
+
+static struct regval_list gc0329_init_regs_640_480_dvp_25fps[] = {
+
+    {0xfe , 0x80},
+    {0xfc , 0x16},
+    {0xfc , 0x16},
+    {0xfe , 0x00},
+    {0x70 , 0x48},
+    {0x73 , 0x90},
+    {0x74 , 0x80},
+    {0x75 , 0x80},
+    {0x76 , 0x94}, //80 jambo
+    {0x77 , 0x62},
+    {0x78 , 0x47},
+    {0x79 , 0x40},
+
+    {0x03 , 0x02},
+    {0x04 , 0x40},
+    ////////////////////analog////////////////////
+    {0xfc , 0x16},
+    {0x09 , 0x00},
+    {0x0a , 0x02},
+    {0x0b , 0x00},
+    {0x0c , 0x02},
+    {0x17 , 0x14},
+    {0x19 , 0x05},
+    {0x1b , 0x24},
+    {0x1c , 0x04},
+    {0x1e , 0x08},
+    {0x1f , 0x08}, //C8
+    {0x20 , 0x01},
+    {0x21 , 0x48},
+    {0x22 , 0xba},
+    {0x23 , 0x22},
+    {0x24 , 0x16},
+    ////////////////////blk////////////////////
+    {0x26 , 0xf7}, //BLK
+    {0x28 , 0x7f}, //BLK limit
+    {0x29 , 0x00},
+    {0x32 , 0x00}, //04 darkc
+    {0x33 , 0x20}, //blk ratio
+    {0x34 , 0x20},
+    {0x35 , 0x20},
+    {0x36 , 0x20},
+
+    {0x3b , 0x04}, //manual offset
+    {0x3c , 0x04},
+    {0x3d , 0x04},
+    {0x3e , 0x04},
+    ////////////////////ISP BLOCK ENABLE////////////////////
+    {0x40 , 0xff},
+    {0x41 , 0x24},//[5]skin detection
+    {0x42 , 0xfa},//disable ABS
+    {0x46 , 0x06},
+    {0x4b , 0xca},
+    {0x4d , 0x01},
+    {0x4f , 0x01},
+    {0x70 , 0x48},
+    ////////////////////DNDD////////////////////
+    {0x80 , 0x07}, // 0xe7 20140915
+    {0x81 , 0xc2}, // 0x22 20140915
+    {0x82 , 0x90}, //DN auto DNDD DEC DNDD //0e //55 jambo
+    {0x83 , 0x05},
+    {0x87 , 0x40}, // 0x4a  20140915
+    ////////////////////INTPEE////////////////////
+    {0x90 , 0x8c}, //ac
+    {0x92 , 0x05},
+    {0x94 , 0x05},
+    {0x95 , 0x45}, //0x44
+    {0x96 , 0x88},
+    ////////////////////ASDE////////////////////
+    {0xfe , 0x01},
+    {0x18 , 0x22},
+    {0xfe , 0x00},
+    {0x9c , 0x0a},
+    {0xa0 , 0xaf},
+    {0xa2 , 0xff},
+    {0xa4 , 0x30}, //50 jambo
+    {0xa5 , 0x31},
+    {0xa7 , 0x35},
+    ////////////////////RGB gamma////////////////////
+    {0xfe , 0x00},
+    {0xbf , 0x0b},
+    {0xc0 , 0x1d},
+    {0xc1 , 0x33},
+    {0xc2 , 0x49},
+    {0xc3 , 0x5d},
+    {0xc4 , 0x6e},
+    {0xc5 , 0x7c},
+    {0xc6 , 0x99},
+    {0xc7 , 0xaf},
+    {0xc8 , 0xc2},
+    {0xc9 , 0xd0},
+    {0xca , 0xda},
+    {0xcb , 0xe2},
+    {0xcc , 0xe7},
+    {0xcd , 0xf0},
+    {0xce , 0xf7},
+    {0xcf , 0xff},
+    ////////////////////Y gamma////////////////////
+    {0xfe , 0x00},
+    {0x63 , 0x00},
+    {0x64 , 0x06},
+    {0x65 , 0x0d},
+    {0x66 , 0x1b},
+    {0x67 , 0x2b},
+    {0x68 , 0x3d},
+    {0x69 , 0x50},
+    {0x6a , 0x60},
+    {0x6b , 0x80},
+    {0x6c , 0xa0},
+    {0x6d , 0xc0},
+    {0x6e , 0xe0},
+    {0x6f , 0xff},
+    //////////////////CC///////////////////
+#if 1 //main
+    {0xfe , 0x00},
+    {0xb3 , 0x44},
+    {0xb4 , 0xfd},
+    {0xb5 , 0x02},
+    {0xb6 , 0xfa},
+    {0xb7 , 0x48},
+    {0xb8 , 0xf0},
+#else //sub
+    {0xfe , 0x00},
+    {0xb3 , 0x42},//40
+    {0xb4 , 0xff},//00
+    {0xb5 , 0x06},//06
+    {0xb6 , 0xf0},//00
+    {0xb7 , 0x44},//40
+    {0xb8 , 0xf0},//00
+#endif
+    // crop
+    {0x50 , 0x01},
+    ////////////////////YCP////////////////////
+    {0xfe , 0x00},
+
+    {0xd0 , 0x40},
+    {0xd1 , 0x28},
+    {0xd2 , 0x28},
+
+    {0xd3 , 0x40}, //cont 0x40
+    {0xd5 , 0x00},
+
+    {0xdd , 0x14},
+    {0xde , 0x34},
+
+    ////////////////////AEC////////////////////
+    {0xfe , 0x01},
+    {0x10 , 0x40}, // before Gamma
+    {0x11 , 0x21}, //
+    {0x12 , 0x13},  // center weight *2
+    {0x13 , 0x50}, //4 //4}, // AE Target
+    {0x17 , 0xa8},  //88, 08, c8, a8
+    {0x1a , 0x21},
+    {0x20 , 0x31},  //AEC stop margin
+    {0x21 , 0xc0},
+    {0x22 , 0x60},
+    {0x3c , 0x50},
+    {0x3d , 0x40},
+    {0x3e , 0x45}, //read 3f for status
+
+    ////////////////////AWB////////////////////
+#if 1 //main
+    {0xfe , 0x01},
+    {0x06 , 0x12},
+    {0x07 , 0x06},
+    {0x08 , 0x9c},
+    {0x09 , 0xee},
+    {0x50 , 0xfc},
+    {0x51 , 0x28},
+    {0x52 , 0x10},
+    {0x53 , 0x20},
+    {0x54 , 0x12},
+    {0x55 , 0x16},
+    {0x56 , 0x30},
+    {0x58 , 0x60},
+    {0x59 , 0x08},
+    {0x5a , 0x02},
+    {0x5b , 0x63},
+    {0x5c , 0x35},
+    {0x5d , 0x72},
+    {0x5e , 0x11},
+    {0x5f , 0x40},
+    {0x60 , 0x40},
+    {0x61 , 0xc8},
+    {0x62 , 0xa0},
+    {0x63 , 0x40},
+    {0x64 , 0x50},
+    {0x65 , 0x98},
+    {0x66 , 0xfa},
+    {0x67 , 0x80},
+    {0x68 , 0x60},
+    {0x69 , 0x90},
+    {0x6a , 0x40},
+    {0x6b , 0x39},
+    {0x6c , 0x30},
+    {0x6d , 0x60},
+    {0x6e , 0x41},
+    {0x70 , 0x10},
+    {0x71 , 0x00},
+    {0x72 , 0x10},
+    {0x73 , 0x40},
+    {0x80 , 0x60},
+    {0x81 , 0x50},
+    {0x82 , 0x42},
+    {0x83 , 0x40},
+    {0x84 , 0x40},
+    {0x85 , 0x40},
+    {0x74 , 0x40},
+    {0x75 , 0x58},
+    {0x76 , 0x24},
+    {0x77 , 0x40},
+    {0x78 , 0x20},
+    {0x79 , 0x60},
+    {0x7a , 0x58},
+    {0x7b , 0x20},
+    {0x7c , 0x30},
+    {0x7d , 0x35},
+    {0x7e , 0x10},
+    {0x7f , 0x08},
+#else //sub
+    {0xfe , 0x01},
+    {0x06 , 0x16},
+    {0x07 , 0x06},
+    {0x08 , 0x98},
+    {0x09 , 0xee},
+    {0x50 , 0xfc},
+    {0x51 , 0x20},
+    {0x52 , 0x1b},//0b
+    {0x53 , 0x10},//20
+    {0x54 , 0x10},//40
+    {0x55 , 0x10},
+    {0x56 , 0x20},
+    {0x57 , 0xa0},
+    {0x58 , 0xa0},
+    {0x59 , 0x28},
+    {0x5a , 0x02},
+    {0x5b , 0x63},
+    {0x5c , 0x04},//34
+    {0x5d , 0x73},
+    {0x5e , 0x11},
+    {0x5f , 0x40},
+    {0x60 , 0x40},
+    {0x61 , 0xc8},//d8 //c8
+    {0x62 , 0xa0},///88 //A0
+    {0x63 , 0x40},
+    {0x64 , 0x40},//37
+    {0x65 , 0xd0},
+    {0x66 , 0xfa},
+    {0x67 , 0x70},
+    {0x68 , 0x58},
+    {0x69 , 0xa5}, //85 jaambo
+    {0x6a , 0x40},
+    {0x6b , 0x39},
+    {0x6c , 0x18},
+    {0x6d , 0x28},
+    {0x6e , 0x41},
+    {0x70 , 0x40},
+    {0x71 , 0x00},
+    {0x72 , 0x10},
+    {0x73 , 0x30},//awb outdoor-th
+    {0x80 , 0x60},
+    {0x81 , 0x50},
+    {0x82 , 0x42},
+    {0x83 , 0x40},
+    {0x84 , 0x40},
+    {0x85 , 0x40},
+    {0x86 , 0x40},
+    {0x87 , 0x40},
+    {0x88 , 0xfe},
+    {0x89 , 0xa0},
+    {0x74 , 0x40},
+    {0x75 , 0x58},
+    {0x76 , 0x24},
+    {0x77 , 0x40},
+    {0x78 , 0x20},
+    {0x79 , 0x60},
+    {0x7a , 0x58},
+    {0x7b , 0x20},
+    {0x7c , 0x30},
+    {0x7d , 0x35},
+    {0x7e , 0x10},
+    {0x7f , 0x08},
+#endif
+    ///////////////////ABS///////////////////////
+    {0x9c , 0x00},
+    {0x9e , 0xc0},
+    {0x9f , 0x40},
+    ////////////////////CC-AWB////////////////////
+    {0xd0 , 0x00},
+    {0xd2 , 0x2c},
+    {0xd3 , 0x80},
+    ///////////////////LSC //////////////////////
+    {0xfe , 0x01},
+    {0xc0 , 0x0b},
+    {0xc1 , 0x07},
+    {0xc2 , 0x05},
+    {0xc6 , 0x0b},
+    {0xc7 , 0x07},
+    {0xc8 , 0x05},
+    {0xba , 0x39},
+    {0xbb , 0x24},
+    {0xbc , 0x23},
+    {0xb4 , 0x39},
+    {0xb5 , 0x24},
+    {0xb6 , 0x23},
+    {0xc3 , 0x00},
+    {0xc4 , 0x00},
+    {0xc5 , 0x00},
+    {0xc9 , 0x00},
+    {0xca , 0x00},
+    {0xcb , 0x00},
+    {0xbd , 0x2b},
+    {0xbe , 0x00},
+    {0xbf , 0x00},
+    {0xb7 , 0x09},
+    {0xb8 , 0x00},
+    {0xb9 , 0x00},
+    {0xa8 , 0x31},
+    {0xa9 , 0x23},
+    {0xaa , 0x20},
+    {0xab , 0x31},
+    {0xac , 0x23},
+    {0xad , 0x20},
+    {0xae , 0x31},
+    {0xaf , 0x23},
+    {0xb0 , 0x20},
+    {0xb1 , 0x31},
+    {0xb2 , 0x23},
+    {0xb3 , 0x20},
+    {0xa4 , 0x00},
+    {0xa5 , 0x00},
+    {0xa6 , 0x00},
+    {0xa7 , 0x00},
+    {0xa1 , 0x3c},
+    {0xa2 , 0x50},
+    {0xfe , 0x00},
+    //////////////////// flicker ///////////////////
+    {0x05 , 0x00},
+    {0x06 , 0x6A},
+    {0x07 , 0x00},
+    {0x08 , 0x70},
+    {0xfe , 0x01},
+    {0x29 , 0x00},  //anti-flicker step [11:8]
+    {0x2a , 0x90},  //anti-flicker step [7:0]
+    {0x2b , 0x02},  //exp level 0 , 0x14.28fps
+    {0x2c , 0x58},
+    {0x2d , 0x02},  //exp level 1 , 0x12.50fps
+    {0x2e , 0x58},
+    {0x2f , 0x02},  //exp level 2 , 0x10.00fps
+    {0x30 , 0x58},
+    {0x31 , 0x02},  //exp level 3 , 0x7.14fps
+    {0x32 , 0x58},
+    {0xfe , 0x00},
+    ////////////////////out ///////////////////
+    {0x50, 0x01},
+    {0x51, 0x00}, //win_y
+    {0x52, 0x00},
+    {0x53, 0x00}, //win_x
+    {0x54, 0x00},
+    {0x55, 0x01}, //win_height
+    {0x56, 0xe0},
+    {0x57, 0x02}, //win_width
+    {0x58, 0x80},
+    {0x44 ,0xa2},
+    {0xf0 ,0x07},
+    {0xf1 ,0x01},
+    {GC0329_REG_END, 0x00},    /* END MARKER */
+};
+
+
+static struct regval_list gc0329_init_regs_320_240_dvp_60fps[] = {
+
+    {0xfe , 0x80},
+    {0xfc , 0x16},
+    {0xfc , 0x16},
+    {0xfe , 0x00},
+
+    {0x70 , 0x48},
+    {0x73 , 0x90},
+    {0x74 , 0x80},
+    {0x75 , 0x80},
+    {0x76 , 0x94}, //80 jambo
+    {0x77 , 0x62},
+    {0x78 , 0x47},
+    {0x79 , 0x40},
+
+    {0x03 , 0x02},
+    {0x04 , 0x40},
+
+    ////////////////////analog////////////////////
+    {0xfc , 0x16},
+    {0x09 , 0x00},
+    {0x0a , 0x42},
+    {0x0b , 0x00},
+    {0x0c , 0x42},
+
+    {0x0d , 0x00},
+    {0x0e , 0xf8},
+    {0x0f , 0x01},
+    {0x10 , 0x48},
+
+    {0x17 , 0x14},
+    {0x19 , 0x05},
+    {0x1b , 0x24},
+    {0x1c , 0x04},
+    {0x1e , 0x08},
+    {0x1f , 0x08}, //C8
+    {0x20 , 0x01},
+    {0x21 , 0x48},
+    {0x22 , 0xba},
+    {0x23 , 0x22},
+    {0x24 , 0x16},
+
+    ////////////////////blk////////////////////
+    {0x26 , 0xf7}, //BLK
+    {0x28 , 0x7f}, //BLK limit
+    {0x29 , 0x00},
+    {0x32 , 0x00}, //04 darkc
+    {0x33 , 0x20}, //blk ratio
+    {0x34 , 0x20},
+    {0x35 , 0x20},
+    {0x36 , 0x20},
+
+    {0x3b , 0x04}, //manual offset
+    {0x3c , 0x04},
+    {0x3d , 0x04},
+    {0x3e , 0x04},
+
+    ////////////////////ISP BLOCK ENABLE////////////////////
+    {0x40 , 0xff},
+    {0x41 , 0x24},//[5]skin detection
+    {0x42 , 0xfa},//disable ABS
+    {0x46 , 0x06},
+    {0x4b , 0xca},
+    {0x4d , 0x01},
+    {0x4f , 0x01},
+    {0x70 , 0x48},
+
+    ////////////////////DNDD////////////////////
+    {0x80 , 0x07}, // 0xe7 20140915
+    {0x81 , 0xc2}, // 0x22 20140915
+    {0x82 , 0x90}, //DN auto DNDD DEC DNDD //0e //55 jambo
+    {0x83 , 0x05},
+    {0x87 , 0x40}, // 0x4a  20140915
+
+    ////////////////////INTPEE////////////////////
+    {0x90 , 0x8c}, //ac
+    {0x92 , 0x05},
+    {0x94 , 0x05},
+    {0x95 , 0x45}, //0x44
+    {0x96 , 0x88},
+
+    ////////////////////ASDE////////////////////
+    {0xfe , 0x01},
+    {0x18 , 0x22},
+    {0xfe , 0x00},
+    {0x9c , 0x0a},
+    {0xa0 , 0xaf},
+    {0xa2 , 0xff},
+    {0xa4 , 0x30}, //50 jambo
+    {0xa5 , 0x31},
+    {0xa7 , 0x35},
+
+    ////////////////////RGB gamma////////////////////
+    {0xfe , 0x00},
+    {0xbf , 0x0b},
+    {0xc0 , 0x1d},
+    {0xc1 , 0x33},
+    {0xc2 , 0x49},
+    {0xc3 , 0x5d},
+    {0xc4 , 0x6e},
+    {0xc5 , 0x7c},
+    {0xc6 , 0x99},
+    {0xc7 , 0xaf},
+    {0xc8 , 0xc2},
+    {0xc9 , 0xd0},
+    {0xca , 0xda},
+    {0xcb , 0xe2},
+    {0xcc , 0xe7},
+    {0xcd , 0xf0},
+    {0xce , 0xf7},
+    {0xcf , 0xff},
+
+    ////////////////////Y gamma////////////////////
+    {0xfe , 0x00},
+    {0x63 , 0x00},
+    {0x64 , 0x06},
+    {0x65 , 0x0d},
+    {0x66 , 0x1b},
+    {0x67 , 0x2b},
+    {0x68 , 0x3d},
+    {0x69 , 0x50},
+    {0x6a , 0x60},
+    {0x6b , 0x80},
+    {0x6c , 0xa0},
+    {0x6d , 0xc0},
+    {0x6e , 0xe0},
+    {0x6f , 0xff},
+
+    //////////////////CC///////////////////
+#if 1 //main
+    {0xfe , 0x00},
+    {0xb3 , 0x44},
+    {0xb4 , 0xfd},
+    {0xb5 , 0x02},
+    {0xb6 , 0xfa},
+    {0xb7 , 0x48},
+    {0xb8 , 0xf0},
+#else //sub
+    {0xfe , 0x00},
+    {0xb3 , 0x42},//40
+    {0xb4 , 0xff},//00
+    {0xb5 , 0x06},//06
+    {0xb6 , 0xf0},//00
+    {0xb7 , 0x44},//40
+    {0xb8 , 0xf0},//00
+#endif
+
+    // crop
+    {0x50 , 0x01},
+
+    ////////////////////YCP////////////////////
+    {0xfe , 0x00},
+
+    {0xd0 , 0x40},
+    {0xd1 , 0x28},
+    {0xd2 , 0x28},
+
+    {0xd3 , 0x40}, //cont 0x40
+    {0xd5 , 0x00},
+
+    {0xdd , 0x14},
+    {0xde , 0x34},
+
+    ////////////////////AEC////////////////////
+    {0xfe , 0x01},
+    {0x10 , 0x40}, // before Gamma
+    {0x11 , 0x21}, //
+    {0x12 , 0x13},  // center weight *2
+    {0x13 , 0x50}, //4 //4}, // AE Target
+    {0x17 , 0xa8},  //88, 08, c8, a8
+    {0x1a , 0x21},
+    {0x20 , 0x31},  //AEC stop margin
+    {0x21 , 0xc0},
+    {0x22 , 0x60},
+    {0x3c , 0x50},
+    {0x3d , 0x40},
+    {0x3e , 0x45}, //read 3f for status
+
+    ////////////////////AWB////////////////////
+#if 1 //main
+    {0xfe , 0x01},
+    {0x06 , 0x12},
+    {0x07 , 0x06},
+    {0x08 , 0x9c},
+    {0x09 , 0xee},
+    {0x50 , 0xfc},
+    {0x51 , 0x28},
+    {0x52 , 0x10},
+    {0x53 , 0x20},
+    {0x54 , 0x12},
+    {0x55 , 0x16},
+    {0x56 , 0x30},
+    {0x58 , 0x60},
+    {0x59 , 0x08},
+    {0x5a , 0x02},
+    {0x5b , 0x63},
+    {0x5c , 0x35},
+    {0x5d , 0x72},
+    {0x5e , 0x11},
+    {0x5f , 0x40},
+    {0x60 , 0x40},
+    {0x61 , 0xc8},
+    {0x62 , 0xa0},
+    {0x63 , 0x40},
+    {0x64 , 0x50},
+    {0x65 , 0x98},
+    {0x66 , 0xfa},
+    {0x67 , 0x80},
+    {0x68 , 0x60},
+    {0x69 , 0x90},
+    {0x6a , 0x40},
+    {0x6b , 0x39},
+    {0x6c , 0x30},
+    {0x6d , 0x60},
+    {0x6e , 0x41},
+    {0x70 , 0x10},
+    {0x71 , 0x00},
+    {0x72 , 0x10},
+    {0x73 , 0x40},
+    {0x80 , 0x60},
+    {0x81 , 0x50},
+    {0x82 , 0x42},
+    {0x83 , 0x40},
+    {0x84 , 0x40},
+    {0x85 , 0x40},
+    {0x74 , 0x40},
+    {0x75 , 0x58},
+    {0x76 , 0x24},
+    {0x77 , 0x40},
+    {0x78 , 0x20},
+    {0x79 , 0x60},
+    {0x7a , 0x58},
+    {0x7b , 0x20},
+    {0x7c , 0x30},
+    {0x7d , 0x35},
+    {0x7e , 0x10},
+    {0x7f , 0x08},
+#else //sub
+    {0xfe , 0x01},
+    {0x06 , 0x16},
+    {0x07 , 0x06},
+    {0x08 , 0x98},
+    {0x09 , 0xee},
+    {0x50 , 0xfc},
+    {0x51 , 0x20},
+    {0x52 , 0x1b},//0b
+    {0x53 , 0x10},//20
+    {0x54 , 0x10},//40
+    {0x55 , 0x10},
+    {0x56 , 0x20},
+    {0x57 , 0xa0},
+    {0x58 , 0xa0},
+    {0x59 , 0x28},
+    {0x5a , 0x02},
+    {0x5b , 0x63},
+    {0x5c , 0x04},//34
+    {0x5d , 0x73},
+    {0x5e , 0x11},
+    {0x5f , 0x40},
+    {0x60 , 0x40},
+    {0x61 , 0xc8},//d8 //c8
+    {0x62 , 0xa0},///88 //A0
+    {0x63 , 0x40},
+    {0x64 , 0x40},//37
+    {0x65 , 0xd0},
+    {0x66 , 0xfa},
+    {0x67 , 0x70},
+    {0x68 , 0x58},
+    {0x69 , 0xa5}, //85 jaambo
+    {0x6a , 0x40},
+    {0x6b , 0x39},
+    {0x6c , 0x18},
+    {0x6d , 0x28},
+    {0x6e , 0x41},
+    {0x70 , 0x40},
+    {0x71 , 0x00},
+    {0x72 , 0x10},
+    {0x73 , 0x30},//awb outdoor-th
+    {0x80 , 0x60},
+    {0x81 , 0x50},
+    {0x82 , 0x42},
+    {0x83 , 0x40},
+    {0x84 , 0x40},
+    {0x85 , 0x40},
+    {0x86 , 0x40},
+    {0x87 , 0x40},
+    {0x88 , 0xfe},
+    {0x89 , 0xa0},
+    {0x74 , 0x40},
+    {0x75 , 0x58},
+    {0x76 , 0x24},
+    {0x77 , 0x40},
+    {0x78 , 0x20},
+    {0x79 , 0x60},
+    {0x7a , 0x58},
+    {0x7b , 0x20},
+    {0x7c , 0x30},
+    {0x7d , 0x35},
+    {0x7e , 0x10},
+    {0x7f , 0x08},
+#endif
+
+    ///////////////////ABS///////////////////////
+    {0x9c , 0x00},
+    {0x9e , 0xc0},
+    {0x9f , 0x40},
+
+    ////////////////////CC-AWB////////////////////
+    {0xd0 , 0x00},
+    {0xd2 , 0x2c},
+    {0xd3 , 0x80},
+
+    ///////////////////LSC //////////////////////
+
+    {0xfe , 0x01},
+    {0xc0 , 0x0b},
+    {0xc1 , 0x07},
+    {0xc2 , 0x05},
+    {0xc6 , 0x0b},
+    {0xc7 , 0x07},
+    {0xc8 , 0x05},
+    {0xba , 0x39},
+    {0xbb , 0x24},
+    {0xbc , 0x23},
+    {0xb4 , 0x39},
+    {0xb5 , 0x24},
+    {0xb6 , 0x23},
+    {0xc3 , 0x00},
+    {0xc4 , 0x00},
+    {0xc5 , 0x00},
+    {0xc9 , 0x00},
+    {0xca , 0x00},
+    {0xcb , 0x00},
+    {0xbd , 0x2b},
+    {0xbe , 0x00},
+    {0xbf , 0x00},
+    {0xb7 , 0x09},
+    {0xb8 , 0x00},
+    {0xb9 , 0x00},
+    {0xa8 , 0x31},
+    {0xa9 , 0x23},
+    {0xaa , 0x20},
+    {0xab , 0x31},
+    {0xac , 0x23},
+    {0xad , 0x20},
+    {0xae , 0x31},
+    {0xaf , 0x23},
+    {0xb0 , 0x20},
+    {0xb1 , 0x31},
+    {0xb2 , 0x23},
+    {0xb3 , 0x20},
+    {0xa4 , 0x00},
+    {0xa5 , 0x00},
+    {0xa6 , 0x00},
+    {0xa7 , 0x00},
+    {0xa1 , 0x3c},
+    {0xa2 , 0x50},
+    {0xfe , 0x00},
+
+    //////////////////// flicker ///////////////////
+    {0x05 , 0x00},
+    {0x06 , 0x6A},
+    {0x07 , 0x00},
+    {0x08 , 0x70},
+    {0xfe , 0x01},
+    {0x29 , 0x00},  //anti-flicker step [11:8]
+    {0x2a , 0x90},  //anti-flicker step [7:0]
+    {0x2b , 0x02},  //exp level 0 , 0x14.28fps
+    {0x2c , 0x58},
+    {0x2d , 0x02},  //exp level 1 , 0x12.50fps
+    {0x2e , 0x58},
+    {0x2f , 0x02},  //exp level 2 , 0x10.00fps
+    {0x30 , 0x58},
+    {0x31 , 0x02},  //exp level 3 , 0x7.14fps
+    {0x32 , 0x58},
+    {0xfe , 0x00},
+
+    ////////////////////out ///////////////////
+    {0x50, 0x01},
+    {0x51, 0x00}, //win_y
+    {0x52, 0x00},
+    {0x53, 0x00}, //win_x
+    {0x54, 0x00},
+    {0x55, 0x00}, //win_height
+    {0x56, 0xf0},
+    {0x57, 0x01}, //win_width
+    {0x58, 0x40},
+
+    {0x44 , 0xa2},
+    {0xf0 , 0x07},
+    {0xf1 , 0x01},
+
+    {GC0329_REG_END, 0x00},    /* END MARKER */
+};
+
+static struct regval_list gc0329_init_regs_320_320_dvp_93fps_gray[] = {
+    {0xfe , 0x80},
+    {0xfc , 0x16},
+    {0xfc , 0x16},
+    {0xfe , 0x00},
+
+    {0x70 , 0x48},
+    {0x73 , 0x90},
+    {0x74 , 0x80},
+    {0x75 , 0x80},
+    {0x76 , 0x94}, //80 jambo
+    {0x77 , 0x62},
+    {0x78 , 0x47},
+    {0x79 , 0x40},
+
+    {0x03 , 0x00},
+    {0x04 , 0x96},
+
+    ////////////////////analog////////////////////
+    {0xfc , 0x16},
+    {0x09 , 0x00}, //row start[8]
+    {0x0a , 0x50}, //row start[7:0] height start
+    {0x0b , 0x00}, //col start[8]
+    {0x0c , 0xa0}, //col start[7:0] width start
+    {0x0d , 0x01}, //win height[8]
+    {0x0e , 0x48}, //win height[7:0], need +8
+    {0x0f , 0x01}, //win width[8]
+    {0x10 , 0x48}, //win width[7:0], need +8
+
+    {0x17 , 0x14},
+    {0x19 , 0x05},
+    {0x1b , 0x24},
+    {0x1c , 0x04},
+    {0x1e , 0x08},
+    {0x1f , 0x08}, //C8
+    {0x20 , 0x01},
+    {0x21 , 0x48},
+    {0x22 , 0xba},
+    {0x23 , 0x22},
+    {0x24 , 0x16},
+
+    ////////////////////blk////////////////////
+    {0x26 , 0xf7}, //BLK
+    {0x28 , 0x7f}, //BLK limit
+    {0x29 , 0x00},
+    {0x32 , 0x00}, //04 darkc
+    {0x33 , 0x20}, //blk ratio
+    {0x34 , 0x20},
+    {0x35 , 0x20},
+    {0x36 , 0x20},
+
+    {0x3b , 0x04}, //manual offset
+    {0x3c , 0x04},
+    {0x3d , 0x04},
+    {0x3e , 0x04},
+
+    ////////////////////ISP BLOCK ENABLE////////////////////
+    {0x40 , 0xCF},/* [7]BKS enable
+                     [6]gamma enable
+                     [5]CC enable
+                     [4]Edge Enhancement enable
+                     [3]Interpolation enable
+                     [2]Noise removal enable
+                     [1]Defect removal enable
+                     [0]Lens-shading correction enable */
+    {0x41 , 0x04},
+    {0x42 , 0x38},/* [7]Auto Saturation enable
+                     [6]auto EE enable
+                     [5]auto DN enable
+                     [4]auto DD enable
+                     [3]auto LSC enable
+                     [2]ABS enable
+                     [1]AWB enable
+                     [0]ACE enable */
+    {0x46 , 0x06},
+    {0x4b , 0xca},
+    {0x4d , 0x01},
+    {0x4f , 0x01},//enable AEC
+    {0x70 , 0x48},
+
+    ////////////////////DNDD////////////////////
+    {0x80 , 0x07}, // 0xe7 20140915
+    {0x81 , 0x31}, // 0x22 20140915
+    {0x82 , 0x3f}, //DN auto DNDD DEC DNDD //0e //55 jambo
+    {0x83 , 0x01},
+    {0x87 , 0x40}, // 0x4a  20140915
+
+    ////////////////////RGB gamma////////////////////
+    {0xfe , 0x00},
+    {0xbf , 0x0b},
+    {0xc0 , 0x1d},
+    {0xc1 , 0x33},
+    {0xc2 , 0x49},
+    {0xc3 , 0x5d},
+    {0xc4 , 0x6e},
+    {0xc5 , 0x7c},
+    {0xc6 , 0x99},
+    {0xc7 , 0xaf},
+    {0xc8 , 0xc2},
+    {0xc9 , 0xd0},
+    {0xca , 0xda},
+    {0xcb , 0xe2},
+    {0xcc , 0xe7},
+    {0xcd , 0xf0},
+    {0xce , 0xf7},
+    {0xcf , 0xff},
+
+    ////////////////////Y gamma////////////////////
+    {0xfe , 0x00},
+    {0x63 , 0x00},
+    {0x64 , 0x06},
+    {0x65 , 0x0d},
+    {0x66 , 0x1b},
+    {0x67 , 0x2b},
+    {0x68 , 0x3d},
+    {0x69 , 0x50},
+    {0x6a , 0x60},
+    {0x6b , 0x80},
+    {0x6c , 0xa0},
+    {0x6d , 0xc0},
+    {0x6e , 0xe0},
+    {0x6f , 0xff},
+
+    ////////////////////YCP////////////////////
+    {0xfe , 0x00},
+
+    {0xd0 , 0x40},
+    {0xd1 , 0x28}, //saturation_Cb: 3.5bits
+    {0xd2 , 0x28}, //saturation_Cr: 3.5bits
+
+    {0xd3 , 0x80}, //luma contrast: 2.6bits
+    {0xd4 , 0x80},
+    {0xd5 , 0x00},
+
+    {0xdd , 0x14},
+    {0xde , 0x34},
+
+    ////////////////////AEC////////////////////
+    {0xfe , 0x01},
+    {0x10 , 0x40}, // before Gamma
+    {0x11 , 0x11}, //
+    {0x12 , 0x08},  // center weight *2
+    {0x13 , 0x32}, //4 //4}, // AE Target
+    {0x17 , 0xa8},  //88, 08, c8, a8
+    {0x1a , 0x21},
+    {0x20 , 0x31},  //AEC stop margin
+    {0x21 , 0xd0},
+    {0x22 , 0x80},
+    {0x3c , 0x50},
+    {0x3d , 0x40},
+    {0x3e , 0x45}, //read 3f for status
+
+    {0x40 , 0x14},
+    {0x95 , 0x12},
+
+    ///////////////////LSC //////////////////////
+    {0xfe , 0x01},
+    {0xc0 , 0x0b},
+    {0xc1 , 0x07},
+    {0xc2 , 0x05},
+    {0xc6 , 0x0b},
+    {0xc7 , 0x07},
+    {0xc8 , 0x05},
+    {0xba , 0x39},
+    {0xbb , 0x24},
+    {0xbc , 0x23},
+    {0xb4 , 0x39},
+    {0xb5 , 0x24},
+    {0xb6 , 0x23},
+    {0xc3 , 0x00},
+    {0xc4 , 0x00},
+    {0xc5 , 0x00},
+    {0xc9 , 0x00},
+    {0xca , 0x00},
+    {0xcb , 0x00},
+    {0xbd , 0x2b},
+    {0xbe , 0x00},
+    {0xbf , 0x00},
+    {0xb7 , 0x09},
+    {0xb8 , 0x00},
+    {0xb9 , 0x00},
+    {0xa8 , 0x31},
+    {0xa9 , 0x23},
+    {0xaa , 0x20},
+    {0xab , 0x31},
+    {0xac , 0x23},
+    {0xad , 0x20},
+    {0xae , 0x31},
+    {0xaf , 0x23},
+    {0xb0 , 0x20},
+    {0xb1 , 0x31},
+    {0xb2 , 0x23},
+    {0xb3 , 0x20},
+    {0xa4 , 0x00},
+    {0xa5 , 0x00},
+    {0xa6 , 0x00},
+    {0xa7 , 0x00},
+    {0xa1 , 0x3c},
+    {0xa2 , 0x50},
+
+    //////////////////// flicker ///////////////////
+    {0xfe , 0x00},
+    {0x05 , 0x00},
+    {0x06 , 0x30},
+    {0x07 , 0x00},
+    {0x08 , 0x0F},
+    {0xfe , 0x01},
+    {0x29 , 0x00},  //anti-flicker step [11:8]
+    {0x2a , 0x80},  //anti-flicker step [7:0]
+    {0x2b , 0x01},  //exp level 0 , 0x14.28fps
+    {0x2c , 0x00},
+    {0x2d , 0x01},  //exp level 1 , 0x12.50fps
+    {0x2e , 0x00},
+    {0x2f , 0x01},  //exp level 2 , 0x10.00fps
+    {0x30 , 0x00},
+    {0x31 , 0x01},  //exp level 3 , 0x7.14fps
+    {0x32 , 0x00},
+
+    ////////////////////out ///////////////////
+    {0xfe , 0x00},
+    {0x50, 0x00},
+    {0x51, 0x00}, //win_y
+    {0x52, 0x00},
+    {0x53, 0x00}, //win_x
+    {0x54, 0x00},
+    {0x55, 0x01}, //win_height
+    {0x56, 0x40},
+    {0x57, 0x01}, //win_width
+    {0x58, 0x40},
+
+    {0x44 , 0xa2},
+    {0xf0 , 0x07},
+    {0xf1 , 0x01},
+
+    {GC0329_REG_END, 0x00},    /* END MARKER */
+};
+
+
+
+static struct regval_list gc0329_regs_stream_on[] = {
+    {0xfe , 0x00},
+    {0xf0 , 0x07},
+    {0xf1 , 0x01},
+    {GC0329_REG_END, 0x00},    /* END MARKER */
+};
+
+static struct regval_list gc0329_regs_stream_off[] = {
+    {0xfe , 0x00},
+    {0xf0 , 0x00},
+    {0xf1 , 0x00},
+    {GC0329_REG_END, 0x00},    /* END MARKER */
+};
+
+
+static int gc0329_write(struct i2c_client *i2c, unsigned char reg, unsigned char value)
+{
+    unsigned char buf[2] = {reg, value};
+    struct i2c_msg msg = {
+        .addr   = i2c->addr,
+        .flags  = 0,
+        .len    = 2,
+        .buf    = buf,
+    };
+
+    int ret = i2c_transfer(i2c->adapter, &msg, 1);
+    if (ret < 0) {
+        printk(KERN_ERR "gc0329: failed to write reg: %x\n", (int)reg);
+    }
+
+    return ret;
+}
+
+static int gc0329_read(struct i2c_client *i2c, unsigned char reg, unsigned char *value)
+{
+    unsigned char buf[1] = {reg & 0xff};
+    struct i2c_msg msg[2] = {
+        [0] = {
+            .addr  = i2c->addr,
+            .flags = 0,
+            .len   = 1,
+            .buf   = buf,
+        },
+        [1] = {
+            .addr  = i2c->addr,
+            .flags = I2C_M_RD,
+            .len   = 1,
+            .buf   = value,
+        }
+    };
+
+    int ret = i2c_transfer(i2c->adapter, msg, 2);
+    if (ret < 0) {
+        printk(KERN_ERR "gc0329(%x): failed to read reg: %x\n", i2c->addr, (int)reg);
+    }
+
+    return ret;
+}
+
+static int gc0329_write_array(struct i2c_client *i2c, struct regval_list *vals)
+{
+    int ret;
+
+    while (vals->reg_num != GC0329_REG_END) {
+        if (vals->reg_num == GC0329_REG_DELAY) {
+            m_msleep(vals->value);
+        } else {
+            ret = gc0329_write(i2c, vals->reg_num, vals->value);
+            if (ret < 0)
+                return ret;
+        }
+        // printk(KERN_ERR "vals->reg_num:%x, vals->value:%x\n", vals->reg_num, vals->value);
+        vals++;
+    }
+
+    return 0;
+}
+
+static inline int gc0329_read_array(struct i2c_client *i2c, struct regval_list *vals)
+{
+    int ret;
+    unsigned char val;
+
+    while (vals->reg_num != GC0329_REG_END) {
+        if (vals->reg_num == GC0329_REG_DELAY) {
+            m_msleep(vals->value);
+        } else {
+            ret = gc0329_read(i2c, vals->reg_num, &val);
+            if (ret < 0)
+                return ret;
+        }
+        printk(KERN_ERR "vals->reg_num:%x, vals->value:%x\n", vals->reg_num, val);
+        vals++;
+    }
+
+    return 0;
+}
+
+static int gc0329_detect(struct i2c_client *i2c)
+{
+    unsigned char val;
+    int ret;
+
+    gc0329_write(i2c,0xfc, 0x16);
+    m_msleep(30);
+
+    ret = gc0329_read(i2c, 0x00, &val);
+    if (ret < 0)
+        return ret;
+    if (val != GC0329_CHIP_ID)
+        return -ENODEV;
+
+    return 0;
+}
+
+static int init_gpio(void)
+{
+    int ret;
+    char gpio_str[10];
+
+    if (reset_gpio != -1) {
+        ret = gpio_request(reset_gpio, "gc0329_reset");
+        if (ret) {
+            printk(KERN_ERR "gc0329: failed to request rst pin: %s\n", gpio_to_str(reset_gpio, gpio_str));
+            goto err_reset_gpio;
+        }
+    }
+
+    if (pwdn_gpio != -1) {
+        ret = gpio_request(pwdn_gpio, "gc0329_pwdn");
+        if (ret) {
+            printk(KERN_ERR "gc0329: failed to request pwdn pin: %s\n", gpio_to_str(pwdn_gpio, gpio_str));
+            goto err_pwdn_gpio;
+        }
+    }
+
+    if (power_gpio != -1) {
+        ret = gpio_request(power_gpio, "gc0329_power");
+        if (ret) {
+            printk(KERN_ERR "gc0329: failed to request pwdn pin: %s\n", gpio_to_str(power_gpio, gpio_str));
+            goto err_power_gpio;
+        }
+    }
+
+    return 0;
+
+err_power_gpio:
+    if (pwdn_gpio != -1)
+        gpio_free(pwdn_gpio);
+err_pwdn_gpio:
+    if (reset_gpio != -1)
+        gpio_free(reset_gpio);
+err_reset_gpio:
+    dvp_deinit_gpio();
+
+    return ret;
+}
+
+static void deinit_gpio(void)
+{
+    if (power_gpio != -1)
+        gpio_free(power_gpio);
+
+    if (pwdn_gpio != -1)
+        gpio_free(pwdn_gpio);
+
+    if (reset_gpio != -1)
+        gpio_free(reset_gpio);
+
+    dvp_deinit_gpio();
+}
+
+static void gc0329_power_off(void)
+{
+    if (reset_gpio != -1)
+        gpio_direction_output(reset_gpio, 0);
+
+    if (pwdn_gpio != -1)
+        gpio_direction_output(pwdn_gpio, 1);
+
+    if (power_gpio != -1)
+        gpio_direction_output(power_gpio, 0);
+
+    camera_disable_sensor_mclk(camera_index);
+}
+
+extern uint32_t tisp_log2_fixed_to_fixed(const uint32_t val, const int in_fix_point, const uint8_t out_fix_point);
+static int gc0329_power_on(void)
+{
+    int ret;
+
+    camera_enable_sensor_mclk(camera_index, 27 * 1000 * 1000);
+
+    if (power_gpio != -1) {
+        gpio_direction_output(power_gpio, 1);
+        m_msleep(50);
+    }
+
+    if (pwdn_gpio != -1){
+        gpio_direction_output(pwdn_gpio, 1);
+        m_msleep(50);
+        gpio_direction_output(pwdn_gpio, 0);
+        m_msleep(10);
+    }
+
+    if (reset_gpio != -1){
+        gpio_direction_output(reset_gpio, 1);
+        m_msleep(5);
+        gpio_direction_output(reset_gpio, 0);
+        m_msleep(10);
+        gpio_direction_output(reset_gpio, 1);
+        m_msleep(30);
+    }
+
+    ret = gc0329_detect(i2c_dev);
+    if (ret) {
+        printk(KERN_ERR "gc0329: failed to detect\n");
+       gc0329_power_off();
+        return ret;
+    }
+    ret = gc0329_write_array(i2c_dev, gc0329_sensor_attr.sensor_info.private_init_setting);
+
+    if (ret) {
+        printk(KERN_ERR "gc0329: failed to init regs\n");
+        gc0329_power_off();
+        return ret;
+    }
+
+    return 0;
+}
+
+static int gc0329_stream_on(void)
+{
+    int ret = gc0329_write_array(i2c_dev, gc0329_regs_stream_on);
+    if (ret)
+        printk(KERN_ERR "gc0329: failed to stream on\n");
+
+    return ret;
+}
+
+static void gc0329_stream_off(void)
+{
+    int ret = gc0329_write_array(i2c_dev, gc0329_regs_stream_off);
+    if (ret)
+        printk(KERN_ERR "gc0329: failed to stream on\n");
+}
+
+static int gc0329_g_register(struct sensor_dbg_register *reg)
+{
+    unsigned char val;
+    int ret;
+
+    ret = gc0329_read(i2c_dev, reg->reg & 0xffff, &val);
+    reg->val = val;
+    reg->size = 2;
+    return ret;
+}
+
+static int gc0329_s_register(struct sensor_dbg_register *reg)
+{
+    return gc0329_write(i2c_dev, reg->reg & 0xffff, reg->val & 0xffff);
+}
+
+static int gc0329_set_integration_time(int value)
+{
+    return 0;
+}
+
+unsigned int gc0329_alloc_again(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_again)
+{
+    return isp_gain;
+}
+
+static int gc0329_set_analog_gain(int value)
+{
+
+    return 0;
+}
+
+unsigned int gc0329_alloc_dgain(unsigned int isp_gain, unsigned char shift, unsigned int *sensor_dgain)
+{
+    return isp_gain;
+}
+
+static int gc0329_set_digital_gain(int value)
+{
+    return 0;
+}
+
+static int gc0329_set_fps(int fps)
+{
+    return 0;
+}
+
+static struct sensor_info gc0329_sensor_info[] = {
+    {
+        .private_init_setting   = gc0329_init_regs_640_480_dvp_25fps,
+        .width                  = 640,
+        .height                 = 480,
+        .fmt                    = SENSOR_PIXEL_FMT_YUYV8_2X8,
+
+        .fps                    = 25 << 16 | 1,
+    },
+    {
+        .private_init_setting   = gc0329_init_regs_320_240_dvp_60fps,
+        .width                  = 320,
+        .height                 = 240,
+        .fmt                    = SENSOR_PIXEL_FMT_YUYV8_2X8,
+
+        .fps                    = 60 << 16 | 1,
+    },
+    {
+        .private_init_setting   = gc0329_init_regs_320_320_dvp_93fps_gray,
+        .width                  = 320,
+        .height                 = 320,
+        .fmt                    = SENSOR_PIXEL_FMT_YUYV8_2X8,
+
+        .fps                    = 93 << 16 | 1,
+    },
+};
+
+static struct sensor_attr gc0329_sensor_attr = {
+    .device_name        = GC0329_DEVICE_NAME,
+    .cbus_addr          = GC0329_DEVICE_I2C_ADDR,
+
+    .dma_mode           = SENSOR_DATA_DMA_MODE_GREY,    // olny dvp.data_fmt is DVP_YUV422
+    .dbus_type          = SENSOR_DATA_BUS_DVP,
+    .dvp = {
+        .data_fmt       = DVP_YUV422,
+        .gpio_mode      = DVP_PA_LOW_8BIT,
+        .timing_mode    = DVP_HREF_MODE,
+        .yuv_data_order = order_1_2_3_4,
+        .pclk_polarity  = POLARITY_SAMPLE_FALLING,
+        .hsync_polarity = POLARITY_HIGH_ACTIVE,
+        .vsync_polarity = POLARITY_LOW_ACTIVE,
+        .img_scan_mode  = DVP_IMG_SCAN_PROGRESS,
+    },
+
+    .isp_clk_rate       = 150 * 1000 * 1000,
+
+    .ops = {
+        .power_on               = gc0329_power_on,
+        .power_off              = gc0329_power_off,
+        .stream_on              = gc0329_stream_on,
+        .stream_off             = gc0329_stream_off,
+        .get_register           = gc0329_g_register,
+        .set_register           = gc0329_s_register,
+
+        .set_integration_time   = gc0329_set_integration_time,
+        .alloc_again            = gc0329_alloc_again,
+        .set_analog_gain        = gc0329_set_analog_gain,
+        .alloc_dgain            = gc0329_alloc_dgain,
+        .set_digital_gain       = gc0329_set_digital_gain,
+        .set_fps                = gc0329_set_fps,
+    },
+};
+
+static int gc0329_probe(struct i2c_client *client,
+        const struct i2c_device_id *id)
+{
+    int i;
+
+    for (i = 0; i < ARRAY_SIZE(dvp_gpio_func_array); i++) {
+        if (!strcmp(dvp_gpio_func_str, dvp_gpio_func_array[i])) {
+            dvp_gpio_func = i;
+            break;
+        }
+    }
+
+    if (i == ARRAY_SIZE(dvp_gpio_func_array)){
+        printk(KERN_ERR "sensor dvp_gpio_func set error!\n");
+        return -EINVAL;
+    }
+
+    int ret = init_gpio();
+    if (ret)
+        goto err_init_gpio;
+
+    ret = dvp_init_select_gpio(&gc0329_sensor_attr.dvp,dvp_gpio_func);
+    if (ret)
+        goto err_dvp_select_gpio;
+
+    /* 确定根据传入参数sensor info */
+    for (i = 0; i < ARRAY_SIZE(resolution_array); i++) {
+        if (!strcmp(resolution, resolution_array[i])) {
+            memcpy(&gc0329_sensor_attr.sensor_info, &gc0329_sensor_info[i], sizeof(struct sensor_info));
+            break;
+        }
+    }
+
+    if (i == ARRAY_SIZE(resolution_array)) {
+        /* use default sensor info */
+        memcpy(&gc0329_sensor_attr.sensor_info, &gc0329_sensor_info[0], sizeof(struct sensor_info));
+        printk(KERN_ERR "Match %s Falied! Used Resolution: %d x %d.\n", \
+                        resolution,                                     \
+                        gc0329_sensor_attr.sensor_info.width,           \
+                        gc0329_sensor_attr.sensor_info.height);
+    }
+
+    ret = camera_register_sensor(camera_index, &gc0329_sensor_attr);
+    if (ret)
+        goto err_camera_register;
+
+    return 0;
+
+err_camera_register:
+    dvp_deinit_gpio();
+err_dvp_select_gpio:
+    deinit_gpio();
+
+err_init_gpio:
+
+    return ret;
+}
+
+static int gc0329_remove(struct i2c_client *client)
+{
+    camera_unregister_sensor(camera_index, &gc0329_sensor_attr);
+    dvp_deinit_gpio();
+    deinit_gpio();
+    return 0;
+}
+
+static const struct i2c_device_id gc0329_id[] = {
+    { GC0329_DEVICE_NAME, 0 },
+    { }
+};
+MODULE_DEVICE_TABLE(i2c, gc0329_id);
+
+static struct i2c_driver gc0329_driver = {
+    .driver = {
+        .owner          = THIS_MODULE,
+        .name           = GC0329_DEVICE_NAME,
+    },
+    .probe              = gc0329_probe,
+    .remove             = gc0329_remove,
+    .id_table           = gc0329_id,
+};
+
+static struct i2c_board_info sensor_gc0329_info = {
+    .type               = GC0329_DEVICE_NAME,
+    .addr               = GC0329_DEVICE_I2C_ADDR,
+};
+
+static __init int init_gc0329(void)
+{
+    if (i2c_bus_num < 0) {
+        printk(KERN_ERR "gc0329: i2c_bus_num must be set\n");
+        return -EINVAL;
+    }
+
+    int ret = i2c_add_driver(&gc0329_driver);
+    if (ret) {
+        printk(KERN_ERR "gc0329: failed to register i2c driver\n");
+        return ret;
+    }
+
+    i2c_dev = i2c_register_device(&sensor_gc0329_info, i2c_bus_num);
+    if (i2c_dev == NULL) {
+        printk(KERN_ERR "gc0329: failed to register i2c device\n");
+        i2c_del_driver(&gc0329_driver);
+        return -EINVAL;
+    }
+
+    return 0;
+}
+
+static __exit void exit_gc0329(void)
+{
+    i2c_unregister_device(i2c_dev);
+    i2c_del_driver(&gc0329_driver);
+}
+
+module_init(init_gc0329);
+module_exit(exit_gc0329);
+
+MODULE_DESCRIPTION("x2000 gc0329 driver");
+MODULE_LICENSE("GPL");

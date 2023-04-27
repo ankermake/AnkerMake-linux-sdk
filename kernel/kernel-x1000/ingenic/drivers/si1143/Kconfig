@@ -1,0 +1,3 @@
+config SI1143
+    bool "si1143"
+

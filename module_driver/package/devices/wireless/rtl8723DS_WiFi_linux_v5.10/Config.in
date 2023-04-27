@@ -1,0 +1,30 @@
+menuconfig MD_RTL8723DS
+	bool "rtl8723ds wireless cards support"
+
+config MD_RTL8723DS_MMC_NUM
+	int "wlan_mmc_num (mmc/sdio 总线号)"
+	default -1
+	help
+	  wifi 挂接在哪个 mmc 总线,比如 0, 1
+
+config MD_RTL8723DS_WLAN_DIS_N
+	string "gpio_wl_dis_n(控制wifi的供电)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_RTL8723DS_BT_DIS_N
+	string "gpio_bt_dis_n(用于控制bt的供电)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_RTL8723DS_BT_WIFI_POWER_EN
+	string "gpio_bt_wifi_power_en(用于控制整个模块的供电)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_RTL8723DS_BT_WIFI_POWER_VALID_LEVEL
+	string "gpio_bt_wifi_power_valid_level(bt,wifi模块供电引脚的有效电平)"
+	default 0
+	choice from MD_GPIO_ACTIVE_LEVEL
+
+endmenu

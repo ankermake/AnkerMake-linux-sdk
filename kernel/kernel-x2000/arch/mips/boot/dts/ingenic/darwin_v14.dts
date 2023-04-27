@@ -1,0 +1,279 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "x2500.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <generated/autoconf.h>
+
+#ifdef CONFIG_INGENIC_ISP_V2_CAMERA_GC2093
+#include "darwin_cameras/gc2093.dtsi"
+#elif CONFIG_INGENIC_ISP_V2_CAMERA_SC2310
+#include "darwin_cameras/sc2310.dtsi"
+#endif
+
+/ {
+	compatible = "ingenic,darwin", "ingenic,x2500";
+};
+
+&uart0 {
+	status = "disable";
+};
+
+&uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pb>;
+};
+
+&uart2 {
+	status = "disable";
+};
+
+
+&i2c2 {
+	pinctrl-0 = <&i2c2_pc>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&i2c3 {
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-0 = <&i2c3_pb1>;
+	pinctrl-names = "default";
+	status = "okay";
+	rtc_pcf8563:rtc_pcf8563@0x51{
+		compatible = "nxp,pcf8563";
+		reg = <0x51>;
+		status = "ok";
+	    };
+};
+
+&cpufreq {
+	status = "disable";
+	operating-points = <
+		/*KHZ uV */
+		1200000	900000
+		750000	900000
+		600000	900000
+		500000	900000
+		400000	900000
+		375000	900000
+		300000	900000
+		200000	900000
+			>;
+
+};
+
+//&pwm {
+//	ingenic,pwm-outputs = <0>; /* <0 - 15> select which pwms are really used */
+//}
+
+&pdma {
+	status = "okay";
+};
+
+&msc0 {
+	status = "disable";
+	pinctrl-names = "default";
+	pinctrl-0 = <&msc0_pb>;
+	/*mmc-hs200-1_8v;*/
+	cap-mmc-highspeed;
+	max-frequency = <25000000>;
+	bus-width = <4>;
+	voltage-ranges = <1800 3300>;
+	cd-gpios = <0>;
+	/* special property */
+	ingenic,rst-gpios = <0>;
+	ingenic,pwr-gpios = <0>;
+};
+
+&msc1 {
+	status = "okay";
+	pinctrl-names = "default";
+	mmc-hs200-1_8v;
+	/* cap-mmc-highspeed; */
+	max-frequency = <100000000>;
+	bus-width = <4>;
+	voltage-ranges = <1800 3300>;
+	non-removable;
+
+	/* special property */
+	ingenic,wp-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+	pinctrl-0 = <&msc1_pc>;
+	ingenic,rst-gpio = <&gpc 21 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+};
+
+&mac0 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac0_rmii_p0_normal>, <&mac0_rmii_p1_normal>;
+	pinctrl-1 = <&mac0_rmii_p0_rst>, <&mac0_rmii_p1_normal>;
+	status = "okay";
+	ingenic,rst-gpio = <&gpb 22 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RMII>;
+	ingenic,mode-reg = <0xb00000e8>;
+	ingenic,phy-clk-freq = <50000000>;
+};
+
+&sfc {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&sfc_pa>;
+	ingenic,sfc-init-frequency = <20000000>;
+	ingenic,sfc-max-frequency = <50000000>;
+	ingenic,use_ofpart_info      = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0>;
+};
+
+&spi0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0_pc>;
+
+	spi-max-frequency = <48000000>;
+	num-cs = <2>;
+	cs-gpios = <0>, <0>;
+	ingenic,chnl = <0>;
+	ingenic,allow_cs_same = <1>;
+	ingenic,bus_num = <0>;
+	ingenic,has_dma_support = <1>;
+};
+
+&dtrng {
+	status = "okay";
+};
+
+&otg {
+	g-use-dma;
+	dr_mode = "otg";
+	status = "okay";
+};
+
+&otg_phy {
+	dr_mode = "otg";
+	compatible = "ingenic,innophy-x2500", "syscon";
+	ingenic,drvvbus-gpio = <&gpb 27 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	status = "okay";
+};
+
+/ {
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+
+	gpio_keys: gpio_keys {
+		   compatible = "gpio-keys";
+
+		   power {
+			   label = "Power";
+			   linux,code = <KEY_POWER>;
+			   gpios = <&gpa 31 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			   gpio-key,wakeup;
+		   };
+            bootsel0 {
+                label = "bootsel0";
+                linux,code = <KEY_HOME>;
+                gpios = <&gpc 0 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+            };
+
+            bootsel1 {
+                label = "bootsel1";
+                linux,code = <KEY_BACK>;
+                gpios = <&gpc 1 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+            };
+
+	};
+};
+
+&el150 {
+	status = "disable";
+};
+
+&sadc{
+	status = "okay";
+};
+
+&dpu {
+	status = "okay";
+	ingenic,disable-rdma-fb = <1>;
+	ingenic,layer-exported = <1 0 0 0>;
+	ingenic,layer-frames   = <2 2 2 2>;
+	ingenic,layer-framesize = <800 1280>, <800 1280>, <320 240>, <320 240>;   /*Max framesize for each layer.*/
+	layer,color_mode	= <0 0 0 0>;					/*src fmt,*/
+	layer,src-size       	= <800 1280>, <800 1280>, <320 240>, <240 200>;	/*Layer src size should smaller than framesize*/
+	layer,target-size	= <800 1280>, <400 640>, <160 240>, <240 200>;	/*Target Size should smaller than src_size.*/
+	layer,target-pos	= <0 0>, <0 640>, <340 480>, <100 400>;	/*target pos , the start point of the target panel.*/
+	layer,enable		= <1 1 1 1>;					/*layer enabled or disabled.*/
+	ingenic,logo-pan-layer	= <0>;						/*on which layer should init logo pan on.*/
+	port {
+		dpu_out_ep: endpoint {
+			remote-endpoint = <&panel_jd9366_ep>;
+	    };
+	};
+};
+
+&pwmz{
+	pinctrl-0 = <&pwm2_pb>;
+};
+
+/ {
+	display-dpi {
+		compatible = "simple-bus";
+		#interrupt-cells = <1>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges = <>;
+		panel_jd9365d@0 {
+			compatible = "ingenic,jd9366";
+			status = "okay";
+			pinctrl-names = "default";
+			ingenic,rst-gpio = <&gpd 16 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			ingenic,vdd-en-gpio = <&gpd 21 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			/* ingenic,lcd-pwm-gpio = <&gpb 30 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>; */
+			port {
+				panel_jd9366_ep: endpoint {
+					remote-endpoint = <&dpu_out_ep>;
+				};
+			};
+		};
+	};
+};
+/ {
+	dump_dmic_codec:dump_dmic_codec{
+		compatible = "ingenic,dmic-dump-codec";
+		status = "ok";
+	};
+
+	sound_darwin_icdc {
+		status = "ok";
+		compatible = "ingenic,x2500-sound";
+		ingenic,model = "darwin";
+		ingenic,dai-link = "i2s-icodec", "dmic";
+		ingenic,stream = "i2s-icodec", "dmic";
+		ingenic,cpu-dai = <&i2s>, <&dmic>;
+		ingenic,platform = <&aic>, <&dmic>;
+		ingenic,codec = <&icodec>, <&dump_dmic_codec>;
+		ingenic,codec-dai = "icodec", "dmic-dump";
+		ingenic,audio-routing = "Speaker", "HPOUTL", "DACL", "MICBIAS" ,
+			"ADCL",  "MICL",
+			"ADCR",  "MICR";
+		ingenic,spken-gpio = <&gpd 2 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		ingenic,sgm8903en-gpio = <&gpd 5 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	};
+
+};
+
+&soc_nna{
+	status = "okay";
+};
+
+&i2d{
+	status = "okay";
+};
+
+&bscaler0{
+	status = "okay";
+};

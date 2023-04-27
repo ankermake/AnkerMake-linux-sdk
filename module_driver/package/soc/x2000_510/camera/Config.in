@@ -1,0 +1,83 @@
+array SOC_X2000_510_CAMERA_MCLK_IO
+    string "X2000_510 MCLK 引脚"
+    item "PC15" PC15
+    item "PE24" PE24
+
+menuconfig MD_X2000_510_CAMERA_VIC
+    bool "camera 驱动(vic/cim控制器)"
+    select MD_RMEM_MANAGER
+
+
+config MD_X2000_510_CAMERA_VIC0
+    bool "选择VIC0控制器"
+
+config MD_X2000_510_CAMERA_VIC0_MCLK
+    string "VIC0 MCLK管脚选择"
+    default PE24
+    choice from SOC_X2000_510_CAMERA_MCLK_IO
+    depends on MD_X2000_510_CAMERA_VIC0
+
+choice "      选择VIC0 数据通路(ISP/DDR)"
+    default MD_X2000_510_CAMERA_VIC0_ISP_DISABLE
+    depends on MD_X2000_510_CAMERA_VIC0
+
+config MD_X2000_510_CAMERA_VIC0_ISP_DISABLE
+    bool "    VIC0数据不通过ISP模块"
+
+config MD_X2000_510_CAMERA_VIC0_ISP_ENABLE
+    bool "    VIC0数据通过ISP模块"
+
+endchoice
+
+config MD_X2000_510_CAMERA_VIC0_FRAME_NUMS
+    int "VIC0 Camera 帧缓冲数 "
+    default 2
+    depends on MD_X2000_510_CAMERA_VIC0
+
+
+
+config MD_X2000_510_CAMERA_VIC1
+    bool "选择VIC1控制器"
+
+config MD_X2000_510_CAMERA_VIC1_MCLK
+    string "VIC1 MCLK管脚选择"
+    default PE24
+    choice from SOC_X2000_510_CAMERA_MCLK_IO
+    depends on MD_X2000_510_CAMERA_VIC1
+
+choice "      选择VIC1 数据通路(ISP/DDR)"
+    default MD_X2000_510_CAMERA_VIC1_ISP_DISABLE
+    depends on MD_X2000_510_CAMERA_VIC1
+
+config MD_X2000_510_CAMERA_VIC1_ISP_DISABLE
+    bool "    VIC1数据不通过ISP模块"
+
+config MD_X2000_510_CAMERA_VIC1_ISP_ENABLE
+    bool "    VIC1数据通过ISP模块"
+
+endchoice
+
+config MD_X2000_510_CAMERA_VIC1_FRAME_NUMS
+    int "VIC1 Camera 帧缓冲数 "
+    default 2
+    depends on MD_X2000_510_CAMERA_VIC1
+
+
+
+config MD_X2000_510_CAMERA_CIM
+    bool "选择CIM控制器"
+
+config MD_X2000_510_CAMERA_CIM_MCLK
+    string "CIM MCLK管脚选择"
+    default PE24
+    choice from SOC_X2000_510_CAMERA_MCLK_IO
+    depends on MD_X2000_510_CAMERA_CIM
+
+config MD_X2000_510_CAMERA_CIM_FRAME_NUMS
+    int "CIM Camera 帧缓冲数 "
+    default 2
+    depends on MD_X2000_510_CAMERA_CIM
+
+
+
+endmenu

@@ -1,0 +1,5 @@
+1.将压缩包解压后,把里面的源码替换掉kernel目录下的相应文件
+2.根据压缩包里的readme配置kernel
+3.使用usb_configfs_hid-ok.sh脚本配置hid功能
+4.使用usb_configfs_serial.sh功能配置serial功能
+

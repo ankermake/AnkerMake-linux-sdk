@@ -1,0 +1,29 @@
+
+
+choice
+	prompt "Board type"
+	depends on CHIP_X1500
+	default PRODUCT_X1500_YAK
+
+config PRODUCT_X1500_YAK
+    bool "product x1500 yak"
+
+config PRODUCT_X1500L_WOLF
+    bool "product x1500l wolf"
+
+endchoice
+
+if PRODUCT_X1500_YAK
+config PRODUCT_NAME
+string
+default "yak"
+source "arch/mips/xburst/soc-x1000/chip-x1500/yak/Kconfig"
+endif
+
+
+if PRODUCT_X1500L_WOLF
+config PRODUCT_NAME
+string
+default "wolf"
+source "arch/mips/xburst/soc-x1000/chip-x1500/wolf/Kconfig"
+endif

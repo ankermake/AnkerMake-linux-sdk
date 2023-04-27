@@ -1,0 +1,86 @@
+diff --git a/libavdevice/alsa.c b/libavdevice/alsa.c
+index 117b2ea..ee282fa 100644
+--- a/libavdevice/alsa.c
++++ b/libavdevice/alsa.c
+@@ -286,6 +286,10 @@ av_cold int ff_alsa_open(AVFormatContext *ctx, snd_pcm_stream_t mode,
+         }
+     }
+ 
++    s->pkt = av_packet_alloc();
++    if (!s->pkt)
++        goto fail1;
++
+     s->h = h;
+     return 0;
+ 
+@@ -308,6 +312,7 @@ av_cold int ff_alsa_close(AVFormatContext *s1)
+     if (CONFIG_ALSA_INDEV)
+         ff_timefilter_destroy(s->timefilter);
+     snd_pcm_close(s->h);
++    av_packet_free(&s->pkt);
+     return 0;
+ }
+ 
+diff --git a/libavdevice/alsa.h b/libavdevice/alsa.h
+index 1ed8c82..07783c9 100644
+--- a/libavdevice/alsa.h
++++ b/libavdevice/alsa.h
+@@ -58,6 +58,7 @@ typedef struct AlsaData {
+     void *reorder_buf;
+     int reorder_buf_size; ///< in frames
+     int64_t timestamp; ///< current timestamp, without latency applied.
++    AVPacket *pkt;
+ } AlsaData;
+ 
+ /**
+diff --git a/libavdevice/alsa_dec.c b/libavdevice/alsa_dec.c
+index c50ce71..ef93934 100644
+--- a/libavdevice/alsa_dec.c
++++ b/libavdevice/alsa_dec.c
+@@ -105,34 +105,36 @@ static int audio_read_packet(AVFormatContext *s1, AVPacket *pkt)
+     int64_t dts;
+     snd_pcm_sframes_t delay = 0;
+ 
+-    if (av_new_packet(pkt, s->period_size * s->frame_size) < 0) {
+-        return AVERROR(EIO);
++    if (!s->pkt->data) {
++        int ret = av_new_packet(s->pkt, s->period_size * s->frame_size);
++        if (ret < 0)
++            return ret;
++        s->pkt->size = 0;
+     }
+ 
+-    while ((res = snd_pcm_readi(s->h, pkt->data, s->period_size)) < 0) {
++    do {
++        while ((res = snd_pcm_readi(s->h, s->pkt->data + s->pkt->size, s->period_size - s->pkt->size / s->frame_size)) < 0) {
+         if (res == -EAGAIN) {
+-            av_packet_unref(pkt);
+-
+             return AVERROR(EAGAIN);
+         }
++        s->pkt->size = 0;
+         if (ff_alsa_xrun_recover(s1, res) < 0) {
+             av_log(s1, AV_LOG_ERROR, "ALSA read error: %s\n",
+                    snd_strerror(res));
+-            av_packet_unref(pkt);
+-
+             return AVERROR(EIO);
+         }
+         ff_timefilter_reset(s->timefilter);
+-    }
++        }
++        s->pkt->size += res * s->frame_size;
++    } while (s->pkt->size < s->period_size * s->frame_size);
+ 
++    av_packet_move_ref(pkt, s->pkt);
+     dts = av_gettime();
+     snd_pcm_delay(s->h, &delay);
+     dts -= av_rescale(delay + res, 1000000, s->sample_rate);
+     pkt->pts = ff_timefilter_update(s->timefilter, dts, s->last_period);
+     s->last_period = res;
+ 
+-    pkt->size = res * s->frame_size;
+-
+     return 0;
+ }
+ 

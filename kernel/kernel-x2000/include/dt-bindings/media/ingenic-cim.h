@@ -1,0 +1,8 @@
+#ifndef __INGENIC_CIM_H_
+#define __INGENIC_CIM_H_
+
+#define CIM_INTERFACE_VOL_DEFAULT	1
+#define CIM_INTERFACE_VOL_1V8	2
+#define CIM_INTERFACE_VOL_3V3	3
+
+#endif

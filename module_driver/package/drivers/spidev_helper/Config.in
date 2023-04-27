@@ -1,0 +1,4 @@
+config MD_SPI_DEVICE_HELPER
+    bool "spi设备辅助模块（动态增加或删除spi设备）"
+    select MD_SPI_DEVICE
+    default n

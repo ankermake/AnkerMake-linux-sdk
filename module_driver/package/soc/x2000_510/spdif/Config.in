@@ -1,0 +1,3 @@
+config MD_X2000_510_SPDIF
+    bool "spdif 驱动"
+    select MD_X2000_510_AUDIO_DMA

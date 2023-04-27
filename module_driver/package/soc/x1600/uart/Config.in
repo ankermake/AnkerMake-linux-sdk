@@ -1,0 +1,192 @@
+menuconfig MD_X1600_UART
+    bool "uart tty驱动 dma模式接收"
+
+config MD_X1600_UART0
+    bool "uart 0"
+
+config MD_X1600_UART0_RX
+    string "    rx gpio"
+    choice from UART0_RX_PINS
+    depends on MD_X1600_UART0
+    default -1
+
+config MD_X1600_UART0_TX
+    string "    tx gpio"
+    choice from UART0_TX_PINS
+    depends on MD_X1600_UART0
+    default -1
+
+config MD_X1600_UART0_CTS
+    string "    cts gpio"
+    choice from UART0_CTS_PINS
+    depends on MD_X1600_UART0
+    default -1
+
+config MD_X1600_UART0_RTS
+    string "    rts gpio"
+    choice from UART0_RTS_PINS
+    depends on MD_X1600_UART0
+    default -1
+
+config MD_X1600_UART1
+    bool "uart 1"
+
+config MD_X1600_UART1_RX
+    string "    rx gpio"
+    choice from UART1_RX_PINS
+    depends on MD_X1600_UART1
+    default -1
+
+config MD_X1600_UART1_TX
+    string "    tx gpio"
+    choice from UART1_TX_PINS
+    depends on MD_X1600_UART1
+    default -1
+
+config MD_X1600_UART1_CTS
+    string "    cts gpio"
+    choice from UART1_CTS_PINS
+    depends on MD_X1600_UART1
+    default -1
+
+config MD_X1600_UART1_RTS
+    string "    rts gpio"
+    choice from UART1_RTS_PINS
+    depends on MD_X1600_UART1
+    default -1
+
+config MD_X1600_UART2
+    bool "uart 2"
+
+config MD_X1600_UART2_RX
+    string "    rx gpio"
+    choice from UART2_RX_PINS
+    depends on MD_X1600_UART2
+    default -1
+
+config MD_X1600_UART2_TX
+    string "    tx gpio"
+    choice from UART2_TX_PINS
+    depends on MD_X1600_UART2
+    default -1
+
+config MD_X1600_UART2_CTS
+    string "    cts gpio"
+    choice from UART2_CTS_PINS
+    depends on MD_X1600_UART2
+    default -1
+
+config MD_X1600_UART2_RTS
+    string "    rts gpio"
+    choice from UART2_RTS_PINS
+    depends on MD_X1600_UART2
+    default -1
+
+config MD_X1600_UART3
+    bool "uart 3"
+
+config MD_X1600_UART3_RX
+    string "    rx gpio"
+    choice from UART3_RX_PINS
+    depends on MD_X1600_UART3
+    default -1
+
+config MD_X1600_UART3_TX
+    string "    tx gpio"
+    choice from UART3_TX_PINS
+    depends on MD_X1600_UART3
+    default -1
+
+config MD_X1600_UART3_CTS
+    string "    cts gpio"
+    choice from UART3_CTS_PINS
+    depends on MD_X1600_UART3
+    default -1
+
+config MD_X1600_UART3_RTS
+    string "    rts gpio"
+    choice from UART3_RTS_PINS
+    depends on MD_X1600_UART3
+    default -1
+
+endmenu
+
+array UART0_RX_PINS
+    string "uart0 rx 引脚"
+    item "PB7" PB7
+    item "NULL" -1
+
+array UART0_TX_PINS
+    string "uart0 tx 引脚"
+    item "PB8" PB8
+    item "NULL" -1
+
+array UART0_CTS_PINS
+    string "uart0 cts 引脚"
+    item "NULL" -1
+    item "PB9" PB9
+
+array UART0_RTS_PINS
+    string "uart0 rts 引脚"
+    item "NULL" -1
+    item "PB10" PB10
+
+array UART1_RX_PINS
+    string "uart1 rx 引脚"
+    item "PB3" PB3
+    item "NULL" -1
+
+array UART1_TX_PINS
+    string "uart1 tx 引脚"
+    item "PB2" PB2
+    item "NULL" -1
+
+array UART1_CTS_PINS
+    string "uart1 cts 引脚"
+    item "NULL" -1
+    item "PB5" PB5
+
+array UART1_RTS_PINS
+    string "uart1 rts 引脚"
+    item "NULL" -1
+    item "PB4" PB4
+
+array UART2_RX_PINS
+    string "uart2 rx 引脚"
+    item "PA31" PA31
+    item "PB1" PB1
+    item "NULL" -1
+
+array UART2_TX_PINS
+    string "uart2 tx 引脚"
+    item "PA30" PA30
+    item "PB0" PB0
+    item "NULL" -1
+
+array UART2_CTS_PINS
+    string "uart2 cts 引脚"
+    item "NULL" -1
+
+array UART2_RTS_PINS
+    string "uart2 rts 引脚"
+    item "NULL" -1
+
+array UART3_RX_PINS
+    string "uart3 rx 引脚"
+    item "PB5" PB5
+    item "PD5" PD5
+    item "NULL" -1
+
+array UART3_TX_PINS
+    string "uart3 tx 引脚"
+    item "PB4" PB4
+    item "PD4" PD4
+    item "NULL" -1
+
+array UART3_CTS_PINS
+    string "uart3 cts 引脚"
+    item "NULL" -1
+
+array UART3_RTS_PINS
+    string "uart3 rts 引脚"
+    item "NULL" -1

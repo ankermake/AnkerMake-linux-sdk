@@ -1,0 +1,22 @@
+menuconfig MD_X1520_SENSOR_ISP_OV5693
+    bool "sensor ov5693 (mipi,raw10)"
+    depends on MD_SOC_X1520
+
+config OV5693_BINNING_960P_SUPPORT
+    bool "sensor ov5693 binning_1280_960_30fps (选择binnig 1280*960 30fps)"
+
+config MD_X1520_OV5693_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1520_OV5693_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1520_OV5693_ISPCLK
+    int "isp clk (isp 时钟频率)"
+    default 90000000
+
+endmenu # MD_X1520_SENSOR_OV5693

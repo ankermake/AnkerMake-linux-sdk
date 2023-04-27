@@ -1,0 +1,8 @@
+menuconfig APP_br_sdcard_setting
+    bool "sdcard相关设置"
+
+config APP_br_sdcard_automatic_mount
+    bool "sd 卡自动挂载(挂载在/tmp/sdcard/ 目录下)"
+    default y
+
+endmenu

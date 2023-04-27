@@ -1,0 +1,4 @@
+config JZ_NVPU
+    depends on SOC_VPU
+    bool "vpu client device of soc_vpu"
+    default n

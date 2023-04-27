@@ -1,0 +1,25 @@
+menuconfig MD_X1830_LCD_ST7701
+    bool "TFT ST7701 (480x854) (X1830)"
+    select MD_X1830_FB
+    depends on MD_SOC_X1830
+
+config MD_X1830_ST7701_RST
+    string "gpio reset(lcd 复位引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_ST7701_POWER_EN
+    string "gpio power enable(lcd power使能引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_ST7701_SPI_BUS_NUM
+    int "spi bus num(挂接的spi总线号)"
+    default -1
+
+config MD_X1830_ST7701_SPI_CS
+    string "spi cs pin(片选脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+endmenu # MD_X1830_LCD_ST7701

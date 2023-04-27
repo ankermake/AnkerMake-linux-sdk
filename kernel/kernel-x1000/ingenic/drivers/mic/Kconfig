@@ -1,0 +1,47 @@
+menuconfig JZ_MICCHAR
+	bool "MIC char support for Ingenic"
+	depends on JZRISC && SOUND && SND && !SND_ASOC_INGENIC && HIGH_RES_TIMERS && DMA_ENGINE
+	default n
+	select SND_PCM
+	help
+		Say 'Y' to enable mic char drivers of xburst.
+
+if JZ_MICCHAR
+
+config	JZ_MICHAR_I2S
+	bool
+######################################
+if JZ_MICHAR_I2S
+config	JZ_MICCHAR_I2S_DEF_MCLK_RATE
+	int "default mclk rate"
+	default 12288000
+config	JZ_MICCHAR_I2S_ICDC
+	bool
+config	JZ_MICCHAR_I2S_MASTER
+	bool
+config	JZ_MICCHAR_I2S_SLAVE
+	bool
+endif
+########################################
+choice
+	prompt "mic char codec select"
+	default JZ_MICCHAR_X1830_CODEC
+config JZ_MICCHAR_X1830_CODEC
+	bool "x1830 internal codec"
+	select JZ_MICCHAR_I2S_ICDC
+	select JZ_MICHAR_I2S
+endchoice
+######################################
+config JZ_MICCHAR_WITH_SND_I2S
+	bool "use i2s sound output"
+	default y
+if JZ_MICCHAR_WITH_SND_I2S
+choice
+	prompt "sound out codec select"
+	default JZ_MICCHAR_SND_USB_ICDC
+config JZ_MICCHAR_SND_USB_ICDC
+	bool "internal codec"
+endchoice
+endif  #JZ_MICCHAR_WITH_SND_I2S
+######################################
+endif  #JZ_MICCHAR

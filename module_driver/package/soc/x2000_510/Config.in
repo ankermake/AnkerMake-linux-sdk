@@ -1,0 +1,36 @@
+menuconfig MD_SOC_X2000_510
+    bool "x2000驱动列表"
+    depends on MD_CHOICE_SOC_X2000_510
+
+config MD_SOC_DIR
+    string
+    default soc/x2000_510
+
+source package/soc/x2000_510/adc/Config.in
+source package/soc/x2000_510/gpio/Config.in
+source package/soc/x2000_510/watchdog/Config.in
+source package/soc/x2000_510/dtrng/Config.in
+source package/soc/x2000_510/i2c/Config.in
+source package/soc/x2000_510/pwm/Config.in
+
+source package/soc/x2000_510/def_gpio_pins.in
+
+source package/soc/x2000_510/efuse/Config.in
+source package/soc/x2000_510/utils/Config.in
+source package/soc/x2000_510/mcu/Config.in
+source package/soc/x2000_510/tcu/Config.in
+source package/soc/x2000_510/hash/Config.in
+source package/soc/x2000_510/fb/Config.in
+source package/soc/x2000_510/fb_layer_mixer/Config.in
+source package/soc/x2000_510/rotator/Config.in
+source package/soc/x2000_510/camera/Config.in
+source package/soc/x2000_510/audio_dma/Config.in
+source package/soc/x2000_510/aic/Config.in
+source package/soc/x2000_510/dmic/Config.in
+source package/soc/x2000_510/icodec/Config.in
+source package/soc/x2000_510/spdif/Config.in
+source package/soc/x2000_510/spi/Config.in
+source package/soc/x2000_510/msc/Config.in
+source package/soc/x2000_510/mac/Config.in
+endmenu
+

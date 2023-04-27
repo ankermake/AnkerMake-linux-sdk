@@ -1,0 +1,55 @@
+menuconfig MD_TOUCHSCREEN_FT6236
+    bool "ft6236_touch"
+
+config MD_FT6236_DEV_NAME
+    string "触摸屏设备名称"
+    default "ft6236"
+
+config MD_FT6236_REGULATOR_NAME
+    string "regulator name(通过名字获取 tp module 电源管理器)"
+    default "GPIO-POWER0"
+
+config MD_FT6236_GPIO_POWER
+    string "gpio power(ft6236 电源控制引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_FT6236_GPIO_RESET
+    string "gpio reset(ft6236 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_FT6236_GPIO_INT
+    string "gpio int(ft6236 中断脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_FT6236_I2C_BUSNUM
+    int "i2c bus num (ft6236 挂接的i2c总线号)"
+    default -1
+
+config MD_FT6236_MAX_TOUCH_NUMBER
+    int "能检测的最大触摸点个数(最大为2,最小为1，大于2计为2)"
+    default 2
+
+config MD_FT6236_X_COORDS_MAX
+    int "最大X轴坐标值"
+    default 480
+
+config MD_FT6236_Y_COORDS_MAX
+    int "最大Y轴坐标值"
+    default 320
+
+config MD_FT6236_X_COORDS_FLIP
+    bool "X轴是否翻转"
+    default n
+
+config MD_FT6236_Y_COORDS_FLIP
+    bool "Y轴是否翻转"
+    default n
+
+config MD_FT6236_X_Y_COORDS_EXCHANGE
+    bool "X,Y轴是否对调"
+    default n
+
+endmenu

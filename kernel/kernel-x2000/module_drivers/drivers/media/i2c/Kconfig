@@ -1,0 +1,4 @@
+
+source "$OUTSIDE_DRIVERS/drivers/media/i2c/ingenic-isp/Kconfig"
+source "$OUTSIDE_DRIVERS/drivers/media/i2c/ingenic-isp-v2/Kconfig"
+source "$OUTSIDE_DRIVERS/drivers/media/i2c/soc_camera/Kconfig"

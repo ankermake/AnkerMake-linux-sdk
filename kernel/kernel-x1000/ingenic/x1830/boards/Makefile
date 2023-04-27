@@ -1,0 +1,4 @@
+CFLAGS_KERNEL   += -I$(srctree)/ingenic/x1830/boards/$(CONFIG_PLATFORM_NAME)/$(CONFIG_BOARD_NAME)/
+
+obj-y += common/
+obj-$(CONFIG_SOC_X1830_DRIVERS) += $(CONFIG_PLATFORM_NAME)/

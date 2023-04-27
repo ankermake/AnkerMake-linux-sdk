@@ -1,0 +1,25 @@
+menuconfig MD_X2000_SENSOR_GC5035_MIPI
+    bool "sensor gc5035 (mipi,raw10)"
+    select MD_X2000_CAMERA_VIC
+    depends on MD_SOC_X2000_BASE
+
+config MD_X2000_GC5035_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GC5035_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GC5035_GPIO_POWER
+    string "gpio power(sensor 电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GC5035_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+endmenu # MD_X2000_SENSOR_GC5035_MIPI

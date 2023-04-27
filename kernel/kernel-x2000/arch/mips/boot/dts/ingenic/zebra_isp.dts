@@ -1,0 +1,431 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "x2000-v12.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	compatible = "img,zebra", "ingenic,x2000";
+};
+
+&uart0 {
+	status = "disable";
+};
+
+&uart2 {
+	status = "okay";
+};
+
+&pinctrl {
+	ingenic,gpa_voltage = <GPIO_VOLTAGE_1V8>;
+};
+
+&felix {
+	status = "okay";
+};
+
+&helix {
+	status = "okay";
+};
+
+&msc0 {
+	status = "disable";
+	/*mmc-hs200-1_8v;*/
+	cap-mmc-highspeed;
+	non-removable;
+	max-frequency = <50000000>;
+	bus-width = <4>;
+	non-removable;
+	voltage-ranges = <1800 3300>;
+
+	/* special property */
+	ingenic,wp-gpios = <0>;
+	ingneic,cd-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+};
+
+&msc1 {
+	status = "okay";
+	pinctrl-names ="default","enable", "disable";
+	pinctrl-0 = <&msc1_4bit>;
+	pinctrl-1 = <&rtc32k_enable>;
+	pinctrl-2 = <&rtc32k_disable>;
+
+	max-frequency = <50000000>;
+	bus-width = <4>;
+	voltage-ranges = <1800 3300>;
+	/*non-removable;*/
+
+	ingenic,sdio_clk = <1>;
+	keep-power-in-suspend;
+
+	/* special property */
+	ingenic,wp-gpios = <0>;
+	ingneic,cd-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+	ingenic,removal-manual; /*removal-dontcare, removal-nonremovable, removal-removable, removal-manual*/
+
+	bcmdhd_wlan: bcmdhd_wlan {
+		 compatible = "android,bcmdhd_wlan";
+		 ingenic,sdio-irq = <&gpd 20 IRQ_TYPE_LEVEL_HIGH INGENIC_GPIO_NOBIAS>;
+		 ingenic,sdio-reset = <&gpd 19 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	};
+};
+
+&msc2 {
+	status = "okay";
+	/*mmc-hs200-1_8v;*/
+	cap-mmc-highspeed;
+	non-removable;
+	max-frequency = <50000000>;
+	bus-width = <4>;
+	non-removable;
+	voltage-ranges = <1800 3300>;
+
+	/* special property */
+	ingenic,wp-gpios = <0>;
+	ingneic,cd-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+};
+
+
+&mac0 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac0_rmii_p0_normal>, <&mac0_rmii_p1_normal>;
+	pinctrl-1 = <&mac0_rmii_p0_rst>, <&mac0_rmii_p1_normal>;
+	status = "disabled";
+	ingenic,rst-gpio = <&gpb 0 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RMII>;
+	ingenic,mode-reg = <0xb00000e4>;
+};
+
+&mac1 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac1_rmii_p0_normal>, <&mac1_rmii_p1_normal>;
+	pinctrl-1 = <&mac1_rmii_p0_rst>, <&mac1_rmii_p1_normal>;
+	status = "disabled";
+	ingenic,rst-gpio = <&gpb 26 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RMII>;
+	ingenic,mode-reg = <0xb00000e8>;
+};
+
+
+/*
+&mac0 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac0_rgmii_p0_normal>, <&mac0_rgmii_p1_normal>;
+	pinctrl-1 = <&mac0_rgmii_p0_rst>, <&mac0_rgmii_p1_normal>;
+	status = "okay";
+	ingenic,rst-gpio = <&gpb 0 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RGMII>;
+	ingenic,mode-reg = <0xb00000e4>;
+};
+
+&mac1 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac1_rgmii_p0_normal>, <&mac1_rgmii_p1_normal>;
+	pinctrl-1 = <&mac1_rgmii_p0_rst>, <&mac1_rgmii_p1_normal>;
+	status = "okay";
+	ingenic,rst-gpio = <&gpb 26 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RGMII>;
+	ingenic,mode-reg = <0xb00000e8>;
+};
+*/
+&sfc {
+	status = "okay";
+	ingenic,sfc-max-frequency = <320000000>;
+	ingenic,use_board_info      = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0>;
+
+
+};
+
+&otg {
+	g-use-dma;
+	dr_mode = "otg"; // host,peripheral,otg
+	status = "okay";
+};
+
+&otg_phy {
+	compatible = "ingenic,innophy", "syscon";
+	ingenic,drvvbus-gpio = <&gpe 22 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	status = "okay";
+};
+
+
+&as_be_baic {
+	pinctrl-names = "default";
+	pinctrl-0 = <&baic1_tmclk_pc>, <&baic1_rmclk_pc>, <&baic1_pc>, <&baic2_mclk_pa>, <&baic2_pa>,
+		<&baic3_mclk_pa>, <&baic3_pa>, <&baic4_pd>;
+};
+
+&as_spdif {
+	pinctrl-names = "default";
+	pinctrl-0 = <&spdif_pc>;
+};
+
+&as_dmic {
+	pinctrl-names = "default";
+	pinctrl-0 = <&dmic_pc>;
+};
+
+&i2c2 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c2_pb>;
+
+	ak4458: dac@0x10 {
+		compatible = "asahi-kasei,ak4458";
+		status = "okay";
+		reg = <0x10>;
+		reset-gpios = <&gpb 13 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		mute-gpios = <&gpb 15 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	};
+	wm8594: adc@0x1a {
+		compatible = "wlf,wm8594";
+		status = "okay";
+		reg = <0x1a>;
+		reset-gpios = <&gpb 9 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		mute-gpios = <&gpb 10 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		pwdn-gpios = <&gpb 11 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	};
+};
+
+&i2c3 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pa>;
+
+	ov4689_1:ov4689@0x21 {
+		status = "ok";
+		compatible = "ovti,ov4689";
+		reg = <0x21>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cim_vic_mclk_pe_24M>;
+
+		port {
+			ov4689_ep1:endpoint {
+				remote-endpoint = <&isp1_ep>;
+			};
+		};
+	};
+
+	sc2232h_0:sc2232h@0x30 {
+		status = "ok";
+		compatible = "ingenic,sc2232h";
+		reg = <0x30>;
+		pinctrl-names = "default", "default";
+		pinctrl-0 = <&vic_pa_high_10bit>;
+		pinctrl-1 = <&cim_vic_mclk_pe_24M>;
+
+		ingenic,rst-gpio = <&gpa 15 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+
+		port {
+			sc2232h_ep0:endpoint {
+				remote-endpoint = <&isp0_ep>;
+				bus-width = <10>;	/* Used data lines */
+				data-shift = <2>;	/* Lines 9:2 are used */
+
+				/* If hsync-active/vsync-active are missing,
+				   embedded BT.656 sync is used */
+				hsync-active = <1>;	/* Active high */
+				vsync-active = <1>;	/* Active high */
+				data-active = <1>;	/* Active high */
+				pclk-sample = <1>;	/* Rising */
+			};
+		};
+	};
+};
+
+&csi0 {
+	status = "disabled";
+};
+&isp0_ep {
+/*
+	//MIPI Sensor
+	remote-endpoint = <&ov4689_ep0>;
+	data-lanes = <2>;
+	clk-lanes = <1>;
+*/
+
+	//DVP Sensor
+	remote-endpoint = <&sc2232h_ep0>;
+	bus-width = <10>;	/* Used data lines */
+	data-shift = <2>;	/* Lines 12:2 are used */
+
+	/* If hsync-active/vsync-active are missing,
+	   embedded BT.656 sync is used */
+	hsync-active = <1>;	/* Active high */
+	vsync-active = <1>;	/* Active high */
+	data-active = <1>;	/* Active high */
+	pclk-sample = <1>;	/* Rising */
+};
+
+&isp1_ep {
+	remote-endpoint = <&ov4689_ep1>;
+	data-lanes = <2>;
+	clk-lanes = <1>;
+};
+&csi1 {
+	status = "ok";
+};
+&i2c4 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c4_pd>;
+
+	ov4689_0:ov4689@0x21 {
+		status = "ok";
+		compatible = "ovti,ov4689";
+		reg = <0x21>;
+
+		port {
+			ov4689_ep0:endpoint {
+				remote-endpoint = <&isp0_ep>;
+			};
+		};
+	};
+
+	/*
+	jxf23_0:jxf23@0x44 {
+		status = "ok";
+		compatible = "ingenic,jxf23";
+		reg = <0x44>;
+
+		port {
+			jxf23_ep0:endpoint {
+				remote-endpoint = <&isp0_ep>;
+			};
+		};
+	};
+	jxf23_1:jxf23@0x40 {
+		sttus = "ok";
+		compatible = "ingenic,jxf23";
+		reg = <0x40>;
+
+		port {
+			jxf23_ep1:endpoint {
+				remote-endpoint = <&isp1_ep>;
+			};
+		};
+
+	};
+	*/
+};
+
+&dpu {
+	status = "okay";
+	port {
+		dpu_out_ep: endpoint {
+			remote-endpoint = <&panel_y88249_ep>;
+			/*remote-endpoint = <&panel_kd050hdfia019_ep>;*/
+		};
+	};
+};
+
+&spi0 {
+	/*status = "disabled";*/
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0_pb>;
+
+	spi-max-frequency = <54000000>;
+	num-cs = <2>;
+	cs-gpios = <0>, <0>;
+	/*cs-gpios = <&gpa 27 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>, <&gpa 27 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;*/
+	ingenic,chnl = <0>;
+	ingenic,allow_cs_same = <1>;
+	ingenic,bus_num = <0>;
+	ingenic,has_dma_support = <0>;
+	ingenic,spi-src-clk = <1>;/*0.ext; 1.ssi*/
+
+	dac0: dac8881@0 {
+		compatible = "spidev";
+		reg = <2>;
+		chip_select= <0>;
+		spi-max-frequency = <10000000>;
+	};
+};
+
+/ {
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+
+	gpio_keys: gpio_keys {
+		   compatible = "gpio-keys";
+
+		   power {
+			   label = "Power";
+			   linux,code = <KEY_POWER>;
+			   gpios = <&gpa 31 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			   gpio-key,wakeup;
+		   };
+	   };
+	sound {
+		compatible = "ingenic,x2000-sound";
+		ingenic,model = "zebra";
+	};
+
+	i2c@0 {
+		compatible = "i2c-gpio";
+		gpios = <&gpc 12 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS /* sda */>,
+			<&gpb 8 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS /* scl */>;
+		//i2c-gpio,sda-open-drain;
+		//i2c-gpio,scl-open-drain;
+		i2c-gpio,scl-output-only;
+		i2c-gpio,delay-us = <2>; /* ~100 kHz */
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ak5558: adc@0x13 {
+			compatible = "asahi-kasei,ak5558";
+			status = "okay";
+			reg = <0x13>;
+			reset-gpios = <&gpb 21 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		};
+	};
+
+	display-dbi {
+		compatible = "simple-bus";
+		#interrupt-cells = <1>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges = <>;
+		panel_y88249@0 {
+			compatible = "ingenic,y88249";
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&tft_lcd_pb_rgb888>;
+			ingenic,vdd-en-gpio = <&gpc 12 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+			ingenic,rst-gpio = <&gpc 1 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			ingenic,pwm-gpio = <&gpc 15 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			port {
+				panel_y88249_ep: endpoint {
+					remote-endpoint = <&dpu_out_ep>;
+				};
+			};
+		};
+		panel_kd050hdfia019@0 {
+			compatible = "ingenic,kd050hdfia019";
+			status = "okay";
+			pinctrl-names = "default";
+			port {
+				panel_kd050hdfia019_ep: endpoint {
+					remote-endpoint = <&dpu_out_ep>;
+				};
+			};
+		};
+	};
+};

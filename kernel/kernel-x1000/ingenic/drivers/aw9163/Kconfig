@@ -1,0 +1,3 @@
+config AW9163
+    bool "aw9163"
+

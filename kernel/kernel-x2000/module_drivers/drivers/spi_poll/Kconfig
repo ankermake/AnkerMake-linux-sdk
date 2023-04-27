@@ -1,0 +1,81 @@
+config INGENIC_POLL_SPI
+        tristate "X1600 Ingenic SPI Controller POLL"
+        depends on SOC_X1600
+        help
+                SPI driver for Ingenic series SoCs
+
+config INGENIC_POLL_SPI_CLK_RATE
+    int "spi clk rate"
+    default 100000000
+    depends on INGENIC_POLL_SPI
+
+config INGENIC_POLL_SPI0
+       tristate "X1600 POLL SPI0"
+       depends on INGENIC_POLL_SPI
+
+choice
+        prompt "SPI0_MOSI_GPIO"
+        depends on INGENIC_POLL_SPI0
+        default INGENIC_POLL_SPI0_MOSI_PB13
+
+config INGENIC_POLL_SPI0_MOSI_PB13
+    bool "GPIO_PB(13)"
+
+config INGENIC_POLL_SPI0_MOSI_PA30
+    bool "GPIO_PA(30)"
+
+config INGENIC_POLL_SPI0_MOSI_NULL
+    bool "NULL"
+
+endchoice
+
+
+choice
+        prompt "SPI0_MISO_GPIO"
+        depends on INGENIC_POLL_SPI0
+        default INGENIC_POLL_SPI0_MISO_PB14
+
+config INGENIC_POLL_SPI0_MISO_PB14
+    bool "GPIO_PB(14)"
+
+config INGENIC_POLL_SPI0_MISO_PA29
+    bool "GPIO_PA(29)"
+
+config INGENIC_POLL_SPI0_MISO_NULL
+    bool "NULL"
+
+endchoice
+
+choice
+        prompt "SPI0_CLK_GPIO"
+        depends on INGENIC_POLL_SPI0
+        default INGENIC_POLL_SPI0_CLK_PB12
+
+config INGENIC_POLL_SPI0_CLK_PB12
+    bool "GPIO_PB(12)"
+
+config INGENIC_POLL_SPI0_CLK_PA31
+    bool "GPIO_PA(31)"
+
+endchoice
+
+
+choice
+        prompt "SPI0_CS_GPIO"
+        depends on INGENIC_POLL_SPI0
+        default INGENIC_POLL_SPI0_CS_PB16
+
+config INGENIC_POLL_SPI0_CS_PB16
+    bool "GPIO_PB(16)"
+
+config INGENIC_POLL_SPI0_CS_PA28
+    bool "GPIO_PA(28)"
+
+config INGENIC_POLL_SPI0_CS_NULL
+    bool "NULL"
+
+endchoice
+
+
+
+

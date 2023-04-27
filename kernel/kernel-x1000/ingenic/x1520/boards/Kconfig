@@ -1,0 +1,25 @@
+choice
+	prompt "Platform Type"
+	depends on SOC_X1520_DRIVERS
+	default PLATFORM_SCANNER
+
+config PLATFORM_SCANNER
+	bool "scanner"
+
+config PLATFORM_X1520_MODULE_BASE
+	bool "module base"
+
+endchoice
+
+if PLATFORM_SCANNER
+source "ingenic/x1520/boards/scanner/Kconfig"
+endif
+
+if PLATFORM_X1520_MODULE_BASE
+source "ingenic/x1520/boards/module_base/Kconfig"
+endif
+
+config PLATFORM_NAME
+	string
+	default "scanner" if PLATFORM_SCANNER
+	default "module_base" if PLATFORM_X1520_MODULE_BASE

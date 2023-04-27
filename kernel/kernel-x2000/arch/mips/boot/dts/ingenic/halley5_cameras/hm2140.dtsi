@@ -1,0 +1,29 @@
+
+&i2c3 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pa>;
+
+		 hm2140@0x24 {
+			 status = "ok";
+			 compatible = "himax,hm2140";
+			 reg = <0x24>;
+			 pinctrl-names = "default";
+			 pinctrl-0 = <0x11>;
+			 ingenic,pwdn-gpio = <0x5 0xd 0x1 0x0>;
+			 ingenic,sync-gpio = <0x5 0xa 0x0 0x0>;
+
+			 port {
+
+				 endpoint {
+					 remote-endpoint = <0x12>;
+					 linux,phandle = <0x22>;
+					 phandle = <0x22>;
+				 };
+			 };
+		 };
+
+};
+

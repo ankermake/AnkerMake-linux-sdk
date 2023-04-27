@@ -1,0 +1,58 @@
+menuconfig MD_X2000_GPIO_REGULATOR
+    bool "gpios regulator"
+
+menuconfig MD_X2000_GPIO_REGULATOR0
+    bool "regulator0 config"
+
+config MD_X2000_GPIO_REGULATOR0_PIN
+    string "regulator0 pin(电源控制引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GPIO0_ACTIVET_LEVEL
+	int "active level (1为高有效)"
+	default 1
+
+config MD_X2000_GPIO_REGULATOR0_NAME
+	string "regulator0 name"
+	default "GPIO-POWER0"
+
+endmenu
+
+menuconfig MD_X2000_GPIO_REGULATOR1
+    bool "regulator1 config"
+
+config MD_X2000_GPIO_REGULATOR1_PIN
+    string "regulator1 pin(电源控制引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GPIO1_ACTIVET_LEVEL
+	int "active level (1为高有效)"
+	default 1
+
+config MD_X2000_GPIO_REGULATOR1_NAME
+	string "regulator1 name"
+	default "GPIO-POWER1"
+
+endmenu
+
+menuconfig MD_X2000_GPIO_REGULATOR2
+    bool "regulator2 config"
+
+config MD_X2000_GPIO_REGULATOR2_PIN
+    string "regulator2 pin(电源控制引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GPIO2_ACTIVET_LEVEL
+	int "active level (1为高有效)"
+	default 1
+
+config MD_X2000_GPIO_REGULATOR2_NAME
+	string "regulator2 name"
+	default "GPIO-POWER2"
+
+endmenu
+
+endmenu # MD_X2000_GPIO_REGULATOR

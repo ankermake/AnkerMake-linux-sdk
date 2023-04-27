@@ -1,0 +1,30 @@
+menuconfig MD_X1600_LCD_KWH035
+    bool "SLCD KWH035 (320x480) (X1600)"
+    select MD_X1600_FB
+    depends on MD_SOC_X1600_BASE
+
+config MD_X1600_LCD_REGULATOR_NAME
+    string "regulator name(通过名字获取 lcd module 电源管理器)"
+    default "GPIO-POWER0"
+
+config MD_X1600_KWH035_CS
+    string "gpio chip select(lcd 片选引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1600_KWH035_RD
+    string "gpio lcd read signal(lcd 读引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1600_KWH035_RST
+    string "gpio reset(lcd 复位引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1600_KWH035_POWER_EN
+    string "gpio power enable(lcd power使能引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+endmenu # MD_X1600_LCD_KWH035

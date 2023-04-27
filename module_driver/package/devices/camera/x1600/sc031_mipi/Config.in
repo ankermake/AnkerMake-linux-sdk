@@ -1,0 +1,25 @@
+menuconfig MD_X1600_SENSOR_SC031_MIPI
+    bool "sensor sc031 (mipi,raw10)"
+    select MD_X1600_CAMERA
+    depends on MD_SOC_X1600_BASE
+
+config MD_X1600_SC031_MIPI_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1600_SC031_MIPI_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1600_SC031_MIPI_GPIO_POWER
+    string "gpio power(sensor 电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1600_SC031_MIPI_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+endmenu

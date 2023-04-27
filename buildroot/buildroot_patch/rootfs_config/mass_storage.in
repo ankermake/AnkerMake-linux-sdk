@@ -1,0 +1,8 @@
+menuconfig APP_br_mass_storage_setting
+    bool "mass_storage相关设置"
+
+config APP_br_mass_storage_automatic_mount
+    bool "mass_storage 自动挂载(挂载在/tmp/mass_storage/目录下)"
+    default y
+
+endmenu

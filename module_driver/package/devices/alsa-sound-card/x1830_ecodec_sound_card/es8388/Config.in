@@ -1,0 +1,2 @@
+config MD_X1830_ES8388_SOUND_CARD
+    bool "使用 x1830 es8388(外部codec) 创建一个声卡"

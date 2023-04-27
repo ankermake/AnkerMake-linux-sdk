@@ -1,0 +1,33 @@
+config MD_SPI_GPIO6
+    bool "添加一个spi总线"
+    default n
+
+config MD_SPI_GPIO6_BUS_NUM
+    int "  bus num(唯一总线号)"
+    default 11
+    depends on MD_SPI_GPIO6
+
+config MD_SPI_GPIO6_SCK
+    string "  sck pin(时钟引脚)"
+    choice from SOC_GPIO_PINS
+    depends on MD_SPI_GPIO6
+    default -1
+
+config MD_SPI_GPIO6_MOSI
+    string "  mosi pin(输出引脚)"
+    choice from SOC_GPIO_PINS
+    depends on MD_SPI_GPIO6
+    default -1
+
+config MD_SPI_GPIO6_MISO
+    string "  miso pin(输入引脚)"
+    choice from SOC_GPIO_PINS
+    depends on MD_SPI_GPIO6
+    default -1
+
+config MD_SPI_GPIO6_NUM_CHIPSELECT
+    int "  num_chipselect(最大的从设备数量)"
+    default 8
+    depends on MD_SPI_GPIO6
+    help
+        从设备的chip_select 需要在此范围内

@@ -1,0 +1,5 @@
+menu "使用x2000_510 spdif创建一个声卡"
+
+source package/devices/alsa-sound-card/x2000_510_spdif_sound_card/spdif/Config.in
+
+endmenu

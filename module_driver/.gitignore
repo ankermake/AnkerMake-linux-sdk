@@ -1,0 +1,16 @@
+*.cmd
+*.ko.cmd
+*.o
+*.o.d
+*.ko
+*.mod.c
+*.mod
+modules.order
+.tmp_versions
+Module.symvers
+
+.config.in
+config.h
+.vscode/
+output/
+soc/x1830/mscaler/coefficient_file.txt

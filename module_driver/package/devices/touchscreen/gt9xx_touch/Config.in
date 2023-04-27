@@ -1,0 +1,70 @@
+array GT9XX_SERIES
+    int "GT9XX系列"
+    item "V1 (x2000-darwin-600*1024) " 0x1
+    item "V2 (x2000-halley5-720*1280) " 0x2
+    item "V2 (x2000-ilock-720*1280) " 0x2
+    item "V2 (x2100-kale-720*1280) " 0x2
+    item "V3 (x1600-halley6-480*800) " 0x3
+
+menuconfig MD_TOUCHSCREEN_GT9XX
+    bool "gt9xx_touch"
+
+config MD_GTP_VERSION
+    string "GT9XX系列供应商版本"
+    choice from GT9XX_SERIES
+    default 0x1
+
+config MD_GTP_REGULATOR_NAME
+    string "regulator name(通过名字获取 tp module 电源管理器)"
+    default -1
+
+config MD_GTP_POWER_EN_GPIO
+    string "gpio power(lcd power使能引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_GTP_RESET_GPIO
+    string "gpio reset(touchscreen 复位脚)"
+    choice from SOC_GPIO_PINS
+
+config MD_GTP_IRQ_GPIO
+    string "gpio irq(touchscreen 中断引脚)"
+    choice from SOC_GPIO_PINS
+
+config MD_GTP_MAX_TOUCH_NUMBER
+    int "能检测的最大触摸点个数(最大为10,最小为2，小于2计为2,大于10计为10)"
+    default 2
+
+config MD_GTP_I2C_BUSNUM
+    int "i2c bus num(触摸屏挂接的i2c总线号)"
+    default -1
+
+config MD_GTP_X_COORDS_MIN
+    int "最小X轴坐标值"
+    default 0
+
+config MD_GTP_Y_COORDS_MIN
+    int "最小Y轴坐标值"
+    default 0
+
+config MD_GTP_X_COORDS_MAX
+    int "最大X轴坐标值"
+    default 600
+
+config MD_GTP_Y_COORDS_MAX
+    int "最大Y轴坐标值"
+    default 1024
+
+config MD_GTP_X_COORDS_FLIP
+    bool "X轴是否翻转"
+    default n
+
+config MD_GTP_Y_COORDS_FLIP
+    bool "Y轴是否翻转"
+    default n
+
+config MD_GTP_X_Y_COORDS_EXCHANGE
+    bool "X,Y轴是否对调"
+    default n
+
+endmenu

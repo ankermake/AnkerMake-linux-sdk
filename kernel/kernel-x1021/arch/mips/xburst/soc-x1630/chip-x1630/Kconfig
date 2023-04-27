@@ -1,0 +1,17 @@
+
+choice
+	prompt "Board type"
+	depends on CHIP_X1630
+	default PRODUCT_X1630_DOLPHIN
+
+config PRODUCT_X1630_DOLPHIN
+	bool "product x1630 dolphin"
+
+endchoice
+
+if PRODUCT_X1630_DOLPHIN
+config PRODUCT_NAME
+string
+default "dolphin"
+source "arch/mips/xburst/soc-x1630/chip-x1630/dolphin/Kconfig"
+endif

@@ -1,0 +1,61 @@
+menuconfig MD_PWM_BACKLIGHT
+    bool "pwm背光"
+
+config MD_PWM_BACKLIGHT0
+    bool "pwm_backlight0"
+
+config MD_PWM_BACKLIGHT_GPIO
+    string "pwm 引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_PWM_BACKLIGHT0
+
+config MD_PWM_BACKLIGHT_ACTIVE_LEVEL
+    string "pwm 引脚活跃电平"
+    choice from PWM_ACTIVE_LEVELS
+    default 1
+    depends on MD_PWM_BACKLIGHT0
+
+config MD_PWM_BACKLIGHT_POWER_GPIO
+    string "pwm 背光供电引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_PWM_BACKLIGHT0
+
+config MD_PWM_BACKLIGHT_POWER_GPIO_VAILD_LEVEL
+    string "pwm 背光供电引脚有效电平"
+    choice from PWM_ENABLE_GPIO_VAILD_LEVEL
+    default 1
+    depends on MD_PWM_BACKLIGHT0
+
+config MD_PWM_BACKLIGHT0_FREQ
+    int "pwm频率(单位hz)"
+    default 1000000
+    depends on MD_PWM_BACKLIGHT0
+
+config MD_PWM_BACKLIGHT0_MAX_BRIGHTNESS
+    int "最大背光值"
+    default 300
+    depends on MD_PWM_BACKLIGHT0
+
+config MD_PWM_BACKLIGHT_DEFAULT_BRIGHTNESS
+    int "默认背光值"
+    default 200
+    depends on MD_PWM_BACKLIGHT0
+
+config MD_PWM_BACKLIGHT_DEV_NAME
+    string "背光设备名"
+    default "backlight_pwm0"
+    depends on MD_PWM_BACKLIGHT0
+
+endmenu
+
+array PWM_ACTIVE_LEVELS
+    int "pwm 活跃电平"
+    item "PWM_active_low" 0
+    item "PWM_active_high" 1
+
+array PWM_ENABLE_GPIO_VAILD_LEVEL
+    int "pwm 背光供电脚有效电平"
+    item "PWM_enable_gpio_low_vaild" 0
+    item "PWM_enable_gpio_high_vaild" 1

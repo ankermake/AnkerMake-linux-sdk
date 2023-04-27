@@ -1,0 +1,21 @@
+menu "bt,wifi...无线设备"
+
+source package/devices/wireless/bcmdhd_1.363.125.7/Config.in
+
+source package/devices/wireless/bcmdhd_1.363.125.19_infineon/Config.in
+
+source package/devices/wireless/bcmdhd/Config.in
+
+source package/devices/wireless/bcmdhd_1.363.59.144/Config.in
+
+source package/devices/wireless/rtl8723DS_WiFi_linux_v5.10/Config.in
+
+source package/devices/wireless/rtl8189FS_linux_v5.7.10/Config.in
+
+source package/devices/wireless/hi3861v031_linux/Config.in
+
+source package/devices/wireless/esp8089_linux/Config.in
+
+source package/devices/wireless/ssv6x5x_linux/Config.in
+
+endmenu

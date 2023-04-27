@@ -1,0 +1,8 @@
+/****Source test firmware provided by the manufacturer:***/
+
+	ICNT8918_for_test_0x0B03.bin
+md5sum:
+9eb2503e01e62cc7a85aa9d905178507  ICNT8918_for_test_0x0B03.bin
+
+/****Rename:****/
+ICNT8918_for_test_0x0B03.bin -> ICNT8918.bin

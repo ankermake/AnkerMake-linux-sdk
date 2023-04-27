@@ -1,0 +1,28 @@
+menuconfig SPI_FB_V12
+	tristate "JZ framebuffer sfc nand interface support."
+	depends on FB
+	select FB_CFB_FILLRECT
+	select FB_CFB_COPYAREA
+	select FB_CFB_IMAGEBLIT
+	help
+	  virtual Framebuffer support
+config VFB_XRES
+        int "vfb xres"
+        depends on SPI_FB_V12
+        default 194
+        help
+          virtual fb size:pix number of each line
+config VFB_YRES
+        int "vfb yres"
+        depends on SPI_FB_V12
+        default 368
+        help
+          virtual fb size: number of lines
+config VFB_BPP
+        int "vfb bpp"
+        depends on SPI_FB_V12
+        default 24
+        help
+          virtual fb bpp info
+source "$OUTSIDE_DRIVERS/drivers/video/fbdev/ingenic/spi_fb_v12/ingenic_sfc_oled_v2/Kconfig"
+

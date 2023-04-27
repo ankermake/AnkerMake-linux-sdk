@@ -1,0 +1,49 @@
+array SOC_X1520_SPI0_MISO_IO
+    string "SPI MISO(DR) 引脚"
+    item "GPIO_NULL  " -1
+    item "PC11" PC11
+
+array SOC_X1520_SPI0_MOSI_IO
+    string "SPI MOSI(DT) 引脚"
+    item "GPIO_NULL  " -1
+    item "PC12" PC12
+
+array SOC_X1520_SPI0_CLK_IO
+    string "SPI CLK 引脚"
+    item "GPIO_NULL  " -1
+    item "PC15" PC15
+
+menu "SPI 总线"
+    help
+        "依赖于 SPI 驱动"
+
+config MD_X1520_SPI
+    bool
+
+config MD_X1520_SPI0
+    bool "选择 SPI0"
+    select MD_X1520_SPI
+
+config MD_X1520_SPI0_MISO
+    string "        MISO(输入引脚)"
+    default PC11
+    choice from SOC_X1520_SPI0_MISO_IO
+    depends on MD_X1520_SPI0
+    help
+        "MISO= -1,表示不使用MISO引脚"
+
+config MD_X1520_SPI0_MOSI
+    string "        MOSI(输出引脚)"
+    default PC12
+    choice from SOC_X1520_SPI0_MOSI_IO
+    depends on MD_X1520_SPI0
+    help
+        "MOSI= -1,表示不使用MOSI引脚"
+
+config MD_X1520_SPI0_CLK
+    string "        CLK(时钟引脚)"
+    default PC15
+    choice from SOC_X1520_SPI0_CLK_IO
+    depends on MD_X1520_SPI0
+
+endmenu # SPI 总线

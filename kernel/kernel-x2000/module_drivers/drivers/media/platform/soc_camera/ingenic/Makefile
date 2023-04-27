@@ -1,0 +1,1 @@
+obj-$(CONFIG_VIDEO_INGENIC_CIM_V2) += cim-v2/

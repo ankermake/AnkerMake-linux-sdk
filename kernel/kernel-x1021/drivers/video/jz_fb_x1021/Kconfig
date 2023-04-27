@@ -1,0 +1,8 @@
+config FB_JZ_X1021
+	tristate "JZ LCDC framebuffer for x1021"
+	depends on FB
+	select FB_CFB_FILLRECT
+	select FB_CFB_COPYAREA
+	select FB_CFB_IMAGEBLIT
+	help
+	  Framebuffer support for the x1021 SoC.

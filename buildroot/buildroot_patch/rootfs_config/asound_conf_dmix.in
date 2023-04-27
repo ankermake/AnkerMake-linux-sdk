@@ -1,0 +1,9 @@
+
+menuconfig APP_br_asound_conf_dmix
+    bool "alsa dmix配置(混音配置)"
+    default n
+
+config APP_br_asound_conf_codec_name
+    string "声卡名字"
+    default "icodecsoundcard"
+endmenu

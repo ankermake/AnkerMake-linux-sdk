@@ -1,0 +1,13 @@
+config RGB_LED
+    bool "rgb led"
+    help
+        rgb led for doss board
+
+config JZ_X01_LED
+    bool "JZ X01 LED"
+	select JZ_PWM
+	select PWM
+	select PWM_SYSFS
+    default n
+    help
+        JZ X01 LED driver for usr interface

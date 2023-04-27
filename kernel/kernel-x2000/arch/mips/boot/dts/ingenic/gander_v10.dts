@@ -1,0 +1,264 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "x2500.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <generated/autoconf.h>
+
+
+#ifdef CONFIG_INGENIC_ISP_V2_CAMERA_IMX327
+#include "gander_cameras/imx327.dtsi"
+#endif
+
+/ {
+	compatible = "ingenic,gander", "ingenic,x2500";
+};
+
+&uart0 {
+	status = "disable";
+};
+
+&uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pb>;
+};
+
+&uart2 {
+	status = "disable";
+};
+
+&i2c0 {
+	pinctrl-0 = <&i2c0_pa>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&sadc {
+	status = "okay";
+};
+
+
+&i2c2 {
+	pinctrl-0 = <&i2c2_pc>;
+	pinctrl-names = "default";
+	status = "disable";
+};
+
+
+&cpufreq {
+	status = "disable";
+	operating-points = <
+		/*KHZ uV */
+		1200000	900000
+		750000	900000
+		600000	900000
+		500000	900000
+		400000	900000
+		375000	900000
+		300000	900000
+		200000	900000
+			>;
+
+};
+
+
+&pdma {
+	status = "okay";
+};
+
+&msc0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&msc0_pb>;
+	/*mmc-hs200-1_8v;*/
+	cap-mmc-highspeed;
+	max-frequency = <25000000>;
+	bus-width = <4>;
+	voltage-ranges = <1800 3300>;
+	/* cd-inverted; */
+	cd-gpios = <&gpc 6 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	/* special property */
+	ingenic,rst-gpios = <0>;
+	ingenic,pwr-gpios = <&gpd 22 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+};
+
+&msc1 {
+	status = "okay";
+	pinctrl-names = "default";
+	mmc-hs200-1_8v;
+	cap-mmc-highspeed;
+	max-frequency = <200000000>;
+	bus-width = <4>;
+	voltage-ranges = <1800 3300>;
+	non-removable;
+	cap-mmc-hw-reset;
+
+	/* special property */
+	ingenic,wp-gpios = <0>;
+	ingenic,rst-gpios = <&gpc 22 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	pinctrl-0 = <&msc1_pc>;
+};
+
+&mac0 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac0_rmii_p0_normal>, <&mac0_rmii_p1_normal>;
+	pinctrl-1 = <&mac0_rmii_p0_rst>, <&mac0_rmii_p1_normal>;
+	status = "okay";
+	ingenic,rst-gpio = <&gpc 7 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RMII>;
+	ingenic,mode-reg = <0xb0000054>;
+	ingenic,phy-clk-freq = <50000000>;
+};
+
+&sfc {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&sfc_pa>;
+	ingenic,sfc-init-frequency = <20000000>;
+	ingenic,sfc-max-frequency = <50000000>;
+	ingenic,use_ofpart_info      = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0>;
+};
+
+&spi0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0_pc>;
+
+	spi-max-frequency = <48000000>;
+	num-cs = <2>;
+	cs-gpios = <0>, <0>;
+	ingenic,chnl = <0>;
+	ingenic,allow_cs_same = <1>;
+	ingenic,bus_num = <0>;
+	ingenic,has_dma_support = <1>;
+};
+
+&dtrng {
+	status = "okay";
+};
+
+&otg {
+	g-use-dma;
+	dr_mode = "otg";
+	status = "okay";
+};
+
+&otg_phy {
+	dr_mode = "otg";
+	compatible = "ingenic,innophy-x2500", "syscon";
+	ingenic,drvvbus-gpio = <&gpb 27 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	status = "okay";
+};
+
+/ {
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+
+	gpio_keys: gpio_keys {
+		   compatible = "gpio-keys";
+
+		   wakeup {
+			   label = "WAKEUP";
+			   linux,code = <KEY_WAKEUP>;
+			   gpios = <&gpb 28 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			   gpio-key,wakeup;
+		   };
+
+		   wakeup1 {
+			   label = "WAKEUP";
+			   linux,code = <KEY_WAKEUP>;
+			   gpios = <&gpb 29 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			   gpio-key,wakeup;
+		   };
+
+		   power {
+			   label = "Power";
+			   linux,code = <KEY_POWER>;
+			   gpios = <&gpa 31 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			   gpio-key,wakeup;
+		   };
+            bootsel0 {
+                label = "bootsel0";
+                linux,code = <KEY_HOME>;
+                gpios = <&gpc 0 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+            };
+
+            bootsel1 {
+                label = "bootsel1";
+                linux,code = <KEY_BACK>;
+                gpios = <&gpc 1 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+            };
+
+	   };
+};
+
+&el150 {
+	status = "disable";
+};
+
+&dpu {
+	status = "okay";
+	ingenic,disable-rdma-fb = <1>;
+	ingenic,layer-exported = <1 1 0 0>;
+	ingenic,layer-frames   = <2 2 2 2>;
+	ingenic,layer-framesize = <800 480>, <800 480>, <400 240>, <400 240>;   /*Max framesize for each layer.*/
+	layer,color_mode	= <0 0 0 0>;					/*src fmt,*/
+	layer,src-size       	= <800 480>, <800 480>, <400 240>, <400 240>;	/*Layer src size should smaller than framesize*/
+	layer,target-size	= <800 480>, <800 480>, <160 240>, <240 200>;	/*Target Size should smaller than src_size.*/
+	layer,target-pos	= <0 0>, <0 0>, <340 480>, <100 400>;	/*target pos , the start point of the target panel.*/
+	layer,enable		= <1 1 0 0>;					/*layer enabled or disabled.*/
+	ingenic,logo-pan-layer	= <0>;						/*on which layer should init logo pan on.*/
+	port {
+		dpu_out_ep: endpoint {
+			remote-endpoint = <&panel_bm8766_ep>;
+	    };
+	};
+};
+
+/ {
+	display-dpi {
+		compatible = "simple-bus";
+		#interrupt-cells = <1>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges = <>;
+		panel_bm8766@0 {
+			compatible = "ingenic,bm8766";
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&tft_lcd_pd>;
+			gpios = <&gpb 25 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+			port {
+				panel_bm8766_ep: endpoint {
+					remote-endpoint = <&dpu_out_ep>;
+				};
+			};
+		};
+
+	};
+};
+
+&soc_nna{
+	status = "okay";
+};
+
+&i2d{
+	status = "okay";
+};
+
+&bscaler0{
+	status = "okay";
+};
+
+&drawbox{
+	status = "okay";
+};
+
+&ipu{
+	status = "okay";
+};

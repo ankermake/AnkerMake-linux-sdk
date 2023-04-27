@@ -1,0 +1,16 @@
+#
+# Focaltech Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_GT9XX_V2
+    bool "GT9XX Touchscreen_v2"
+    default n
+    help
+      Say Y here if you have Focaltech touch panel.
+      If unsure, say N.
+
+config TOUCHSCREEN_GT9XX_V2_DIRECTORY
+    string "gt ts directory name"
+    default "gt9xx_touch_v2"
+    depends on TOUCHSCREEN_GT9XX_V2
+

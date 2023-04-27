@@ -1,0 +1,4 @@
+config AX88796C_SPI
+    tristate "AX88796C SPI Ethernet"
+    help
+        This selects spi support.

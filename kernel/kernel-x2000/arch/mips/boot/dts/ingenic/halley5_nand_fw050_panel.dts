@@ -1,0 +1,223 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "x2000-v12.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <generated/autoconf.h>
+
+/ {
+	compatible = "ingenic,x2000_halley5_module_base", "ingenic,x2000-v12";
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges =<>;
+
+        reserved_memory: reserved_mem@0x6800000{
+              compatible = "shared-dma-pool";
+              reg = <0x06800000 0x1800000>;
+        };
+	};
+
+};
+
+&uart0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_pd>;
+};
+
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pd>;
+};
+
+&uart3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart3_pc>;
+};
+
+&cpufreq {
+	status = "okay";
+	operating-points = <
+		/*KHZ uV */
+		1200000	900000
+		750000	900000
+		600000	900000
+		500000	900000
+		400000	900000
+		375000	900000
+		300000	900000
+		200000	900000
+			>;
+
+};
+
+&pinctrl {
+	ingenic,gpa_voltage = <GPIO_VOLTAGE_1V8>;
+};
+
+&i2c0 {
+	clock-frequency = <400000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c0_pc>;
+
+	goodix@0x14{
+		compatible = "goodix,gt9xx"; /* do not modify */
+		reg = <0x14>; /* do not modify */
+		interrupt-parent = <&gpc>; /* INT pin */
+		interrupts = <9>;
+		reset-gpios = <&gpc 8 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>; /* RST pin */
+		irq-gpios = <&gpc 9 IRQ_TYPE_EDGE_FALLING INGENIC_GPIO_NOBIAS>; /* INT pin */
+		goodix,driver-send-cfg = <1>;
+		touchscreen-size-x = <1280>;
+		touchscreen-size-y = <720>;
+		goodix,slide-wakeup = <0>;
+		goodix,type-a-report = <0>;
+		goodix,resume-in-workqueue = <0>;
+		goodix,int-sync = <1>;
+		goodix,swap-x2y = <0>;
+		goodix,auto-update-cfg = <0>;
+		goodix,power-off-sleep = <0>;
+		goodix,pen-suppress-finger = <0>;
+		irq-flags = <2>; /* 1 rising, 2 falling */
+		goodix,cfg-group0 = [
+			00 D0 02 00 05 0A 05 00 01 08 28
+			05 50 32 03 05 00 00 00 00 00 00
+			00 00 00 00 00 87 28 09 17 15 31
+			0D 00 00 02 9B 03 25 00 00 00 00
+			00 03 64 32 00 00 00 0F 36 94 C5
+			02 07 00 00 04 9B 11 00 7B 16 00
+			64 1C 00 50 25 00 42 2F 00 42 00
+			00 00 00 00 00 00 00 00 00 00 00
+			00 00 00 00 00 00 00 00 00 00 00
+			00 00 00 00 00 00 00 00 00 00 00
+			00 00 12 10 0E 0C 0A 08 06 04 02
+			FF FF FF FF FF 00 00 00 00 00 00
+			00 00 00 00 00 00 00 00 00 00 26
+			24 22 21 20 1F 1E 1D 00 02 04 06
+			08 0A 0C FF FF FF FF FF FF FF FF
+			FF FF FF 00 00 00 00 00 00 00 00
+			00 00 00 00 00 00 00 00 CF 01];
+	};
+
+};
+
+
+&felix {
+	status = "okay";
+	memory-region=<&reserved_memory>;
+};
+
+&helix {
+	status = "okay";
+    /*memory-region=<&reserved_memory>;*/
+};
+
+&ispcam0 {
+	status = "okay";
+    /*memory-region=<&reserved_memory>;*/
+};
+
+&ispcam1 {
+	status = "okay";
+    /*memory-region=<&reserved_memory>;*/
+};
+
+&pdma {
+	status = "okay";
+};
+
+&sfc {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&sfc_pe>;
+	ingenic,sfc-init-frequency = <200000000>;
+	ingenic,sfc-max-frequency = <320000000>;
+	ingenic,use_ofpart_info  = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0>;
+
+
+};
+
+&pwm {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pwm1_pc>;
+	status = "okay";
+};
+
+&otg {
+	// g-use-dma;
+	dr_mode = "otg";
+	status = "okay";
+};
+
+&otg_phy {
+	dr_mode = "otg";
+	compatible = "ingenic,innophy", "syscon";
+	status = "okay";
+};
+
+&as_be_baic {
+	pinctrl-names = "default";
+	pinctrl-0 =  <&baic4_pd>;
+};
+
+&as_dmic {
+	pinctrl-names = "default";
+	pinctrl-0 = <&dmic_pc_4ch>;
+};
+
+&dpu {
+	status = "okay";
+		dpu_out_ep: endpoint {
+			/*remote-endpoint = <&panel_ma0060_ep>;*/
+			remote-endpoint = <&panel_fw050_ep>;
+	    };
+	};
+
+
+/ {
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+
+	sound {
+		compatible = "ingenic,x2000-sound";
+		ingenic,model = "halley5_v20";
+		ingenic,spken-gpio = <&gpb 2 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	};
+
+	display-dbi {
+		compatible = "simple-bus";
+		#interrupt-cells = <1>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges = <>;
+		panel_fw050 {
+			compatible = "ingenic,fw050";
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&smart_lcd_pb_te>;
+			ingenic,vdd-en-gpio = <&gpc 3 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			ingenic,rst-gpio = <&gpc 4 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		//	ingenic,lcd-pwm-gpio = <&gpc 1 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+			port {
+				panel_fw050_ep: endpoint {
+							remote-endpoint = <&dpu_out_ep>;
+						};
+			};
+		};
+	};
+
+	backlight {
+		compatible = "pwm-backlight";
+		pwms = <&pwm 1 1000000>; /* arg1: pwm channel id [0~15]. arg2: period in ns. */
+		brightness-levels = <0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15>;
+		default-brightness-level = <4>;
+	};
+
+	};

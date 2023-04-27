@@ -1,0 +1,9 @@
+menuconfig INGENIC_SFC_OLED_V2
+	tristate "Supported oled panels"
+	depends on SPI_FB_V12
+
+config OLED_FT2306
+	tristate "oled ft2306"
+	depends on INGENIC_SFC_OLED_V2
+	help
+		lcd panel oled ft2306, for ingenic vfb drivers.

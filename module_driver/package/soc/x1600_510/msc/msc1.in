@@ -1,0 +1,180 @@
+menuconfig MD_X1600_510_MSC1
+    bool "选择 msc1"
+
+array SOC_X1600_510_MSC1_RM_METHOD
+    string "msc1 卡槽移除属性"
+    item "dontcare 忽略该选项" dontcare
+    item "nonremovable 不可移除" nonremovable
+    item "removable  可移除" removable
+    item "manual 手动" manual
+
+array SOC_X1600_510_MSC1_CD_METHOD
+    string "msc1 探测方式"
+    item "cd-internal cd/dat3信号探测" cd-internal
+    item "cd-inverted 外部引脚探测" cd-inverted
+    item "broken-cd  没有探测电路，使用轮询探测" broken-cd
+    item "non-removable 没有探测电路，外设固化在主板" non-removable
+
+array SOC_X1600_510_MSC1_BUS_WIDTH
+    int "msc1 总线宽度"
+    item "1 bits" 1
+    item "4 bits" 4
+
+array SOC_X1600_510_MSC1_SPEED
+    string "msc1 外设选择"
+    item "sd 卡" sd_card
+    item "sdio 外设" sdio
+    item "emmc 外设" emmc
+
+array SOC_X1600_510_MSC1_MAX_FREQUENCY
+    int "msc1 最大频率"
+    item "24000000 hz" 24000000
+    item "50000000 hz" 50000000
+
+config MD_X1600_510_MSC1_MAX_FREQUENCY
+    int "msc1 最高频率"
+    choice from SOC_X1600_510_MSC1_MAX_FREQUENCY
+    default 100000000
+
+config MD_X1600_510_MSC1_RM_METHOD
+    string "msc1 卡槽移除属性"
+    default manual
+    choice from SOC_X1600_510_MSC1_RM_METHOD
+
+config MD_X1600_510_MSC1_CD_METHOD
+    string "msc1 探测方式"
+    default cd-internal
+    choice from SOC_X1600_510_MSC1_CD_METHOD
+
+config MD_X1600_510_MSC1_VOLTAGE_MIN
+    int "msc1 电压范围最小值, 默认1.8V"
+    default 1800
+
+config MD_X1600_510_MSC1_VOLTAGE_MAX
+    int "msc1 电压范围最大值, 默认3.3V"
+    default 3300
+
+config MD_X1600_510_MSC1_BUS_WIDTH
+    int "msc1 总线宽度"
+    choice from SOC_X1600_510_MSC1_BUS_WIDTH
+    default 4
+
+config MD_X1600_510_MSC1_SPEED
+    string "msc1 外设选择"
+    choice from SOC_X1600_510_MSC1_SPEED
+    default sd_card
+
+config MD_X1600_510_MSC1_CAP_POWER_OFF_CARD
+    bool "msc1 上电后可以关闭电源"
+    default n
+
+config MD_X1600_510_MSC1_CAP_MMC_HW_RESET
+    bool "msc1 可以硬件复位"
+    default n
+
+config MD_X1600_510_MSC1_CAP_SDIO_IRQ
+    bool "msc1 使能sdio总线中断"
+    default n
+
+config MD_X1600_510_MSC1_FULL_PWR_CYCLE
+    bool "msc1 支持设备卡的整个电源周期"
+    default n
+
+config MD_X1600_510_MSC1_KEEP_POWER_IN_SUSPEND
+    bool "msc1 待机时不掉电"
+    default n
+
+config MD_X1600_510_MSC1_ENABLE_SDIO_WAKEUP
+    bool "msc1  使能SDIO中断唤醒系统"
+    default n
+
+config MD_X1600_510_MSC1_DSR
+    int "msc1  配置输出驱动能力[0x0000-0xffff]"
+    default 0x404
+
+config MD_X1600_510_MSC1_PIO_MODE
+    bool "msc1 io 模式"
+    default n
+
+config MD_X1600_510_MSC1_ENABLE_AUTOCMD12
+    bool "msc1 多块数据传输时，传输完毕后要发送停止命令CMD12"
+    default n
+
+config MD_X1600_510_MSC1_ENABLE_CPM_RX_TUNING
+    bool "msc1 调节msc1接收时的时钟相位"
+    default n
+
+config MD_X1600_510_MSC1_ENABLE_CPM_TX_TUNING
+    bool "msc1 调节msc1发送时的时钟相位"
+    default n
+
+config MD_X1600_510_MSC1_SDIO_CLK
+    bool "msc1 切换为sdio模式"
+    default n
+
+config MD_X1600_510_MSC1_RST
+    bool "msc1 使能复位引脚"
+    default n
+
+config MD_X1600_510_MSC1_RST_GPIO
+    string "    msc1 复位引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X1600_510_MSC1_RST
+
+config MD_X1600_510_MSC1_RST_ENABLE_LEVEL
+    int "    msc1 复位引脚工作电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+    depends on MD_X1600_510_MSC1_RST
+
+config MD_X1600_510_MSC1_WP
+    bool "msc1 使能写保护引脚"
+    default n
+
+config MD_X1600_510_MSC1_WP_GPIO
+    string "    msc1 写保护引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X1600_510_MSC1_WP
+
+config MD_X1600_510_MSC1_WP_ENABLE_LEVEL
+    int "    msc1 写保护引脚工作电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+    depends on MD_X1600_510_MSC1_WP
+
+config MD_X1600_510_MSC1_PWR
+    bool "msc1 使能供电引脚"
+    default n
+
+config MD_X1600_510_MSC1_PWR_GPIO
+    string "    msc1 供电引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X1600_510_MSC1_PWR
+
+config MD_X1600_510_MSC1_PWR_ENABLE_LEVEL
+    int "    msc1 供电工作电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+    depends on MD_X1600_510_MSC1_PWR
+
+config MD_X1600_510_MSC1_CD
+    bool "msc1 使能探测引脚"
+    default n
+
+config MD_X1600_510_MSC1_CD_GPIO
+    string "    msc1 探测引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X1600_510_MSC1_CD
+
+config MD_X1600_510_MSC1_CD_ENABLE_LEVEL
+    int "    msc1 探测引脚工作电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+    depends on MD_X1600_510_MSC1_CD
+
+
+endmenu # MSC1 总线

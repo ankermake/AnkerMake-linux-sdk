@@ -1,0 +1,78 @@
+choice "        soc(芯片)"
+
+config MD_CHOICE_SOC_X1830
+    bool "x1830"
+    select MD_SOC_X1830
+
+config MD_CHOICE_SOC_X1520
+    bool "x1520"
+    select MD_SOC_X1520
+
+config MD_CHOICE_SOC_X1021
+    bool "x1021"
+    select MD_SOC_X1021
+
+config MD_CHOICE_SOC_X1000
+    bool "x1000"
+    select MD_SOC_X1000
+
+config MD_CHOICE_SOC_X1600
+    bool "x1600"
+    select MD_SOC_X1600
+    select MD_SOC_X1600_BASE
+    select MD_CHOICE_SOC_X1600_BASE
+    select CONFIG_SOC_X1600_IO_ARRAY
+
+config MD_CHOICE_SOC_X1660
+    bool "x1660 (x1600系列)"
+    select MD_SOC_X1600
+    select MD_SOC_X1600_BASE
+    select MD_CHOICE_SOC_X1600_BASE
+    select CONFIG_SOC_X1660_IO_ARRAY
+
+config MD_CHOICE_SOC_X1600_510
+    bool "x1600 (5.10 kernel)"
+    select MD_SOC_X1600_510
+    select MD_SOC_X1600_BASE
+    select MD_CHOICE_SOC_X1600_510_BASE
+    select CONFIG_SOC_X1600_510_IO_ARRAY
+
+config MD_CHOICE_SOC_X1660_510
+    bool "x1660 (5.10 kernel)"
+    select MD_SOC_X1600_510
+    select MD_SOC_X1600_BASE
+    select MD_CHOICE_SOC_X1600_510_BASE
+    select CONFIG_SOC_X1660_510_IO_ARRAY
+
+config MD_CHOICE_SOC_X2000
+    bool "x2000"
+    select MD_SOC_X2000
+    select MD_SOC_X2000_BASE
+
+config MD_CHOICE_SOC_X2000_510
+    bool "x2000 (5.10 kernel)"
+    select MD_SOC_X2000_510
+    select MD_SOC_X2000_BASE
+
+endchoice
+
+config MD_SOC_X1600_BASE
+    bool
+
+config MD_CHOICE_SOC_X1600_BASE
+    bool
+
+config MD_CHOICE_SOC_X1600_510_BASE
+    bool
+
+config MD_SOC_X2000_BASE
+    bool
+
+source package/soc/x1830/Config.in
+source package/soc/x1520/Config.in
+source package/soc/x1021/Config.in
+source package/soc/x1000/Config.in
+source package/soc/x1600/Config.in
+source package/soc/x1600_510/Config.in
+source package/soc/x2000/Config.in
+source package/soc/x2000_510/Config.in

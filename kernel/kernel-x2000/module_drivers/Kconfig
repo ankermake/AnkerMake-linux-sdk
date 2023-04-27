@@ -1,0 +1,11 @@
+menu "Ingenic device-drivers Configurations"
+
+
+config OUTSIDE_DRIVERS_PATH
+	string
+	default OUTSIDE_DRIVERS
+
+source "$OUTSIDE_DRIVERS/drivers/Kconfig"
+source "$OUTSIDE_DRIVERS/sound/soc/ingenic/Kconfig"
+
+endmenu

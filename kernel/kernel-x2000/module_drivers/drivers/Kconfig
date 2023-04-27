@@ -1,0 +1,121 @@
+comment "---- Minimal required Drivers ----"
+menu "[Interrupt] Drivers"
+source "$OUTSIDE_DRIVERS/drivers/irqchip/Kconfig"
+endmenu
+
+menu "[OST] clocksoure Drivers"
+source "$OUTSIDE_DRIVERS/drivers/clocksource/Kconfig"
+endmenu
+
+menu "[CPM] clk Drivers"
+source "$OUTSIDE_DRIVERS/drivers/clk/ingenic-v2/Kconfig"
+endmenu
+
+menu "[GPIO] Pinctroller Drivers"
+source "$OUTSIDE_DRIVERS/drivers/pinctrl/Kconfig"
+endmenu
+
+menu "[UART] Drivers"
+source "$OUTSIDE_DRIVERS/drivers/tty/serial/Kconfig"
+endmenu
+
+menu "[MSC] (eMMC/SD/SDIO) and Device Drivers"
+source "$OUTSIDE_DRIVERS/drivers/mmc/host/Kconfig"
+endmenu
+
+menu "SDIO-WIFI drivers"
+
+source "$OUTSIDE_DRIVERS/drivers/net/wireless/Kconfig"
+
+endmenu
+
+menu "[DMA] Drivers"
+source "$OUTSIDE_DRIVERS/drivers/dma/ingenic/Kconfig"
+endmenu
+
+menu "[SFC] (SPI Nand/Nor Flash) Drivers"
+source "$OUTSIDE_DRIVERS/drivers/mtd/devices/Kconfig"
+endmenu
+
+menu "[SPI] Master/Slave Drivers"
+source "$OUTSIDE_DRIVERS/drivers/spi/Kconfig"
+source "$OUTSIDE_DRIVERS/drivers/spi_poll/Kconfig"
+endmenu
+
+menu "[ADC_POLL] ADC POLL DRVIERS"
+source "$OUTSIDE_DRIVERS/drivers/adc_poll/Kconfig"
+endmenu
+
+menu "[I2C] Master Drivers"
+source "$OUTSIDE_DRIVERS/drivers/i2c/busses/Kconfig"
+endmenu
+
+comment "---- minimal OS requirements. ----"
+
+menu "[LCD] Panel/Touchscreen Drivers"
+
+source "$OUTSIDE_DRIVERS/drivers/video/fbdev/ingenic/Kconfig"
+source "$OUTSIDE_DRIVERS/drivers/video/logo-ingenic/Kconfig"
+
+menu "Touchscreen Drivers"
+source "$OUTSIDE_DRIVERS/drivers/input/touchscreen/Kconfig"
+endmenu
+endmenu
+
+
+
+menu "[GMAC] (ethernet) Drivers"
+source "$OUTSIDE_DRIVERS/drivers/net/ethernet/ingenic/Kconfig"
+endmenu
+
+menu "[CAN] (ethernet) Drivers"
+source "$OUTSIDE_DRIVERS/drivers/net/can/ingenic/Kconfig"
+endmenu
+
+comment "---- (V4L2) Media Device Drivers ----"
+source "$OUTSIDE_DRIVERS/drivers/media/platform/Kconfig"
+menu "[Sensors] Camera Sensors"
+source "$OUTSIDE_DRIVERS/drivers/media/i2c/Kconfig"
+endmenu
+
+source "$OUTSIDE_DRIVERS/drivers/video/ingenic_bscaler/Kconfig"
+source "$OUTSIDE_DRIVERS/drivers/video/ingenic-nna/Kconfig"
+source "$OUTSIDE_DRIVERS/drivers/video/ingenic_ipu/Kconfig"
+source "$OUTSIDE_DRIVERS/drivers/video/ingenic_avpu/Kconfig"
+
+
+
+comment "---- MISC Device Drivers ----"
+source "$OUTSIDE_DRIVERS/drivers/misc/Kconfig"
+
+menu "[RANDOM] drivers"
+source "$OUTSIDE_DRIVERS/drivers/char/hw_random/Kconfig"
+endmenu
+
+comment "[MFD] Multi Function Device Drivers"
+source "$OUTSIDE_DRIVERS/drivers/mfd/Kconfig"
+
+comment "[Power] power and regulator Drivers"
+source "$OUTSIDE_DRIVERS/drivers/power/Kconfig"
+source "$OUTSIDE_DRIVERS/drivers/regulator/Kconfig"
+
+source "$OUTSIDE_DRIVERS/drivers/crypto/Kconfig"
+
+
+menu "[WDT] watchdog Drivers"
+source "$OUTSIDE_DRIVERS/drivers/watchdog/Kconfig"
+endmenu
+
+
+menu "[PWM] drivers"
+source "$OUTSIDE_DRIVERS/drivers/pwm/Kconfig"
+endmenu
+
+menu "[RISCV] drivers"
+depends on SOC_X2500
+source "$OUTSIDE_DRIVERS/drivers/riscv/Kconfig"
+endmenu
+
+menu "[CONN] drivers"
+source "$OUTSIDE_DRIVERS/drivers/conn/Kconfig"
+endmenu

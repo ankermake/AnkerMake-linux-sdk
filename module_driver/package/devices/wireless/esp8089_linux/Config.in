@@ -1,0 +1,15 @@
+menuconfig MD_ESP8089
+    bool "ESP8089 wireless cards support"
+
+config MD_ESP8089_MMC_NUM
+    int "wlan_mmc_num (mmc/sdio 总线号)"
+    default -1
+    help
+      wifi 挂接在哪个 mmc 总线,比如 0, 1
+
+config MD_ESP8089_WLAN_REG_ON
+    string "gpio_wlan_reg_on(wifi的使能引脚)"
+    default -1
+    choice from SOC_GPIO_PINS
+
+endmenu

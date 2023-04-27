@@ -1,0 +1,108 @@
+menuconfig FB_INGENIC_DISPLAYS_V12
+	tristate "Supported lcd panels"
+	depends on FB_INGENIC_V12
+	select BACKLIGHT_LCD_SUPPORT
+	select LCD_CLASS_DEVICE
+	select BACKLIGHT_CLASS_DEVICE
+
+
+config PANEL_V12_Y88249
+	tristate "lcd panel y88249"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel y88249, for ingenicfb drivers.
+
+config PANEL_V12_KD050HDFIA019
+	tristate "lcd panel kd050hdfia019"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel kd050hdfia019, for ingenicfb drivers.
+
+config PANEL_V12_MA0060
+	tristate "lcd panel MA0060"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel MA0060, for ingenicfb drivers.
+
+config PANEL_V12_FW050
+	tristate "lcd panel FW050"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel FW050, for ingenicfb drivers.
+
+config PANEL_V12_TL040WVS03CT
+	tristate "lcd panel tl040wvs03ct"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel tl040wvs03ct, for ingenicfb drivers.
+
+config PANEL_V12_TL040HDS01CT
+	tristate "lcd panel tl040hds01ct"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel tl040hds01ct, for ingenicfb drivers.
+
+config PANEL_V12_JD9161Z
+	tristate "lcd panel JD9161Z"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel JD9161Z, for ingenicfb drivers.
+
+config PANEL_V12_JD9365D
+	tristate "lcd panel JD9365D"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel JD9365D, for ingenicfb drivers.
+config PANEL_V12_JD9366
+	tristate "lcd panel JD9366"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel JD9366, for ingenicfb drivers.
+
+config PANEL_V12_ST7701S
+	tristate "lcd panel ST7701S"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel ST7701S, for ingenicfb drivers.
+
+config PANEL_V12_ST7701S_DX
+	tristate "lcd panel st7701s_dx3.95ips"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel st7701s_dx3.95ips(mipi)480*480, for ingenicfb drivers.
+config PANEL_V12_ST7282
+	tristate "lcd panel st7282"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel st7282, for ingenicfb drivers.
+
+config PANEL_V12_RM690A0
+	tristate "lcd panel rm690a0"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel rm690a0(mipi), for ingenicfb drivers.
+
+
+config PANEL_V12_YTS500XLAI
+	tristate "lcd panel YTS500XLAI"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel YTS500XLAI, for ingenicfb drivers.
+
+config PANEL_V12_YLYM286A
+	tristate "lcd panel ylym286a"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel ylym286a with bridge lt9211, for ingenicfb drivers.
+
+config PANEL_X2000_KD035HVFBD037
+	tristate "SLCD KD035HVFBD037 with control IC otm4802a (320x480)"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel KD035HVFBD037, for ingenicfb drivers.
+
+config PANEL_V12_BM8766
+	tristate "tft bm8766 (480x800)"
+	depends on FB_INGENIC_DISPLAYS_V12
+	help
+		lcd panel bm8766, for ingenicfb drivers.

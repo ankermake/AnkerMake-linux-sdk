@@ -1,0 +1,16 @@
+choice
+	prompt "Board type"
+	depends on SOC_X1520_DRIVERS
+	default BOARD_1520_MODULE_BASE0
+
+config BOARD_1520_MODULE_BASE0
+       bool "board0(ingenic test version)"
+
+endchoice
+
+config BOARD_NAME
+	string
+	default "board0" if BOARD_1520_MODULE_BASE0
+config PRODUCT_NAME
+	string
+	default "board0" if BOARD_1520_MODULE_BASE0

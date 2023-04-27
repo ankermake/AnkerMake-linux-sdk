@@ -1,0 +1,50 @@
+menuconfig MD_X1600_I2C
+    bool "i2c 控制器驱动"
+
+
+config MD_X1600_I2C0_BUS
+    bool "选择I2C0"
+
+choice "              选择I2C0 GPIO"
+    default MD_X1600_I2C0_PA
+    depends on MD_X1600_I2C0_BUS
+
+config MD_X1600_I2C0_PA
+    bool "SCL:GPIO_PA(28) SDA:GPIO_PA(29)"
+
+config MD_X1600_I2C0_PB
+    bool "SCL:GPIO_PB(30) SDA:GPIO_PB(31)"
+    depends on MD_CHOICE_SOC_X1600
+
+endchoice
+
+config MD_X1600_I2C0_RATE
+    int "       I2C0 速度 "
+    default 400000
+    depends on MD_X1600_I2C0_BUS
+
+
+
+config MD_X1600_I2C1_BUS
+    bool "选择I2C1"
+
+choice "              选择I2C1 GPIO"
+    default MD_X1600_I2C1_PB_15_16
+    depends on MD_X1600_I2C1_BUS
+
+config MD_X1600_I2C1_PB_15_16
+    bool "SCL:GPIO_PB(15) SDA:GPIO_PB(16)"
+
+config MD_X1600_I2C1_PB_19_20
+    bool "SCL:GPIO_PB(19) SDA:GPIO_PB(20)"
+    depends on MD_CHOICE_SOC_X1600
+
+endchoice
+
+config MD_X1600_I2C1_RATE
+    int "        I2C1 速度 "
+    default 400000
+    depends on MD_X1600_I2C1_BUS
+
+
+endmenu

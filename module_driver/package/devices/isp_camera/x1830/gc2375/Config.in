@@ -1,0 +1,47 @@
+menuconfig MD_X1830_SENSOR_ISP_GC2375A
+    bool "sensor gc2375a (mipi,raw10)"
+    depends on MD_SOC_X1830
+
+choice "        gc2375a dvp 分辨率选择"
+    default MD_X1830_GC2375A_1600X1200
+
+config MD_X1830_GC2375A_480X800
+    bool "640*1072"
+
+config MD_X1830_GC2375A_720X1200
+    bool "1280*1080"
+
+config MD_X1830_GC2375A_1600X1200
+    bool "1440*1080"
+
+endchoice
+
+config MD_X1830_GC2375A_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_GC2375A_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_GC2375A_GPIO_POWER
+    string "gpio power(sensor 电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_GC2375A_GPIO_I2C_SEL
+    string "gpio i2c select(sensor i2c 使能脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_GC2375A_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+config MD_X1830_GC2375A_ISPCLK
+    int "isp clk (isp 时钟频率)"
+    default 90000000
+
+endmenu # MD_X1830_SENSOR_GC2375A

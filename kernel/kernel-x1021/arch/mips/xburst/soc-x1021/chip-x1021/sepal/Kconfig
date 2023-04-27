@@ -1,0 +1,15 @@
+choice
+prompt "Board version"
+depends on PRODUCT_X1021_SEPAL
+default BOARD_X1021_SEPAL_V10
+
+config BOARD_X1021_SEPAL_V10
+bool "sepal board v10"
+
+endchoice
+
+
+config BOARD_NAME
+string
+default "sepal_v10" if BOARD_X1021_SEPAL_V10
+

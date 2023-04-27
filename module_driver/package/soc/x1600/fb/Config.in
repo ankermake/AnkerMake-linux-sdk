@@ -1,0 +1,25 @@
+menuconfig MD_X1600_FB
+    bool "fb 显示驱动"
+    help
+        Framebuffer support for the x1600 SoC.
+        kernel must select those options
+        select FB
+        select FB_CFB_FILLRECT
+        select FB_CFB_COPYAREA
+        select FB_CFB_IMAGEBLIT
+
+config MD_X1600_RTOS_BOOT_LOGO_FOR_KERNEL
+    bool "rtos 中已初始化过 lcd (此时无需再初始化)"
+    default n
+    help
+        rtos 中已初始化过 lcd, 无需再初始化
+
+config MD_X1600_FB_FRAME_NUM
+    int "帧缓冲数量"
+    default 2
+
+config MD_X1600_FB_PAN_DISPLAY_SYNC
+    bool "pan_display 调用时等待帧刷新完成(单缓冲时选中)"
+    default y
+
+endmenu

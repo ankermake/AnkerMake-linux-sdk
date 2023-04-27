@@ -1,0 +1,76 @@
+&i2c0 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c0_pa>;
+
+	/*RD_X2000_HALLEY5_CAMERA_V3.2*/
+	imx327_0:imx327@0x1a {
+		status = "ok";
+		compatible = "ovti,imx327";
+		reg = <0x1a>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cim1_vic_mclk_pc>;
+
+		ingenic,mclk = <1>;
+		ingenic,rst-gpio = <&gpa 10 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		/*
+		ingenic,ircutp-gpio = <&gpb 7 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		ingenic,ircutn-gpio = <&gpb 1 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+
+		*/
+ 		ingenic,pwen-gpio = <&gpa 3  GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;	//module power-enable
+		port {
+			imx327_ep0:endpoint {
+				remote-endpoint = <&isp1_ep>;
+			};
+		};
+	};
+};
+
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1_pa>;
+
+	/*RD_X2000_HALLEY5_CAMERA_V3.2*/
+	imx327_1:imx327@0x1a {
+		status = "ok";
+		compatible = "ovti,imx327";
+		reg = <0x1a>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cim0_vic_mclk_pc>;
+
+		ingenic,mclk = <0>;
+		ingenic,rst-gpio = <&gpa 11 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		/*
+		ingenic,ircutp-gpio = <&gpb 7 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		ingenic,ircutn-gpio = <&gpb 1 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		*/
+		ingenic,pwen-gpio = <&gpa 3  GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;	//module power-enable
+
+		port {
+			imx327_ep1:endpoint {
+				remote-endpoint = <&isp0_ep>;
+			};
+		};
+	};
+};
+
+
+&isp0_ep {
+	remote-endpoint = <&imx327_ep1>;
+	data-lanes = <0 1>;
+	clk-lanes = <2>;
+};
+
+&isp1_ep {
+	remote-endpoint = <&imx327_ep0>;
+	data-lanes = <3 4>;
+	clk-lanes = <5>;
+};
+

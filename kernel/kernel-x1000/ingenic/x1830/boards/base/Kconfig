@@ -1,0 +1,17 @@
+choice
+	prompt "Board type"
+	depends on SOC_X1830_DRIVERS
+	default BOARD_BASE
+
+config BOARD_BASE
+	bool	"base board"
+
+endchoice
+
+config BOARD_NAME
+	string
+	default "base" if BOARD_BASE
+
+config PRODUCT_NAME
+	string
+	default "base" if BOARD_BASE

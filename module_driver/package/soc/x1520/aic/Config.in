@@ -1,0 +1,3 @@
+config MD_X1520_AIC
+    bool "aic(i2s 接口)"
+

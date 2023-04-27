@@ -1,0 +1,5 @@
+
+obj-$(CONFIG_LCD_TRULY_TFT240240_2_E) += lcd-truly_tft240240_2_e.o
+obj-$(CONFIG_LCD_KD035HVFMD057)	+= kd035hvfmd057.o
+obj-$(CONFIG_LCD_KFM701A21_1A)			+= lcd-kfm701a21_1a.o
+obj-$(CONFIG_LCD_NHD_160128UGC3) += lcd-nhd_160128ugc3.o

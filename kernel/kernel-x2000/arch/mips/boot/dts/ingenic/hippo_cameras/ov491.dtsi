@@ -1,0 +1,33 @@
+&i2c0 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c0_pa>;
+
+	/*BT1120 sensor*/
+	ov491:ov491@0x24 {
+		status = "ok";
+		compatible = "ovti,ov491";
+		reg = <0x24>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&vic_pa_16bit>;
+
+		ingenic,fsync-gpio = <&gpa 20 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		ingenic,rest-gpio = <&gpa 19 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+
+		port {
+			ov491_ep0:endpoint {
+				remote-endpoint = <&isp0_ep>;
+			};
+		};
+	};
+
+};
+
+
+&isp0_ep {
+	remote-endpoint = <&ov491_ep0>;
+	bus-width = <16>;
+};
+

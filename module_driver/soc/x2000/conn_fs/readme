@@ -1,0 +1,62 @@
+RTOS和Linux共享存储分区
+1. 在系统加载时,将共享分区的内容全部读出到指定内存空间
+2. RTOS启动将指定内存空间当做存储介质ramdisk, 文件系统挂载到ramdisk中(此时Linux仍然处于启动阶段,未完成文件系统的挂载),
+   此时文件的只有读操作(写操作将内容写入到ramdisk中，掉电即丢失)
+3. Linux启动 文件系统挂载完成,启动conn_fs_service服务后, 将RTOS端的读写等存储相关操作通过conn_fs核间通讯通知Linux,在Linux端完成相关操作
+   RTOS端发起操作(无法执行存储介质相关的操作),Linux接到命令后执行相应操作
+
+
+
+---------------------------------------------------------------|       |-------------------------------------------------------------------|
+|        RTOS                                                  |       |                        Linux                                      |
+|--------------------------------------------------------------|       |-------------------------------------------------------------------|
+|      读/写/查询等操作的发起                                  |       |                               读/写/查询等操作执行                |
+|   (filesystem/dfs_posix.c)                                   |       |  [应用层conn_fs服务]    (conn_fs_service/conn_fs_posix_open.c)    |
+|   (shell/cmds/cmds_ls.c 等...)                               |       |                         (conn_fs_service/conn_fs.c)               |
+|   - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  |       |  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --   |
+|                                                              |       |                                                                   |
+|                                                              |       |  [内核层conn_fs驱动]                                              |
+|                                                              |       |                    操作命令解析                                   |
+|                    操作命令及参数封装                        |       |                    操作命令转换为POSIX接口                        |
+|           (filesystem/conn_fs_posix/dfs_posix_conn_fs.c)     |       |              (module_driversoc/x2000/conn_fs/conn_fs_posix.c)     |
+|           (filesystem/conn_fs_posix/conn_fs_posix_open.c)    |       |              (module_driversoc/x2000/conn_fs/conn_fs_posix_open.c)|
+|           (等...)                                            |       |     -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -    |
+|                                                              |       |              操作命令参数解析                                     |
+|                                                              |       |              操作命令转换为Linux驱动                              |
+|                                                              |       |           (module_driversoc/x2000/conn_fs/conn_fs_posix.c)        |
+|   - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  |       |     -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -    |
+|                                                              |       |                                                                   |
+|                                            ------------------|\-----\|----------                                                         |
+|                                命令发送    ------------------|/---- /|----------   命令接收                                              |
+|                    (xburst2/soc-x2000/conn_fs/conn_fs.c)     |       |    (module_driversoc/x2000/conn_fs/conn_fs.c)                     |
+|                                                              |       |                                                                   |
+|--------------------------------------------------------------|       |-------------------------------------------------------------------|
+
+1. RTOS端涉及文件
+
+操作发起
+filesystem/dfs_posix.c
+shell/cmds/cmds_ls.c
+
+操作命令以及参数封装
+filesystem/conn_fs_posix/dfs_posix_conn_fs.c
+filesystem/conn_fs_posix/conn_fs_posix_open.c
+
+操作及参数发送
+xburst2/soc-x2000/conn_fs/conn_fs.c
+
+
+2. Linux端驱动涉及文件
+
+操作命令以及参数接收
+module_driver/soc/x2000/conn_fs/conn_fs.c
+
+操作命令转换/参数解析
+module_driver/soc/x2000/conn_fs/conn_fs_posix.c: 将RTOS操作命令转换为 Linux驱动
+module_driver/soc/x2000/conn_fs/conn_fs_posix_posix_open.c: 将RTOS参数解析封装为POSIX接口参数
+
+3. Linux端应用涉及文件(服务)
+conn_fs_service/conn_fs.c: 和Linux驱动交互. 等待事件,反馈执行结果等
+conn_fs_service/conn_fs_posix_open.c: 执行posix操作
+
+

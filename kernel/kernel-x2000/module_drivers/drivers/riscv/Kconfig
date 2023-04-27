@@ -1,0 +1,6 @@
+config X2500_RISCV
+depends on SOC_X2500
+default n
+bool "x2500 riscv driver"
+help
+        Select to support riscv.

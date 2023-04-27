@@ -1,0 +1,3 @@
+config INGENIC_ADC_POLL_X1600
+    bool "x1600 adc poll driver"
+    depends on SOC_X1600

@@ -1,0 +1,41 @@
+menuconfig MD_X2000_SENSOR_OV9732_DVP
+	bool "sensor ov9732 (dvp,raw10)"
+	select MD_X2000_CAMERA_VIC
+	depends on MD_SOC_X2000_BASE
+
+config MD_X2000_OV9732_DVP_SENSOR_NAME
+	string "sensor module name"
+	default "ov9732-vis"
+
+config MD_X2000_OV9732_DVP_GPIO_RESET0
+	string "gpio reset(sensor 复位脚)"
+	choice from SOC_GPIO_PINS
+	default -1
+
+config MD_X2000_OV9732_DVP_GPIO_PWDN0
+	string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+	choice from SOC_GPIO_PINS
+	default -1
+
+config MD_X2000_OV9732_DVP_GPIO_POWER0
+	string "gpio power(sensor 电源控制引脚, 高有效)"
+	choice from SOC_GPIO_PINS
+	default -1
+
+config MD_X2000_OV9732_DVP_SENSOR_REGULATOR_NAME
+	string "regulator name(通过名字获取 sensor module 电源管理器)"
+	default "GPIO-POWER0"
+
+config MD_X2000_OV9732_DVP_I2C_BUSNUM0
+	int "i2c bus num (sensor 挂接的i2c总线号)"
+	default -1
+
+config MD_X2000_OV9732_DVP_I2C_ADDR0
+	int "i2c device addr (sensor的i2c地址)"
+	default -1
+
+config MD_X2000_OV9732_DVP_CAM_BUSNUM0
+	int "cam bus num (sensor 挂接的vic/cim总线号)"
+	default -1
+
+endmenu

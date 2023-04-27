@@ -1,0 +1,63 @@
+menuconfig MD_BCMDHD
+	bool "Broadcom FullMAC(bcm4345c5) wireless cards support"
+	help
+	    This module adds support for wireless adapters based on
+	    Broadcom FullMAC chipset.
+
+config MD_BCMDHD_SET_MAC_ENABLE
+    bool "使能设置mac地址"
+    default y
+
+config MD_BCMDHD_SDIO
+	bool "SDIO bus interface support"
+	default y
+
+config MD_BCMDHD_MMC_NUM
+	int "wlan_mmc_num (mmc/sdio 总线号)"
+	default -1
+	help
+	    wifi 挂接在哪个 mmc 总线,比如 0, 1
+
+config MD_BCMDHD_BT_WIFI_POWER
+	string "gpio_bt_wifi_power(控制控制整个bt,wifi模块的供电)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_WLAN_REG_ON
+	string "gpio_wlan_reg_on(wifi的使能引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_WLAN_WAKE_HOST
+	string "gpio_wlan_wake_host(wifi 唤醒/中断 cpu 的引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_BT_REG_ON
+	string "gpio_bt_reg_on(bt的使能引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_HOST_WAKE_BT
+	string "gpio_host_wake_bt(cpu 唤醒/中断 bt 的引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_BT_WAKE_HOST
+	string "gpio_bt_wake_host(bt 唤醒/中断 cpu 的引脚)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_BCMDHD_FW_PATH
+	string "Firmware path"
+	default "/lib/firmware/wifi_bcm/fw_bcm43456c5_ag.bin"
+	help
+	    Path to the firmware file.
+
+config MD_BCMDHD_NVRAM_PATH
+	string "NVRAM path"
+	default "/lib/firmware/wifi_bcm/nvram_ap6256.txt"
+	help
+	    Path to the calibration file.
+
+endmenu

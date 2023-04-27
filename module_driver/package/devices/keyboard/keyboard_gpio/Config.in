@@ -1,0 +1,22 @@
+menuconfig MD_KEYBOARD_GPIO
+    bool "gpio 按键 驱动/设备"
+
+
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio0.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio1.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio2.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio3.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio4.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio5.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio6.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio7.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio8.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio9.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio10.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio11.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio12.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio13.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio14.in"
+source "package/devices/keyboard/keyboard_gpio/keyboard_gpio15.in"
+
+endmenu

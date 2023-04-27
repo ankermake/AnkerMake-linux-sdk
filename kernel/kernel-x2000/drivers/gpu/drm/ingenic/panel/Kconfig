@@ -1,0 +1,49 @@
+menuconfig DRM_INGENIC_PANEL
+	tristate "Supported lcd panels"
+	depends on DRM_INGENIC_DISPLAYS_V10
+	select BACKLIGHT_LCD_SUPPORT
+	select LCD_CLASS_DEVICE
+	select BACKLIGHT_CLASS_DEVICE
+
+config PANEL_V12_Y88249
+	tristate "lcd panel y88249"
+	depends on DRM_INGENIC_PANEL
+	help
+		lcd panel y88249, for ingenicfb drivers.
+
+config PANEL_V12_KD050HDFIA019
+	tristate "lcd panel kd050hdfia019"
+	depends on DRM_INGENIC_PANEL
+	help
+		lcd panel kd050hdfia019, for ingenicfb drivers.
+
+config PANEL_V12_MA0060
+	tristate "lcd panel MA0060"
+	depends on DRM_INGENIC_PANEL
+	help
+		lcd panel MA0060, for ingenicfb drivers.
+
+config PANEL_V12_TL040WVS03CT
+	tristate "lcd panel tl040wvs03ct"
+	depends on DRM_INGENIC_PANEL
+	help
+		lcd panel tl040wvs03ct, for ingenicfb drivers.
+
+config PANEL_V12_TL040HDS01CT
+	tristate "lcd panel tl040hds01ct"
+	depends on DRM_INGENIC_PANEL
+	help
+		lcd panel tl040hds01ct, for ingenicfb drivers.
+
+config PANEL_V12_JD9161Z
+	tristate "lcd panel JD9161Z"
+	depends on DRM_INGENIC_PANEL
+	help
+		lcd panel JD9161Z, for ingenicfb drivers.
+
+config PANEL_V12_YLYM286A
+	tristate "lcd panel YLYM286A"
+	depends on DRM_INGENIC_PANEL
+	help
+		lcd panel YLYM286A, for ingenicfb drivers.
+

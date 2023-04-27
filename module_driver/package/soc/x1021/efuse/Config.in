@@ -1,0 +1,9 @@
+menuconfig MD_X1021_EFUSE
+    bool "efuse 驱动(芯片熔丝功能)"
+
+config MD_X1021_EFUSE_VDDQ
+    string "efuse 写使能引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+endmenu

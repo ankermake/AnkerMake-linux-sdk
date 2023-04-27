@@ -1,0 +1,42 @@
+
+menuconfig MD_SOC_X1830
+    bool "x1830 驱动列表"
+    depends on MD_CHOICE_SOC_X1830
+
+config MD_SOC_DIR
+    string
+    default soc/x1830
+
+source package/soc/x1830/def_gpio_pins.in
+
+source package/soc/x1830/spi/Config.in
+
+source package/soc/x1830/adc/Config.in
+
+source package/soc/x1830/pwm/Config.in
+
+source package/soc/x1830/efuse/Config.in
+
+source package/soc/x1830/watchdog/Config.in
+
+source package/soc/x1830/i2c/Config.in
+
+source package/soc/x1830/dmic/Config.in
+
+source package/soc/x1830/utils/Config.in
+
+source package/soc/x1830/fb/Config.in
+
+source package/soc/x1830/camera/Config.in
+
+source package/soc/x1830/mscaler/Config.in
+
+source package/soc/x1830/gpio/Config.in
+
+source package/soc/x1830/mac/Config.in
+
+source package/soc/x1830/icodec/Config.in
+
+source package/soc/x1830/aic/Config.in
+
+endmenu

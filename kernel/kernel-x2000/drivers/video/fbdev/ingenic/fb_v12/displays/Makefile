@@ -1,0 +1,17 @@
+obj-$(CONFIG_PANEL_V12_Y88249) += panel-y88249.o
+obj-$(CONFIG_PANEL_V12_KD050HDFIA019) += panel-kd050hdfia019.o
+obj-$(CONFIG_PANEL_V12_MA0060) += panel-ma0060.o
+obj-$(CONFIG_PANEL_V12_TL040WVS03CT) += panel-tl040wvs03ct.o
+obj-$(CONFIG_PANEL_V12_TL040HDS01CT) += panel-tl040hds01ct.o
+obj-$(CONFIG_PANEL_V12_JD9161Z) += panel-jd9161z.o
+obj-$(CONFIG_PANEL_V12_JD9365D) += jd9365d/panel-jd9365d.o
+obj-$(CONFIG_PANEL_V12_ST7701S) += panel-st7701s.o
+obj-$(CONFIG_PANEL_V12_ST7701S_DX) += st7701s_dx3.95ips/panel-st7701sdx.o
+obj-$(CONFIG_PANEL_V12_ST7282) += panel-st7282.o
+obj-$(CONFIG_PANEL_V12_RM690A0) += rm690a0/panel-rm690a0.o
+obj-$(CONFIG_PANEL_V12_YTS500XLAI) += panel-yts500xlai.o
+obj-$(CONFIG_PANEL_V12_YLYM286A) += panel-ylym286a.o
+obj-$(CONFIG_PANEL_X2000_KD035HVFBD037)	+= panel-kd035hvfbd037.o
+obj-$(CONFIG_PANEL_V12_BM8766)	+= panel-bm8766.o
+obj-$(CONFIG_PANEL_V12_JD9366)	+= panel-jd9366.o
+obj-$(CONFIG_PANEL_V12_FW050) += panel-fw050.o

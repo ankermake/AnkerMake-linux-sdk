@@ -1,0 +1,4 @@
+menuconfig MD_X2000_510_TCU
+    bool "tcu 驱动(gpio 时钟计数捕获)"
+
+endmenu

@@ -1,0 +1,5 @@
+menu "使用x2000_510 ecode(外部codec)创建一个声卡"
+
+source package/devices/alsa-sound-card/x2000_510_ecodec_sound_card/ak4493/Config.in
+
+endmenu

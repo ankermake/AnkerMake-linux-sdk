@@ -1,0 +1,20 @@
+menuconfig MD_X1000_FB
+    bool "fb 显示驱动"
+    help
+        Framebuffer support for the x1000 SoC.
+        kernel must select those options
+        select FB
+        select FB_CFB_FILLRECT
+        select FB_CFB_COPYAREA
+        select FB_CFB_IMAGEBLIT
+
+
+config MD_X1000_FB_FRAME_NUM
+    int "帧缓冲数量"
+    default 1
+
+config MD_X1000_FB_PAN_DISPLAY_SYNC
+    bool "pan_display 调用时等待帧刷新完成(单缓冲时选中)"
+    default y
+
+endmenu

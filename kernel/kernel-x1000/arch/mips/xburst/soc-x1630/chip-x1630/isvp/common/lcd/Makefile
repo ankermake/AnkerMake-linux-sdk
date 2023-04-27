@@ -1,0 +1,2 @@
+obj-$(CONFIG_LCD_BM8766) += bm8766.o
+obj-$(CONFIG_LCD_TRULY_TFT240320_299_E) += truly_tft240320_299_e.o

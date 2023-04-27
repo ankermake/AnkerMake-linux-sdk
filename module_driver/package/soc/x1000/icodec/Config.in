@@ -1,0 +1,29 @@
+menuconfig MD_X1000_ICODEC
+    bool "icodec(内部codec)"
+    select MD_X1000_AIC
+
+config MD_X1000_ICODEC_BAIS_ON
+    bool "开启偏置电压"
+    default n
+    help
+        对于外接的模拟mic,内部codec需要提前打开偏置电压
+        对于回采电路，则不需要打开偏置电压
+
+config MD_X1000_ICODEC_SPK_GPIO
+    string "功放引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1000_ICODEC_MAX_HPOUT_VAL
+    int "外放音量最大值(对应寄存器GCR_DACL的[0,4],可填范围是0到31)"
+    default 31
+    help
+        其中0代表-31dB，26代表5dB,31代表0dB.增加1，音量增加1.0dB
+
+config MD_X1000_ICODEC_MIN_HPOUT_VAL
+    int "外放音量最小值(对应寄存器GCR_ADCL的[0,4],可填范围是0到31)"
+    default 0
+    help
+        其中0代表-31dB，26代表5dB,31代表0dB.增加1，音量增加1.0dB
+
+endmenu

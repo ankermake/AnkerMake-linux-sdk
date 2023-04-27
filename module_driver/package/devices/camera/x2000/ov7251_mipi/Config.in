@@ -1,0 +1,32 @@
+menuconfig MD_X2000_SENSOR_OV7251_MIPI
+    bool "sensor ov7251 (mipi,raw10)"
+    select MD_X2000_CAMERA_VIC
+    depends on MD_SOC_X2000_BASE
+
+source package/soc/x2000/camera/interface_type.in
+
+config MD_X2000_OV7251_CAMERA_INDEX
+    string "选择控制器(sensor 连接soc控制器接口索引)"
+    choice from CAMERA_INTERFACE_TYPE_SELECT
+    default -1
+
+config MD_X2000_OV7251_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_OV7251_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+array SENSOR_OV7251_RESOLUTION
+    string "sensor ov7251 resolution"
+    item "640*480 120fps" OV7251_FULL_640_480_120FPS
+    item "320*240 200fps binning" OV7251_BINNING_320_240_200FPS
+
+config MD_X2000_SENSOR_OV7251_RESOLUTION
+    string "resolution(ov7251分辨率配置)"
+    choice from SENSOR_OV7251_RESOLUTION
+    default -1
+
+endmenu # MD_X2000_SENSOR_OV7251_MIPI

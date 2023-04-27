@@ -1,0 +1,6 @@
+.objs/
+.output/
+*.d
+.config.in
+config.h
+.vscode/

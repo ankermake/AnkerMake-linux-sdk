@@ -1,0 +1,26 @@
+menuconfig MD_X2000_LCD_KWH035
+    bool "SLCD KWH035 (320x480) (X2000)"
+    select MD_X2000_FB
+    depends on MD_SOC_X2000_BASE
+
+config MD_X2000_KWH035_CS
+    string "gpio chip select(lcd 片选引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_KWH035_RD
+    string "gpio lcd read signal(lcd 读引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_KWH035_RST
+    string "gpio reset(lcd 复位引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_KWH035_POWER_EN
+    string "gpio power enable(lcd power使能引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+endmenu # MD_X2000_LCD_KWH035

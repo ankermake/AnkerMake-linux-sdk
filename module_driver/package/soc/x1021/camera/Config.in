@@ -1,0 +1,8 @@
+menuconfig MD_X1021_CAMERA
+    bool "camera 驱动(vic控制器,不使用isp)"
+
+config MD_X1021_CAMERA_FRAME_NUMS
+    int "camera帧缓冲数"
+    default 2
+
+endmenu

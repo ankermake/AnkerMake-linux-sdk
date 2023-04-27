@@ -1,0 +1,16 @@
+menu "INGENIC CAN support"
+
+config INGENIC_CAN
+	tristate "ingenic on-chip CAN support"
+#	depends on
+	---help---
+	  Driver for the Microchip INGENIC CAN controllers.
+
+config INGENIC_CAN_USE_PDMA
+	bool "ingenic can use dma transmission"
+	default y
+	depends on INGENIC_CAN
+	---help---
+	Configure CAN to use DMA to transfer data
+
+endmenu

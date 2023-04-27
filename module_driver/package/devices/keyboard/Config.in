@@ -1,0 +1,6 @@
+menu "按键设备列表"
+
+source package/devices/keyboard/keyboard_gpio/Config.in
+source package/devices/keyboard/keyboard_adc/Config.in
+
+endmenu

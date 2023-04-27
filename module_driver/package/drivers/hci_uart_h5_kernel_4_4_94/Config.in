@@ -1,0 +1,2 @@
+config MD_BT_HCIUART_RTKH5_KERNEL_4_4_94
+    bool "Realtek H5 protocol support(kernel 4.4.94 )"

@@ -1,0 +1,14 @@
+comment "X1520 gpio funcion fin select"
+
+menu "PWM function pin select"
+	depends on JZ_PWM
+
+config JZ_PWM0
+	bool "JZ_PWM0"
+	depends on JZ_PWM
+
+config JZ_PWM1
+	bool "JZ_PWM1"
+	depends on JZ_PWM
+
+endmenu	#PWM function pin select

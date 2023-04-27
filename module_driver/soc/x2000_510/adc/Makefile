@@ -1,0 +1,9 @@
+include $(DRIVERS_DIR)/tools/common_module.mk
+
+MODULE_NAME := soc_adc
+
+module-y += adc.o
+module-y += adc_hal.o
+
+obj-m = $(MODULE_NAME).o
+$(MODULE_NAME)-y = $(module-y)

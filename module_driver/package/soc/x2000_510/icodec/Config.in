@@ -1,0 +1,54 @@
+menuconfig MD_X2000_510_ICODEC
+    bool "icodec(内部codec)"
+    select MD_X2000_510_AIC
+
+config MD_X2000_510_ICODEC_BAIS_ON
+    bool "开启偏置电压（录音时打开）"
+    default y
+    help
+        对于外接的模拟mic,内部codec需要提前打开偏置电压
+        对于回采电路，则不需要打开偏置电压
+
+config MD_X2000_510_ICODEC_BAIS_LEVEL
+    int "偏置电压的寄存器数值(范围0-7)"
+    default 7
+
+config MD_X2000_510_ICODEC_SPK_GPIO1
+    string "功放引脚1"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_510_ICODEC_SPK_GPIO1_LEVEL
+    string "功放引脚1使能电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+
+config MD_X2000_510_ICODEC_SPK_GPIO2
+    string "功放引脚2"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_510_ICODEC_SPK_GPIO2_LEVEL
+    string "功放引脚2使能电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 1
+
+config MD_X2000_510_ICODEC_SPK_NEED_DELAY_MS
+    int "功放引脚使能后需要的延时时间(ms)"
+    default 20
+    help
+        部分功放芯片的时序需要在使能功放引脚后加一定的延时
+
+config MD_X2000_510_ICODEC_MAX_HPOUT_VAL
+    int "外放音量最大值(对应寄存器GCR_DACL的[0,4],可填范围是0到31)"
+    default 31
+    help
+        其中0代表-31dB，26代表5dB,31代表0dB.增加1，音量增加1.0dB
+
+config MD_X2000_510_ICODEC_MIN_HPOUT_VAL
+    int "外放音量最小值(对应寄存器GCR_ADCL的[0,4],可填范围是0到31)"
+    default 0
+    help
+        其中0代表-31dB，26代表5dB,31代表0dB.增加1，音量增加1.0dB
+
+endmenu

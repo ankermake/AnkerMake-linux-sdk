@@ -1,0 +1,39 @@
+
+&i2c3 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pa>,<&cim_vic_mclk_pe>;
+
+
+	/*RD_X2000_HALLEY5_CAMERA_V4.2 MIPI interface*/
+	ov2735_0:ov2735@0x36 {
+		status = "ok";
+		compatible = "galaxyc,gc2093";
+		reg = <0x37>;
+
+		ingenic,rst-gpio = <&gpb 30 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		ingenic,pwdn-gpio = <&gpb 31 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		ingenic,ircutp-gpio = <&gpb 7 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		ingenic,ircutn-gpio = <&gpb 1 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+
+		port {
+			ov2735_ep0:endpoint {
+				remote-endpoint = <&isp0_ep>;
+			};
+		};
+	};
+};
+
+&isp0_ep {
+	remote-endpoint = <&ov2735_ep0>;
+	data-lanes = <3 4>;
+	clk-lanes = <5>;
+};
+
+
+&csi0 {
+	clk_precounter = <0x0808>;   /* (precounter_in_clk1 << 8) | precounter_in_clk0*/
+	data_precounter = <0x07070707>; /* (precounter_in_data3 << 24)|(precounter_in_data2 << 16)|(precounter_in_data1 << 8)|precounter_in_data0 */
+};

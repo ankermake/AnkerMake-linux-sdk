@@ -1,0 +1,12 @@
+menuconfig MD_X1830_UTILS
+    bool "utils 驱动(芯片的一些小功能)"
+
+config MD_X1830_UTILS_RTC32K
+    bool "rtc32k 时钟bypas输出(PB18)"
+    default y
+
+config MD_X1830_UTILS_RTC32K_INIT_ON
+    bool "        初始化即使能rtc32k输出"
+    depends on MD_X1830_UTILS_RTC32K
+
+endmenu

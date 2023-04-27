@@ -1,0 +1,185 @@
+menuconfig MD_X2000_510_MAC
+    bool "mac 以太网控制器驱动"
+
+config MD_X2000_510_PHY_CLK_RATE
+    int "PHY CLK 速率"
+    default 0
+    help
+        PHY_CLK引脚时钟,可以提供給外部phy作为时钟源
+        如果不需要请配置成0
+
+config MD_X2000_510_PHY_CLK_DELAY_US
+    int "PHY CLK 使能后延迟时间再通讯(单位：us)"
+    default 0
+
+config MD_X2000_510_MAC0
+    bool "mac0"
+
+choice "选择MAC支持模式"
+    default MD_X2000_510_MAC0_RMII_MODE
+    depends on MD_X2000_510_MAC0
+
+config MD_X2000_510_MAC0_RMII_MODE
+    bool "  RMII_MODE（简化的百兆媒体独立接口）"
+
+config MD_X2000_510_MAC0_RGMII_MODE
+    bool "  RGMII_MODE（简化的千兆媒体独立接口）"
+
+endchoice
+
+config MD_X2000_510_MAC0_PHY_PROBE_MASK
+    int "PHY探测屏蔽(范围：0x0～0xffffffff)"
+    default 0x0
+    depends on MD_X2000_510_MAC0
+    help
+        phy探测屏蔽为32位代表32个地址(0:使能探测 1:屏蔽探测)
+        例如：0xfffffff0(探测前4个地址)
+
+config MD_X2000_510_MAC0_PHY_RESET_TIME_US
+    int "PHY复位时间(单位：us)"
+    default 100000
+    depends on MD_X2000_510_MAC0
+
+config MD_X2000_510_MAC0_PHY_RESET_GPIO
+    string "PHY 复位引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X2000_510_MAC0
+
+config MD_X2000_510_MAC0_PHY_VALID_LEVEL
+    string "PHY 复位电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 0
+    depends on MD_X2000_510_MAC0
+
+config MD_X2000_510_MAC0_RX_CLK_DELAY_UNIT
+    int "RX CLK延时时间(范围：0~128)"
+    default 0
+    depends on MD_X2000_510_MAC0
+    depends on MD_X2000_510_MAC0_RGMII_MODE
+    help
+        例如：delay_time = X * 19.5(ps);
+        配置值范围0-128,RXCLK延时的时间范围0-2.5ns
+        具体配置值需要由phy来确定,TXCLK和RXCLK和data保证2ns左右的delay.
+        如果phy端已经做了delay,mac控制器端就不需要设置或补足差值.
+
+config MD_X2000_510_MAC0_TX_CLK_DELAY_UNIT
+    int "TX CLK延时时间(范围：0~128)"
+    default 0
+    depends on MD_X2000_510_MAC0
+    depends on MD_X2000_510_MAC0_RGMII_MODE
+    help
+        例如：delay_time = X * 19.5(ps);
+        配置值范围0-128,RXCLK延时的时间范围0-2.5ns
+        具体配置值需要由phy来确定,TXCLK和RXCLK和data保证2ns左右的delay.
+        如果phy端已经做了delay,mac控制器端就不需要设置或补足差值.
+
+config MD_X2000_510_MAC0_TX_CLK
+    bool "MAC0以TX_CLK引脚提供给外部PHY作为时钟源(申请TX_CLK引脚)"
+    depends on MD_X2000_510_MAC0
+    depends on MD_X2000_510_MAC0_RMII_MODE
+
+config MD_X2000_510_MAC0_TX_CLK_RATE
+    int "MAC0 TX CLK速率"
+    default 50000000
+    depends on MD_X2000_510_MAC0_TX_CLK
+
+config MD_X2000_510_MAC0_TX_CLK_DELAY_US
+    int "MAC0 TX CLK 使能后延迟时间再通讯(单位：us)"
+    default 0
+    depends on MD_X2000_510_MAC0_TX_CLK
+
+config MD_X2000_510_MAC0_CRYSTAL_CLK
+    bool "MAC0以晶振提供给外部PHY作为时钟源(不申请PHY_CLK引脚)"
+    depends on MD_X2000_510_MAC0
+
+config MD_X2000_510_MAC0_VIRTUAL_PHY
+    bool "MAC0外接虚拟phy设备，RGMII/RMII直接通讯，用于两个gmac互接省略phy芯片或用于直接与FPGA芯片通讯"
+    depends on MD_X2000_510_MAC0
+
+config MD_X2000_510_MAC1
+    bool "mac1"
+
+choice "选择MAC支持模式"
+    default MD_X2000_510_MAC1_RMII_MODE
+    depends on MD_X2000_510_MAC1
+
+config MD_X2000_510_MAC1_RMII_MODE
+    bool "  RMII_MODE（简化的百兆媒体独立接口）"
+
+config MD_X2000_510_MAC1_RGMII_MODE
+    bool "  RGMII_MODE（简化的千兆媒体独立接口）"
+
+endchoice
+
+config MD_X2000_510_MAC1_PHY_PROBE_MASK
+    int "PHY探测屏蔽(范围：0x0～0xffffffff)"
+    default 0x0
+    depends on MD_X2000_510_MAC1
+    help
+        phy探测屏蔽为32位代表32个地址(0:使能探测 1:屏蔽探测)
+        例如：0xfffffff0(探测前4个地址)
+
+config MD_X2000_510_MAC1_PHY_RESET_TIME_US
+    int "PHY复位时间(单位：us)"
+    default 100000
+    depends on MD_X2000_510_MAC1
+
+config MD_X2000_510_MAC1_PHY_RESET_GPIO
+    string "PHY 复位引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_X2000_510_MAC1
+
+config MD_X2000_510_MAC1_PHY_VALID_LEVEL
+    string "PHY 复位电平"
+    choice from MD_GPIO_ACTIVE_LEVEL
+    default 0
+    depends on MD_X2000_510_MAC1
+
+config MD_X2000_510_MAC1_RX_CLK_DELAY_UNIT
+    int "RX CLK延时时间(范围：0~128)"
+    default 0
+    depends on MD_X2000_510_MAC1
+    depends on MD_X2000_510_MAC1_RGMII_MODE
+    help
+        例如：delay_time = X * 19.5(ps);
+        配置值范围0-128,RXCLK延时的时间范围0-2.5ns
+        具体配置值需要由phy来确定,TXCLK和RXCLK和data保证2ns左右的delay.
+        如果phy端已经做了delay,mac控制器端就不需要设置或补足差值.
+
+config MD_X2000_510_MAC1_TX_CLK_DELAY_UNIT
+    int "TX CLK延时时间(范围：0~128)"
+    default 0
+    depends on MD_X2000_510_MAC1
+    depends on MD_X2000_510_MAC1_RGMII_MODE
+    help
+        例如：delay_time = X * 19.5(ps);
+        配置值范围0-128,RXCLK延时的时间范围0-2.5ns
+        具体配置值需要由phy来确定,TXCLK和RXCLK和data保证2ns左右的delay.
+        如果phy端已经做了delay,mac控制器端就不需要设置或补足差值.
+
+config MD_X2000_510_MAC1_TX_CLK
+    bool "MAC1以TX_CLK引脚提供给外部PHY作为时钟源(申请TX_CLK引脚)"
+    depends on MD_X2000_510_MAC1
+    depends on MD_X2000_510_MAC1_RMII_MODE
+
+config MD_X2000_510_MAC1_TX_CLK_RATE
+    int "MAC1 TX CLK速率"
+    default 50000000
+    depends on MD_X2000_510_MAC1_TX_CLK
+
+config MD_X2000_510_MAC1_TX_CLK_DELAY_US
+    int "MAC1 TX CLK 使能后延迟时间再通讯(单位：us)"
+    default 0
+    depends on MD_X2000_510_MAC1_TX_CLK
+
+config MD_X2000_510_MAC1_CRYSTAL_CLK
+    bool "MAC1以晶振提供给外部PHY作为时钟源(不申请PHY_CLK引脚)"
+    depends on MD_X2000_510_MAC1
+
+config MD_X2000_510_MAC1_VIRTUAL_PHY
+    bool "MAC1外接虚拟phy设备，RGMII/RMII直接通讯，用于两个gmac互接省略phy芯片或用于直接与FPGA芯片通讯"
+    depends on MD_X2000_510_MAC1
+
+endmenu

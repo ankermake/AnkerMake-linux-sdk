@@ -1,0 +1,112 @@
+array SOC_X2000_510_SPI0_MISO_IO
+    string "SPI0 MISO(DR) 引脚"
+    item "GPIO_NULL  " -1
+    item "PB29" PB29
+    item "PD10" PD10
+
+array SOC_X2000_510_SPI0_MOSI_IO
+    string "SPI0 MOSI(DT) 引脚"
+    item "GPIO_NULL  " -1
+    item "PB30" PB30
+    item "PD9" PD9
+
+array SOC_X2000_510_SPI0_CLK_IO
+    string "SPI0 CLK 引脚"
+    item "GPIO_NULL  " -1
+    item "PB31" PB31
+    item "PD8" PD8
+
+
+
+array SOC_X2000_510_SPI1_MISO_IO
+    string "SPI1 MISO(DR) 引脚"
+    item "GPIO_NULL  " -1
+    item "PC10" PC10
+    item "PD19" PD19
+    item "PE18" PE18
+
+array SOC_X2000_510_SPI1_MOSI_IO
+    string "SPI1 MOSI(DT) 引脚"
+    item "GPIO_NULL  " -1
+    item "PC11" PC11
+    item "PD18" PD18
+    item "PE17" PE17
+
+array SOC_X2000_510_SPI1_CLK_IO
+    string "SPI1 CLK 引脚"
+    item "GPIO_NULL  " -1
+    item "PC12" PC12
+    item "PD17" PD17
+    item "PE16" PE16
+
+
+
+menu "SPI 总线"
+    help
+        "依赖于 SPI 驱动"
+
+config MD_X2000_510_SPI
+    bool
+
+config MD_X2000_510_SPI_CLK_RATE
+    int "SPI内部时钟源频率(单位Hz)"
+    default 100000000
+    help
+            SPI频率 = SPI内部时钟源频率 / (2 * (CGV + 1))
+            CGV范围: 0 ~ 255
+            当前SPI频率范围: 195312.5 ~ 50000000
+
+config MD_X2000_510_SPI0
+    bool "选择 SPI0"
+    select MD_X2000_510_SPI
+
+config MD_X2000_510_SPI0_MISO
+    string "        MISO(输入引脚)"
+    default PB29
+    choice from SOC_X2000_510_SPI0_MISO_IO
+    depends on MD_X2000_510_SPI0
+    help
+        "MISO= -1,表示不使用MISO引脚"
+
+config MD_X2000_510_SPI0_MOSI
+    string "        MOSI(输出引脚)"
+    default PB30
+    choice from SOC_X2000_510_SPI0_MOSI_IO
+    depends on MD_X2000_510_SPI0
+    help
+        "MOSI= -1,表示不使用MOSI引脚"
+
+config MD_X2000_510_SPI0_CLK
+    string "        CLK(时钟引脚)"
+    default PB31
+    choice from SOC_X2000_510_SPI0_CLK_IO
+    depends on MD_X2000_510_SPI0
+
+
+config MD_X2000_510_SPI1
+    bool "选择 SPI1"
+    select MD_X2000_510_SPI
+
+config MD_X2000_510_SPI1_MISO
+    string "        MISO(输入引脚)"
+    default PC10
+    choice from SOC_X2000_510_SPI1_MISO_IO
+    depends on MD_X2000_510_SPI1
+    help
+        "MISO= -1,表示不使用MISO引脚"
+
+config MD_X2000_510_SPI1_MOSI
+    string "        MOSI(输出引脚)"
+    default PC11
+    choice from SOC_X2000_510_SPI1_MOSI_IO
+    depends on MD_X2000_510_SPI1
+    help
+        "MOSI= -1,表示不使用MOSI引脚"
+
+config MD_X2000_510_SPI1_CLK
+    string "        CLK(时钟引脚)"
+    default PC12
+    choice from SOC_X2000_510_SPI1_CLK_IO
+    depends on MD_X2000_510_SPI1
+
+endmenu # SPI 总线

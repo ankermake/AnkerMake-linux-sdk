@@ -1,0 +1,1 @@
+package-$(MD_AX88796C_SPI) += package/devices/Ethernet/ax88796c_spi/ax88796c_spi.mk

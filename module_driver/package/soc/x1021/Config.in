@@ -1,0 +1,38 @@
+
+menuconfig MD_SOC_X1021
+    bool "x1021 驱动列表"
+    depends on MD_CHOICE_SOC_X1021
+
+config MD_SOC_DIR
+    string
+    default soc/x1021
+
+source package/soc/x1021/def_gpio_pins.in
+
+source package/soc/x1021/spi/Config.in
+
+source package/soc/x1021/adc/Config.in
+
+source package/soc/x1021/efuse/Config.in
+
+source package/soc/x1021/pwm/Config.in
+
+source package/soc/x1021/watchdog/Config.in
+
+source package/soc/x1021/i2c/Config.in
+
+source package/soc/x1021/utils/Config.in
+
+source package/soc/x1021/mac/Config.in
+
+source package/soc/x1021/fb/Config.in
+
+source package/soc/x1021/camera/Config.in
+
+source package/soc/x1021/gpio/Config.in
+
+source package/soc/x1021/icodec/Config.in
+
+source package/soc/x1021/aic/Config.in
+
+endmenu

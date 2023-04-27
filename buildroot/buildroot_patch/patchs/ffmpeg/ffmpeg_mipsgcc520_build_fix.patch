@@ -1,0 +1,27 @@
+diff -ru ffmpeg-4.2.2/configure ffmpeg-4.2.2_2/configure
+--- ffmpeg-4.2.2/configure	2020-01-01 05:35:22.000000000 +0800
++++ ffmpeg-4.2.2_2/configure	2020-09-01 22:23:05.495725142 +0800
+@@ -1119,10 +1119,10 @@
+     done;
+     disable $name
+     cat > $TMPC <<EOF
+-void foo(void){ __asm__ volatile($code); }
++void main(void){ __asm__ volatile($code); }
+ EOF
+     log_file $TMPC
+-    test_cmd $cc $CPPFLAGS $CFLAGS $flags "$@" $CC_C $(cc_o $TMPO) $TMPC &&
++    test_cmd $cc $CPPFLAGS $CFLAGS $flags "$@" $(cc_o $TMPO) $TMPC &&
+     enable $name && add_cflags $flags && add_asflags $flags && add_ldflags $flags
+ }
+ 
+@@ -5166,6 +5166,9 @@
+     test_code cc "" "int test[2*($expr) - 1]" &&
+         subarch=$arch64 || subarch=$arch32
+     enable $subarch
++    if [ $subarch != $arch64 ]; then
++        disable $arch64
++    fi
+ }
+ 
+ case "$arch" in
+Only in ffmpeg-4.2.2_2/: configure_back

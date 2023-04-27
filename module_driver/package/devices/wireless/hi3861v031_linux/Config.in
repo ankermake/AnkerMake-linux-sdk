@@ -1,0 +1,25 @@
+menuconfig MD_HI3861
+	bool "HI3861 wireless cards support"
+
+config MD_HI3861_MMC_NUM
+	int "wlan_mmc_num (mmc/sdio 总线号)"
+	default -1
+	help
+	  wifi 挂接在哪个 mmc 总线,比如 0, 1
+
+config MD_HI3861_WIFI_INT
+	string "gpio_wifi_int(控制wifi的中断)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_HI3861_WIFI_POWER_ON
+	string "gpio_wifi_power_on(控制wifi的供电)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_HI3861_WIFI_POWER_EN
+	string "gpio_wifi_power_en(用于控制整个模块的供电)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+endmenu

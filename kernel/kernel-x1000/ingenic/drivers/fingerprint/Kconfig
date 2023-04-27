@@ -1,0 +1,13 @@
+menuconfig FINGERPRINT
+	bool "Fingerprint sensor support"
+
+if FINGERPRINT
+
+
+config FINGERPRINT_MICROARRAY
+	bool "MicroArray fingerprint sensor"
+	depends on JZ_SPI
+	help
+	  Support for MicroArray fingerPrint.
+
+endif

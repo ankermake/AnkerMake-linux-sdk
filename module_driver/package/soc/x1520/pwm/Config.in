@@ -1,0 +1,2 @@
+config MD_X1520_PWM
+    bool "pwm 驱动(脉冲宽度调制功能)"

@@ -1,0 +1,13 @@
+menuconfig MD_I2C_GPIO
+    bool "gpio i2c 驱动"
+
+source "package/drivers/i2c_gpio/i2c_gpio0.in"
+source "package/drivers/i2c_gpio/i2c_gpio1.in"
+source "package/drivers/i2c_gpio/i2c_gpio2.in"
+source "package/drivers/i2c_gpio/i2c_gpio3.in"
+source "package/drivers/i2c_gpio/i2c_gpio4.in"
+source "package/drivers/i2c_gpio/i2c_gpio5.in"
+source "package/drivers/i2c_gpio/i2c_gpio6.in"
+source "package/drivers/i2c_gpio/i2c_gpio7.in"
+
+endmenu

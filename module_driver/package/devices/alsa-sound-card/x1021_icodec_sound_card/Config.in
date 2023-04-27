@@ -1,0 +1,2 @@
+config MD_X1021_ICODEC_SOUND_CARD
+    bool "使用 x1021 icodec(内部codec) 创建一个声卡"

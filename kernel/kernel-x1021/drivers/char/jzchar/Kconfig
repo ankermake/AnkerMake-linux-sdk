@@ -1,0 +1,37 @@
+#
+# JzSOC char devices configuration
+#
+
+menu "JZSOC char device support(Only for ZKSoftware)"
+	depends on SOC_X1021
+
+config JZCHAR
+	tristate "JzSOC char device support"
+	depends on SOC_X1021
+
+config JZ_CAMERA_SENSOR
+	tristate "Select the camera sensor"
+	depends on JZCHAR
+
+config JZ_VIC_CORE
+	tristate "JZ VIC Camera driver"
+	depends on JZCHAR
+
+config CAMERA_GC0308_SUPPORT
+	tristate "gc0308 camera support"
+	depends on JZCHAR
+	help
+	  This is a misc camera driver for the gc0308 sensor
+
+config CAMERA_GC0328_SUPPORT
+	tristate "gc0328 camera support"
+	depends on JZCHAR
+	help
+	  This is a misc camera driver for the gc0328 sensor
+
+config CAMERA_SC031GS_SUPPORT
+	tristate "sc031gs camera support"
+	depends on JZCHAR
+	help
+	  This is a misc camera driver for the sc031gs sensor
+endmenu

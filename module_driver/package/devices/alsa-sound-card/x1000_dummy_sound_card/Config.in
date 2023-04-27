@@ -1,0 +1,4 @@
+
+
+config  MD_X1000_DUMMY_SOUND_CARD
+    bool "使用 x1000 创建一个虚拟外部声卡(用户没有外部声卡驱动时可以用虚拟声卡输出i2s信号)"

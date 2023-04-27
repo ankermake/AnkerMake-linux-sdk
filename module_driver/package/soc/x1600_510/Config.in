@@ -1,0 +1,40 @@
+menuconfig MD_SOC_X1600_510
+    bool "x1600 驱动列表"
+    depends on MD_CHOICE_SOC_X1600_510_BASE
+
+config MD_SOC_DIR
+    string
+    default soc/x1600_510
+
+source package/soc/x1600_510/def_gpio_pins.in
+
+source package/soc/x1600_510/gpio/Config.in
+
+source package/soc/x1600_510/watchdog/Config.in
+
+source package/soc/x1600_510/utils/Config.in
+
+source package/soc/x1600_510/i2c/Config.in
+
+source package/soc/x1600_510/spi/Config.in
+
+source package/soc/x1600_510/camera/Config.in
+
+source package/soc/x1600_510/adc/Config.in
+
+source package/soc/x1600_510/fb/Config.in
+
+source package/soc/x1600_510/pwm/Config.in
+
+source package/soc/x1600_510/mac/Config.in
+
+source package/soc/x1600_510/dtrng/Config.in
+
+source package/soc/x1600_510/hash/Config.in
+
+source package/soc/x1600_510/aic/Config.in
+source package/soc/x1600_510/msc/Config.in
+
+source package/soc/x1600_510/efuse/Config.in
+
+endmenu

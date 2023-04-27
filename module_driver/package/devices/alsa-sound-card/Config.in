@@ -1,0 +1,28 @@
+menu "alsa声卡设备列表"
+
+source package/devices/alsa-sound-card/x1000_icodec_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x1000_dummy_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x1600_dummy_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x1600_510_dummy_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x1021_icodec_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x1520_icodec_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x1830_icodec_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x2000_icodec_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x2000_ecodec_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x2000_spdif_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x2000_510_icodec_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x2000_510_ecodec_sound_card/Config.in
+
+source package/devices/alsa-sound-card/x2000_510_spdif_sound_card/Config.in
+endmenu

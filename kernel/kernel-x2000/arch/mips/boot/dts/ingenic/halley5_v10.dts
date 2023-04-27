@@ -1,0 +1,296 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "x2000-v12.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	compatible = "ingenic,halley5", "ingenic,x2000-v12";
+};
+
+&uart0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_pd>;
+};
+
+&uart2 {
+	status = "disable";
+};
+
+&uart3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart3_pc>;
+};
+
+&cpufreq {
+	status = "okay";
+	operating-points = <
+		/*KHZ uV */
+		1200000	900000
+		750000	900000
+		600000	900000
+		500000	900000
+		400000	900000
+		375000	900000
+		300000	900000
+		200000	900000
+			>;
+
+};
+
+&pinctrl {
+	ingenic,gpa_voltage = <GPIO_VOLTAGE_1V8>;
+};
+
+&felix {
+	status = "okay";
+};
+
+&helix {
+	status = "okay";
+};
+
+&pdma {
+	status = "okay";
+};
+
+&msc0 {
+	status = "disable";
+	/*mmc-hs200-1_8v;*/
+	cap-mmc-highspeed;
+	non-removable;
+	max-frequency = <50000000>;
+	bus-width = <4>;
+	non-removable;
+	voltage-ranges = <1800 3300>;
+
+	/* special property */
+	ingenic,rst-gpios = <0>;
+};
+
+&msc1 {
+	status = "okay";
+	pinctrl-names ="default","enable", "disable";
+	pinctrl-0 = <&msc1_4bit>;
+	pinctrl-1 = <&rtc32k_enable>;
+	pinctrl-2 = <&rtc32k_disable>;
+
+	sd-uhs-sdr104;
+	max-frequency = <100000000>;
+	bus-width = <4>;
+	voltage-ranges = <1800 3300>;
+	non-removable;
+
+	ingenic,sdio_clk = <1>;
+	keep-power-in-suspend;
+
+	/* special property */
+	ingenic,sdr-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+	ingenic,removal-manual; /*removal-dontcare, removal-nonremovable, removal-removable, removal-manual*/
+
+	bcmdhd_wlan: bcmdhd_wlan {
+		 compatible = "android,bcmdhd_wlan";
+		 ingenic,sdio-irq = <&gpd 0 IRQ_TYPE_LEVEL_HIGH INGENIC_GPIO_NOBIAS>;
+		 ingenic,sdio-reset = <&gpd 1 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	};
+};
+
+
+&msc2 {
+	status = "okay";
+	pinctrl-names ="default";
+	pinctrl-0 = <&msc2_4bit>;
+	sd-uhs-sdr104;
+	sd-uhs-sdr50;
+	/* cd-inverted; */
+	max-frequency = <200000000>;
+	bus-width = <4>;
+	voltage-ranges = <1800 3300>;
+
+	cd-gpios = <&gpc 20 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	/* special property */
+	ingenic,sdr-gpios = <&gpc 0 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-gpios = <0>;
+};
+
+
+&mac0 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac0_rgmii_p0_normal>, <&mac0_rgmii_p1_normal>, <&mac0_phy_clk>;
+	pinctrl-1 = <&mac0_rgmii_p0_rst>, <&mac0_rgmii_p1_normal>, <&mac0_phy_clk>;
+	status = "okay";
+	ingenic,rst-gpio = <&gpc 22 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,rst-delay-ms = <15>;
+	ingenic,mac-mode = <RGMII>;
+	ingenic,mode-reg = <0xb00000e4>;
+	ingenic,rx-clk-delay = <0x2>;
+	ingenic,tx-clk-delay = <0x3f>;
+	ingenic,phy-clk-freq = <25000000>;
+};
+
+&mac1 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac1_rgmii_p0_normal>, <&mac1_rgmii_p1_normal>, <&mac1_phy_clk>;
+	pinctrl-1 = <&mac1_rgmii_p0_rst>, <&mac1_rgmii_p1_normal>, <&mac1_phy_clk>;
+	status = "okay";
+	ingenic,rst-gpio = <&gpb 16 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,rst-delay-ms = <15>;
+	ingenic,mac-mode = <RGMII>;
+	ingenic,mode-reg = <0xb00000e8>;
+	ingenic,rx-clk-delay = <0x0>;
+	ingenic,tx-clk-delay = <0x3f>;
+	ingenic,phy-clk-freq = <25000000>;
+};
+
+&sfc {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&sfc_pe>;
+	ingenic,sfc-init-frequency = <200000000>;
+	ingenic,sfc-max-frequency = <400000000>;
+	ingenic,use_ofpart_info  = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0>;
+
+	norflash@0 {
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			/* spi nor flash partition */
+			uboot@0 {
+				label = "uboot";
+				reg = <0x0000000 0x40000>;
+				/*read-only;*/
+			};
+
+			kernel@40000 {
+				label = "kernel";
+				reg = <0x40000 0x300000>;
+			};
+
+			rootfs@360000 {
+				label = "rootfs";
+				reg = <0x360000 0xca0000>;
+			};
+		};
+	};
+
+	nandflash@1 {
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			/* spi nand flash partition */
+			partition@0 {
+				label = "uboot";
+				reg = <0x0000000 0x100000>;
+				/*read-only;*/
+			};
+
+			partition@100000 {
+				label = "kernel";
+				reg = <0x100000 0x800000>;
+			};
+
+			partition@900000 {
+				label = "rootfs";
+				reg = <0x900000 0xf700000>;
+			};
+		};
+	};
+
+};
+
+&spi0 {
+	status = "disable";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi0_pb>;
+
+	spi-max-frequency = <54000000>;
+	num-cs = <2>;
+	cs-gpios = <0>, <0>;
+	/*cs-gpios = <&gpa 27 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>, <&gpa 27 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;*/
+	ingenic,chnl = <0>;
+	ingenic,allow_cs_same = <1>;
+	ingenic,bus_num = <0>;
+	ingenic,has_dma_support = <0>;
+	ingenic,spi-src-clk = <1>;/*0.ext; 1.ssi*/
+
+	/* Add SPI interface device */
+	spidev: spidev@0 {
+		compatible = "rohm,dh2228fv";
+		reg = <0>;
+		spi-max-frequency = <10000000>;
+	};
+};
+
+&otg {
+	g-use-dma;
+	dr_mode = "otg"; // host,peripheral,otg
+	status = "okay";
+};
+
+&as_be_baic {
+	pinctrl-names = "default";
+	pinctrl-0 =  <&baic4_pd>;
+};
+
+&otg_phy {
+	compatible = "ingenic,innophy", "syscon";
+	ingenic,vbus-dete-gpio = <&gpd 17 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,drvvbus-gpio = <&gpe 22 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	status = "okay";
+};
+
+/ {
+
+	/*
+	 * gpd 21 bt wakeup host
+	 * gpd 22 host wakeup bt
+	 */
+	bt_power {
+		compatible = "ingenic,bt_power";
+		ingenic,reg-on-gpio = <&gpd 20 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		ingenic,wake-gpio = <&gpd 21 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	};
+
+	sound {
+		compatible = "ingenic,x2000-sound";
+		ingenic,model = "halley5_v20";
+	};
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+
+	gpio_keys: gpio_keys {
+		   compatible = "gpio-keys";
+
+		   wakeup {
+			   label = "WAKEUP";
+			   linux,code = <KEY_WAKEUP>;
+			   gpios = <&gpe 31 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			   gpio-key,wakeup;
+		   };
+
+		   bootsel0 {
+			   label = "bootsel0";
+			   linux,code = <KEY_HOME>;
+			   gpios = <&gpe 25 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		   };
+
+		   bootsel1 {
+			   label = "bootsel1";
+			   linux,code = <KEY_BACK>;
+			   gpios = <&gpe 26 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+		   };
+	   };
+
+};

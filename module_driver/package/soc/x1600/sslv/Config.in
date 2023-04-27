@@ -1,0 +1,53 @@
+array SOC_X1600_SSLV0_CLK_IO
+    string "SSLV CLK 引脚"
+    item "GPIO_NULL  " -1
+    item "GPIO_SSLV_CLK" PA31
+    item "GPIO_SSLV_CLK" PB12
+
+array SOC_X1600_SSLV0_DT_IO
+    string "SSLV DT 引脚"
+    item "GPIO_NULL  " -1
+    item "GPIO_SSLV_DT" PA30
+    item "GPIO_SSLV_DT" PB13
+
+array SOC_X1600_SSLV0_DR_IO
+    string "SSLV DR 引脚"
+    item "GPIO_NULL  " -1
+    item "GPIO_SSLV_DR" PA29
+    item "GPIO_SSLV_DR" PB14
+
+array SOC_X1600_SSLV0_CS_IO
+    string "SSLV CS 引脚"
+    item "GPIO_NULL  " -1
+    item "GPIO_SSLV_CS" PA28
+    item "GPIO_SSLV_CS" PB17
+
+
+menuconfig MD_X1600_SSLV
+    bool "SSLV0"
+
+config MD_X1600_SSLV0_CLK
+    string "CLK(时钟引脚)"
+    default PA31
+    choice from SOC_X1600_SSLV0_CLK_IO
+
+config MD_X1600_SSLV0_DT
+    string "DT(输出引脚)"
+    default PA30
+    choice from SOC_X1600_SSLV0_DT_IO
+    help
+        "DT= -1,表示不使用DT引脚"
+
+config MD_X1600_SSLV0_DR
+    string "DR(输入引脚)"
+    default PA29
+    choice from SOC_X1600_SSLV0_DR_IO
+    help
+        "DR= -1,表示不使用DR引脚"
+
+config MD_X1600_SSLV0_CS
+    string "CS(片选脚)"
+    default PA28
+    choice from SOC_X1600_SSLV0_CS_IO
+
+endmenu # SPI SLV

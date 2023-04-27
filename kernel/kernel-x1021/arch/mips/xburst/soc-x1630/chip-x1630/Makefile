@@ -1,0 +1,1 @@
+obj-$(CONFIG_PRODUCT_X1630_DOLPHIN)		+= dolphin/

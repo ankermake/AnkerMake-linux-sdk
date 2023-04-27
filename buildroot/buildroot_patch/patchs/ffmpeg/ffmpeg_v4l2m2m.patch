@@ -1,0 +1,224 @@
+diff --git a/libavcodec/v4l2_buffers.c b/libavcodec/v4l2_buffers.c
+index aef911f..5c165e5 100644
+--- a/libavcodec/v4l2_buffers.c
++++ b/libavcodec/v4l2_buffers.c
+@@ -291,7 +291,13 @@ int ff_v4l2_buffer_avframe_to_buf(const AVFrame *frame, V4L2Buffer* out)
+     int i, ret;
+ 
+     for(i = 0; i < out->num_planes; i++) {
+-        ret = v4l2_bufref_to_buf(out, i, frame->buf[i]->data, frame->buf[i]->size, frame->buf[i]);
++        //ret = v4l2_bufref_to_buf(out, i, frame->buf[i]->data, frame->buf[i]->size, frame->buf[i]);
++        unsigned int size, h = frame->height;
++        if(i == 1 || i == 2)
++            h = h / 2;
++
++        size = frame->linesize[i] * h;
++        ret = v4l2_bufref_to_buf(out, i, frame->data[i], size, frame->buf[i]);
+         if (ret)
+             return ret;
+     }
+diff --git a/libavcodec/v4l2_context.c b/libavcodec/v4l2_context.c
+index efcb042..300521b 100644
+--- a/libavcodec/v4l2_context.c
++++ b/libavcodec/v4l2_context.c
+@@ -543,6 +543,11 @@ int ff_v4l2_context_enqueue_frame(V4L2Context* ctx, const AVFrame* frame)
+     if (ret)
+         return ret;
+ 
++    if (frame->pict_type & AV_PICTURE_TYPE_I)
++        avbuf->flags |= V4L2_BUF_FLAG_KEYFRAME;
++    else
++        avbuf->flags &= ~V4L2_BUF_FLAG_KEYFRAME;
++
+     return ff_v4l2_buffer_enqueue(avbuf);
+ }
+ 
+@@ -643,6 +648,13 @@ int ff_v4l2_context_set_format(V4L2Context* ctx)
+     return ioctl(ctx_to_m2mctx(ctx)->fd, VIDIOC_S_FMT, &ctx->format);
+ }
+ 
++int ff_v4l2_context_get_param(V4L2Context *ctx)
++{
++   ctx->parm.type = ctx->type;
++
++   return ioctl(ctx_to_m2mctx(ctx)->fd, VIDIOC_G_PARM, &ctx->parm);
++}
++
+ void ff_v4l2_context_release(V4L2Context* ctx)
+ {
+     int ret;
+diff --git a/libavcodec/v4l2_context.h b/libavcodec/v4l2_context.h
+index 632f1d0..e883cd1 100644
+--- a/libavcodec/v4l2_context.h
++++ b/libavcodec/v4l2_context.h
+@@ -64,6 +64,8 @@ typedef struct V4L2Context {
+      */
+     struct v4l2_format format;
+ 
++    struct v4l2_streamparm parm;
++
+     /**
+      * Width and height of the frames it produces (in case of a capture context, e.g. when decoding)
+      * or accepts (in case of an output context, e.g. when encoding).
+@@ -117,6 +119,8 @@ int ff_v4l2_context_set_format(V4L2Context* ctx);
+  */
+ int ff_v4l2_context_get_format(V4L2Context* ctx);
+ 
++
++int ff_v4l2_context_get_param(V4L2Context *ctx);
+ /**
+  * Releases a V4L2Context.
+  *
+diff --git a/libavcodec/v4l2_m2m.c b/libavcodec/v4l2_m2m.c
+index 427e165..1ad8180 100644
+--- a/libavcodec/v4l2_m2m.c
++++ b/libavcodec/v4l2_m2m.c
+@@ -78,6 +78,11 @@ static int v4l2_prepare_contexts(V4L2m2mContext* s)
+ 
+     av_log(s->avctx, AV_LOG_INFO, "driver '%s' on card '%s'\n", cap.driver, cap.card);
+ 
++    if(strlen(s->driver_name) != 0) {
++        if(strncmp(s->driver_name, cap.driver, strlen(s->driver_name)))
++            return AVERROR(EINVAL);
++    }
++
+     if (v4l2_mplane_video(&cap)) {
+         s->capture.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+         s->output.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+diff --git a/libavcodec/v4l2_m2m.h b/libavcodec/v4l2_m2m.h
+index 0d4671b..a325092 100644
+--- a/libavcodec/v4l2_m2m.h
++++ b/libavcodec/v4l2_m2m.h
+@@ -42,6 +42,7 @@
+ 
+ typedef struct V4L2m2mContext {
+     char devname[PATH_MAX];
++    const char *driver_name;
+     int fd;
+ 
+     /* the codec context queues */
+diff --git a/libavcodec/v4l2_m2m_dec.c b/libavcodec/v4l2_m2m_dec.c
+index d0601f0..c4157e3 100644
+--- a/libavcodec/v4l2_m2m_dec.c
++++ b/libavcodec/v4l2_m2m_dec.c
+@@ -173,6 +173,8 @@ static av_cold int v4l2_decode_init(AVCodecContext *avctx)
+     capture = &s->capture;
+     output = &s->output;
+ 
++    s->driver_name = "felix-vdec";
++
+     /* if these dimensions are invalid (ie, 0 or too small) an event will be raised
+      * by the v4l2 driver; this event will trigger a full pipeline reconfig and
+      * the proper values will be retrieved from the kernel driver.
+diff --git a/libavcodec/v4l2_m2m_enc.c b/libavcodec/v4l2_m2m_enc.c
+index 636e1a9..d5f1952 100644
+--- a/libavcodec/v4l2_m2m_enc.c
++++ b/libavcodec/v4l2_m2m_enc.c
+@@ -278,6 +278,38 @@ dequeue:
+     return ff_v4l2_context_dequeue_packet(capture, avpkt);
+ }
+ 
++
++struct h264_header {
++	unsigned int size;
++	unsigned char header;
++};
++
++static int v4l2_encode_h264_headers(V4L2m2mContext *s)
++{
++	int ret = 0;
++
++	struct V4L2Context *capture = &s->capture;
++	struct h264_header *h = NULL;
++
++	ret = ff_v4l2_context_get_param(capture);
++
++	if(ret < 0) {
++		printf("--------faield to get parm.ret: %d\n", ret);
++		return ret;
++	}
++
++
++	h = (struct h264_header *)capture->parm.parm.raw_data;
++
++	s->avctx->extradata = av_mallocz(h->size + AV_INPUT_BUFFER_PADDING_SIZE);
++
++	memcpy(s->avctx->extradata, &h->header, h->size);
++
++	s->avctx->extradata_size = h->size;
++
++    return ret;
++}
++
+ static av_cold int v4l2_encode_init(AVCodecContext *avctx)
+ {
+     V4L2Context *capture, *output;
+@@ -291,6 +323,8 @@ static av_cold int v4l2_encode_init(AVCodecContext *avctx)
+     capture = &s->capture;
+     output  = &s->output;
+ 
++    s->driver_name = "helix-venc";
++
+     /* common settings output/capture */
+     output->height = capture->height = avctx->height;
+     output->width = capture->width = avctx->width;
+@@ -309,9 +343,20 @@ static av_cold int v4l2_encode_init(AVCodecContext *avctx)
+         return ret;
+     }
+ 
++    ret = v4l2_encode_h264_headers(s);
++
+     return v4l2_prepare_encoder(s);
+ }
+ 
++static int v4l2_encode_end(AVCodecContext *avctx)
++{
++
++	if(avctx->extradata) {
++		av_freep(&avctx->extradata);
++	}
++	return ff_v4l2_m2m_codec_end(avctx);
++}
++
+ #define OFFSET(x) offsetof(V4L2m2mPriv, x)
+ #define FLAGS AV_OPT_FLAG_VIDEO_PARAM | AV_OPT_FLAG_ENCODING_PARAM
+ 
+@@ -340,7 +385,7 @@ AVCodec ff_ ## NAME ## _v4l2m2m_encoder = { \
+     .init           = v4l2_encode_init,\
+     .send_frame     = v4l2_send_frame,\
+     .receive_packet = v4l2_receive_packet,\
+-    .close          = ff_v4l2_m2m_codec_end,\
++    .close          = v4l2_encode_end,\
+     .capabilities   = AV_CODEC_CAP_HARDWARE | AV_CODEC_CAP_DELAY, \
+     .wrapper_name   = "v4l2m2m", \
+ };
+diff --git a/libavdevice/v4l2enc.c b/libavdevice/v4l2enc.c
+index 1c36f81..222a3ed 100644
+--- a/libavdevice/v4l2enc.c
++++ b/libavdevice/v4l2enc.c
+@@ -47,8 +47,9 @@ static av_cold int write_header(AVFormatContext *s1)
+     }
+ 
+     if (s1->nb_streams != 1 ||
+-        s1->streams[0]->codecpar->codec_type != AVMEDIA_TYPE_VIDEO ||
+-        s1->streams[0]->codecpar->codec_id   != AV_CODEC_ID_RAWVIDEO) {
++        // s1->streams[0]->codecpar->codec_type != AVMEDIA_TYPE_VIDEO ||
++        // s1->streams[0]->codecpar->codec_id   != AV_CODEC_ID_RAWVIDEO) {
++        s1->streams[0]->codecpar->codec_type != AVMEDIA_TYPE_VIDEO) {
+         av_log(s1, AV_LOG_ERROR,
+                "V4L2 output device supports only a single raw video stream\n");
+         return AVERROR(EINVAL);
+@@ -56,7 +57,12 @@ static av_cold int write_header(AVFormatContext *s1)
+ 
+     par = s1->streams[0]->codecpar;
+ 
+-    v4l2_pixfmt = ff_fmt_ff2v4l(par->format, AV_CODEC_ID_RAWVIDEO);
++    // v4l2_pixfmt = ff_fmt_ff2v4l(par->format, AV_CODEC_ID_RAWVIDEO);
++    if(par->codec_id == AV_CODEC_ID_RAWVIDEO) {
++        v4l2_pixfmt = ff_fmt_ff2v4l(par->format, AV_CODEC_ID_RAWVIDEO);
++    } else {
++        v4l2_pixfmt = ff_fmt_ff2v4l(AV_PIX_FMT_NONE, par->codec_id);
++    }
+     if (!v4l2_pixfmt) { // XXX: try to force them one by one?
+         av_log(s1, AV_LOG_ERROR, "Unknown V4L2 pixel format equivalent for %s\n",
+                av_get_pix_fmt_name(par->format));

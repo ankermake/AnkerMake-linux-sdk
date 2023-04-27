@@ -1,0 +1,5 @@
+config GSL1680
+    tristate "GSL1680 touch screen driver"
+    help
+        GSL1680 touch screen driver support
+        320 * 480

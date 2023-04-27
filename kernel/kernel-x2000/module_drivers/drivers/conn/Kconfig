@@ -1,0 +1,16 @@
+
+config X2000_CONN
+        tristate "Ingenic X2000 CONN base driver"
+        depends on SOC_X2000_V12 || SOC_X2000 || SOC_M300 || SOC_X2100 || SOC_X2500
+        default n
+        help
+          ingenic X2000 Serial Multi-core, inter-core communication base driver
+
+config X2000_CONN_BLK
+        tristate "Ingenic X2000 CONN block driver"
+        depends on SOC_X2000_V12 || SOC_X2000 || SOC_M300 || SOC_X2100 || SOC_X2500
+		select X2000_CONN
+        default n
+        help
+          ingenic X2000 Serial Multi-core, inter-core communication block driver
+          one core obtains reading and writing ability from another one

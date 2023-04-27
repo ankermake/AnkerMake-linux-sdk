@@ -1,0 +1,1 @@
+obj-$(CONFIG_LCD_BM8766) += bm8766.o

@@ -1,0 +1,15 @@
+--- qtwebkit-opensource-src-5.9.1/Source/JavaScriptCore/assembler/MIPSAssembler.h	2017-06-16 20:46:36.000000000 +0800
++++ qtwebkit-opensource-src-5.9.1_2/Source/JavaScriptCore/assembler/MIPSAssembler.h	2020-09-24 10:45:48.659188321 +0800
+@@ -524,6 +524,12 @@
+         copDelayNop();
+     }
+ 
++    void mfhc1(RegisterID rt, FPRegisterID fs)
++    {
++        emitInst(0x44600000 | (fs << OP_SH_FS) | (rt << OP_SH_RT));
++        copDelayNop();
++    }
++
+     void sqrtd(FPRegisterID fd, FPRegisterID fs)
+     {
+         emitInst(0x46200004 | (fd << OP_SH_FD) | (fs << OP_SH_FS));

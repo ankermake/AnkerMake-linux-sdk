@@ -1,0 +1,133 @@
+menuconfig CONFIG_SOC_X1600_IO_ARRAY
+    bool
+
+array SOC_GPIO_PINS
+    string "soc gpio 引脚"
+    item "GPIO_NULL" -1
+    item "PA00" PA00
+    item "PA01" PA01
+    item "PA02" PA02
+    item "PA03" PA03
+    item "PA04" PA04
+    item "PA05" PA05
+    item "PA06" PA06
+    item "PA07" PA07
+    item "PA08" PA08
+    item "PA09" PA09
+    item "PA10" PA10
+    item "PA11" PA11
+    item "PA12" PA12
+    item "PA13" PA13
+    item "PA14" PA14
+    item "PA15" PA15
+    item "PA16" PA16
+    item "PA17" PA17
+    item "PA18" PA18
+    item "PA19" PA19
+    item "PA20" PA20
+    item "PA21" PA21
+    item "PA22" PA22
+    item "PA23" PA23
+    item "PA24" PA24
+    item "PA25" PA25
+    item "PA26" PA26
+    item "PA27" PA27
+    item "PA28" PA28
+    item "PA29" PA29
+    item "PA30" PA30
+    item "PA31" PA31
+    item "PB00" PB00
+    item "PB01" PB01
+    item "PB02" PB02
+    item "PB03" PB03
+    item "PB04" PB04
+    item "PB05" PB05
+    item "PB07" PB07
+    item "PB08" PB08
+    item "PB09" PB09
+    item "PB10" PB10
+    item "PB12" PB12
+    item "PB13" PB13
+    item "PB14" PB14
+    item "PB15" PB15
+    item "PB16" PB16
+    item "PB17" PB17
+    item "PB19" PB19
+    item "PB20" PB20
+    item "PB21" PB21
+    item "PB22" PB22
+    item "PB23" PB23
+    item "PB24" PB24
+    item "PB25" PB25
+    item "PB26" PB26
+    item "PB27" PB27
+    item "PB28" PB28
+    item "PB30" PB30
+    item "PB31" PB31
+    item "PC00" PC00
+    item "PC01" PC01
+    item "PC02" PC02
+    item "PC17" PC17
+    item "PC18" PC18
+    item "PC19" PC19
+    item "PC20" PC20
+    item "PC21" PC21
+    item "PC22" PC22
+    item "PC24" PC24
+    item "PC25" PC25
+    item "PC26" PC26
+    item "PC27" PC27
+    item "PC28" PC28
+    item "PC31" PC31
+    item "PD00" PD00
+    item "PD01" PD01
+    item "PD02" PD02
+    item "PD03" PD03
+    item "PD04" PD04
+    item "PD05" PD05
+endmenu
+
+menuconfig CONFIG_SOC_X1660_IO_ARRAY
+    bool
+
+array SOC_GPIO_PINS
+    string "soc gpio 引脚"
+    item "GPIO_NULL" -1
+    item "PA08" PA8
+    item "PA09" PA9
+    item "PA10" PA10
+    item "PA11" PA11
+    item "PA12" PA12
+    item "PA13" PA13
+    item "PA14" PA14
+    item "PA15" PA15
+    item "PA20" PA20
+    item "PA21" PA21
+    item "PA22" PA22
+    item "PA24" PA24
+    item "PA28" PA28
+    item "PA29" PA29
+    item "PA30" PA30
+    item "PA31" PA31
+    item "PB00" PB0
+    item "PB01" PB1
+    item "PB02" PB2
+    item "PB03" PB3
+    item "PB12" PB12
+    item "PB13" PB13
+    item "PB14" PB14
+    item "PB15" PB15
+    item "PB16" PB16
+    item "PB17" PB17
+    item "PC17" PC17
+    item "PC18" PC18
+    item "PC19" PC19
+    item "PC20" PC20
+    item "PC21" PC21
+    item "PC22" PC22
+    item "PC25" PC25
+    item "PC26" PC26
+    item "PC28" PC28
+    item "PD04" PD4
+    item "PD05" PD5
+endmenu

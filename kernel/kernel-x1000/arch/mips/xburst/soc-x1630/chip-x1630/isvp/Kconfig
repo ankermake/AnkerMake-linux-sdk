@@ -1,0 +1,14 @@
+choice
+	prompt "Board type"
+	depends on PLATFORM_X1630_ISVP
+	default BOARD_GOLD
+
+config BOARD_GOLD
+       bool "gold"
+       depends on PLATFORM_X1630_ISVP
+
+endchoice
+
+config BOARD_NAME
+	string
+	default "gold" if BOARD_GOLD

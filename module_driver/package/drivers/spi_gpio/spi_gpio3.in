@@ -1,0 +1,33 @@
+config MD_SPI_GPIO3
+    bool "添加一个spi总线"
+    default n
+
+config MD_SPI_GPIO3_BUS_NUM
+    int "  bus num(唯一总线号)"
+    default 8
+    depends on MD_SPI_GPIO3
+
+config MD_SPI_GPIO3_SCK
+    string "  sck pin(时钟引脚)"
+    choice from SOC_GPIO_PINS
+    depends on MD_SPI_GPIO3
+    default -1
+
+config MD_SPI_GPIO3_MOSI
+    string "  mosi pin(输出引脚)"
+    choice from SOC_GPIO_PINS
+    depends on MD_SPI_GPIO3
+    default -1
+
+config MD_SPI_GPIO3_MISO
+    string "  miso pin(输入引脚)"
+    choice from SOC_GPIO_PINS
+    depends on MD_SPI_GPIO3
+    default -1
+
+config MD_SPI_GPIO3_NUM_CHIPSELECT
+    int "  num_chipselect(最大的从设备数量)"
+    default 8
+    depends on MD_SPI_GPIO3
+    help
+        从设备的chip_select 需要在此范围内

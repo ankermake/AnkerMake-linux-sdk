@@ -1,0 +1,5 @@
+menuconfig MD_X2000_CONN_PCM
+    bool "使用RTOS端的PCM驱动(核间通信)"
+
+source package/soc/x2000/conn_pcm/conn_pcm_playback/Config.in
+endmenu

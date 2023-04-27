@@ -1,0 +1,5 @@
+config DT_HALLEY2_V20
+	bool "halley2 v20"
+
+config DT_X1500_YAK
+	bool "X1500 Yak"

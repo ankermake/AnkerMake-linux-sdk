@@ -1,0 +1,141 @@
+#include <dt-bindings/pinctrl/ingenic-pinctrl.h>
+
+&pinctrl {
+	uart0_pin: uart0-pin {
+		uart0_pb: uart0-pb {
+			ingenic,pinmux = <&gpb 19 19>, <&gpb 22 22>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+		};
+	};
+	uart1_pin: uart1-pin {
+		uart1_pb: uart1-pb {
+			ingenic,pinmux = <&gpb 23 24>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+		};
+	};
+
+	mac_rmii: mac-rmii {
+		ingenic,pinmux = <&gpb 6 11>, <&gpb 13 16>;
+		ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+	};
+
+	i2c0_pin: i2c0-pin {
+		i2c0_pa: i2c0-pa {
+			ingenic,pinmux = <&gpa 12 13>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+
+	};
+	i2c1_pin: i2c1-pin {
+		i2c1_pb: i2c1-pb {
+			ingenic,pinmux = <&gpb 25 26>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+		};
+	};
+
+	i2c2_pin: i2c2-pin {
+		i2c2_pc: i2c2-pc {
+			ingenic,pinmux = <&gpb 27 28>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+	};
+
+	cim_pa: cim-pa {
+		ingenic,pinmux = <&gpa 0 7>, <&gpa 14 17>;
+		ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+	};
+
+	sfc_pin: sfc-pin {
+		sfc_pa: sfc-pa {
+			ingenic,pinmux = <&gpa 23 28>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+	};
+	spi0_pin: spi0-pin {
+		spi0_pc: spi0-pc {
+			ingenic,pinmux = <&gpc 11 14>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+		};
+	};
+		spi1_pin: spi1-pin {
+		spi1_pc: spi1-pc {
+			ingenic,pinmux = <&gpc 19 20>, <&gpc 23 24>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+		spi1_pd: spi1-pd {
+			ingenic,pinmux = <&gpd 2 3>, <&gpc 6 7>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION2>;
+		};
+	};
+
+	msc0_4bit: msc0-4bit {
+		msc0_4bit_pb: msc0-4bit-pb {
+			ingenic,pinmux = <&gpb 0 5>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+		};
+	};
+	msc1_4bit: msc1-4bit {
+		msc1_4bit_pc: msc1-4bit-pc {
+			ingenic,pinmux = <&gpc 2 7>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+		};
+	};
+	pwm: pwm {
+		pwm0_pb: pwm0_pb {
+			ingenic,pinmux = <&gpb 17 17>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+		};
+		pwm0_pc: pwm0_pc {
+			ingenic,pinmux = <&gpc 11 11>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+		pwm1_pb: pwm1_pb {
+			ingenic,pinmux = <&gpb 18 18>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+		};
+		pwm1_pc: pwm1_pc {
+			ingenic,pinmux = <&gpc 12 12>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+		pwm2_pc1: pwm2_pc1 {
+			ingenic,pinmux = <&gpc 8 8>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION0>;
+		};
+		pwm2_pc2: pwm2_pc2 {
+			ingenic,pinmux = <&gpc 13 13>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+		pwm3_pc: pwm3_pc {
+			ingenic,pinmux = <&gpc 14 14>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+		pwm4_pc: pwm4_pc {
+			ingenic,pinmux = <&gpc 15 15>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+		pwm5_pc: pwm5_pc {
+			ingenic,pinmux = <&gpc 16 16>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+		pwm6_pc: pwm6_pc {
+			ingenic,pinmux = <&gpc 17 17>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+		pwm7_pc: pwm7_pc {
+			ingenic,pinmux = <&gpc 18 18>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+	};
+
+	rtc32k_pins:rtc32k-pins {
+		rtc32k_enable:rtc32k-enable {
+			ingenic,pinmux = <&gpb 18 18>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTION1>;
+		};
+		rtc32k_disable:rtc32k-disable {
+			ingenic,pinmux = <&gpb 18 18>;
+			ingenic,pinmux-funcsel = <PINCTL_FUNCTIONS>;
+		};
+	};
+
+};

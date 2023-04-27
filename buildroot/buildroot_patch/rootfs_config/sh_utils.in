@@ -1,0 +1,23 @@
+menu "实用shell脚本工具"
+
+config APP_br_sh_utils_wait_file
+    bool "wait_file.sh(等待文件出现，带超时)"
+    default y
+
+config APP_br_sh_utils_mount_ubifs
+    bool "mount_ubifs.sh(挂载ubi分区)"
+    default y
+
+config APP_br_sh_utils_mount_jffs2
+    bool "mount_jffs2.sh(挂载jffs2分区)"
+    default n
+
+config APP_br_sh_utils_mount_mmc_ext4
+    bool "mount_mmc_ext4.sh(挂载mmc ext4分区)"
+    default n
+
+config APP_br_sh_utils_mount_mmc_fat
+    bool "mount_mmc_fat.sh(挂载mmc fat分区)"
+    default n
+
+endmenu

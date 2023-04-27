@@ -1,0 +1,34 @@
+
+menuconfig MD_SOC_X1520
+    bool "x1520 驱动列表"
+    depends on MD_CHOICE_SOC_X1520
+
+config MD_SOC_DIR
+    string
+    default soc/x1520
+
+source package/soc/x1520/def_gpio_pins.in
+
+source package/soc/x1520/spi/Config.in
+
+source package/soc/x1520/adc/Config.in
+
+source package/soc/x1520/efuse/Config.in
+
+source package/soc/x1520/pwm/Config.in
+
+source package/soc/x1520/watchdog/Config.in
+
+source package/soc/x1520/i2c/Config.in
+
+source package/soc/x1520/utils/Config.in
+
+source package/soc/x1520/camera/Config.in
+
+source package/soc/x1520/gpio/Config.in
+
+source package/soc/x1520/icodec/Config.in
+
+source package/soc/x1520/aic/Config.in
+
+endmenu

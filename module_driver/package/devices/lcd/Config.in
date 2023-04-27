@@ -1,0 +1,31 @@
+menu "lcd设备列表"
+
+source package/devices/lcd/x1830/lcd_kwh035/Config.in
+source package/devices/lcd/x1830/lcd_st7701/Config.in
+source package/devices/lcd/x1830/lcd_st7701_9bit_spi/Config.in
+source package/devices/lcd/x1000/lcd_truly240240/Config.in
+source package/devices/lcd/x1021/lcd_kwh035/Config.in
+source package/devices/lcd/x2000/lcd_kwh035/Config.in
+source package/devices/lcd/x2000/lcd_kd070d57/Config.in
+source package/devices/lcd/x2000/lcd_fw050/Config.in
+source package/devices/lcd/x2000/lcd_ma0060/Config.in
+source package/devices/lcd/x2000/lcd_m1700/Config.in
+source package/devices/lcd/x2000/lcd_st7789/Config.in
+source package/devices/lcd/x2000/lcd_st7701s/Config.in
+source package/devices/lcd/x2000/lcd_jd9851/Config.in
+source package/devices/lcd/x2000/lcd_s6d04d1/Config.in
+source package/devices/lcd/x2000/lcd_cc0702/Config.in
+source package/devices/lcd/x2000/lcd_gc9106/Config.in
+source package/devices/lcd/spi/lcd_gc9106/Config.in
+source package/devices/lcd/x2000/lcd_jd9366/Config.in
+source package/devices/lcd/x2000/lcd_gl0700/Config.in
+source package/devices/lcd/x2000/lcd_ili9881d/Config.in
+source package/devices/lcd/x2000/lcd_otm8018b/Config.in
+source package/devices/lcd/x2000/lcd_st7785m/Config.in
+
+source package/devices/lcd/x1600/lcd_st7701/Config.in
+source package/devices/lcd/x1600/lcd_kwh035/Config.in
+
+
+
+endmenu

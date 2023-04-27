@@ -1,0 +1,10 @@
+menuconfig MD_X1600_PWM
+    bool "pwm 驱动(脉冲宽度调制功能)"
+
+config MD_X1600_PWM_CHECK_DMA_DATA
+    bool "检查PWM DMA数据正确性"
+    default n
+    help
+        内部需要判断每个数据,影响效率.建议调用函数前确保数据正确性,不要使能内部校验.
+
+endmenu

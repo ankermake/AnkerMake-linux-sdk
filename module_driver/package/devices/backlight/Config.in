@@ -1,0 +1,7 @@
+menu "背光设备列表"
+
+source "package/devices/backlight/pwm_backlight/pwm_backlight.in"
+
+source "package/devices/backlight/gpio_backlight/gpio_backlight.in"
+
+endmenu

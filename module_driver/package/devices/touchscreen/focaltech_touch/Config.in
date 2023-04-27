@@ -1,0 +1,94 @@
+menuconfig MD_TOUCHSCREEN_FTS
+    bool "Focaltech Touchscreen"
+
+config MD_FTS_I2C_BUSNUM
+    int "i2c bus num(触摸屏挂接的i2c总线号)"
+    default -1
+
+config MD_FTS_X_COORDS_MIN
+    int "最小X轴坐标值"
+    default 0
+
+config MD_FTS_Y_COORDS_MIN
+    int "最小Y轴坐标值"
+    default 0
+
+config MD_FTS_X_COORDS_MAX
+    int "最大X轴坐标值"
+    default 1080
+
+config MD_FTS_Y_COORDS_MAX
+    int "最大X轴坐标值"
+    default 1920
+
+config MD_FTS_X_COORDS_FLIP
+    bool "X轴是否翻转"
+    default n
+
+config MD_FTS_Y_COORDS_FLIP
+    bool "Y轴是否翻转"
+    default n
+
+config MD_FTS_X_Y_COORDS_EXCHANGE
+    bool "X,Y轴是否对调"
+    default n
+
+config MD_FTS_RESET_GPIO
+    string "gpio reset(touchscreen 复位脚)"
+    choice from SOC_GPIO_PINS
+
+config MD_FTS_IRQ_GPIO
+    string "gpio irq(touchscreen 中断引脚)"
+    choice from SOC_GPIO_PINS
+
+
+config MD_FTS_MAX_TOUCH_NUMBER
+    int "能检测的最大触摸点个数(最大为10,最小为2，小于2计为2,大于10计为10)"
+    default 2
+
+menuconfig MD_FTS_HAVE_KEY
+    bool "使用虚拟按键"
+    default n
+
+config MD_FTS_KEY_NUMBER
+    int "key 的个数"
+
+config MD_FTS_KEY0_CODE
+    int "key0 的键码"
+
+config MD_FTS_KEY0_X_COORDS
+    int "key0 x轴坐标"
+
+config MD_FTS_KEY0_Y_COORDS
+    int "key0 y轴坐标"
+
+config MD_FTS_KEY1_CODE
+    int "key1 的键码"
+
+config MD_FTS_KEY1_X_COORDS
+    int "key1 x轴坐标"
+
+config MD_FTS_KEY1_Y_COORDS
+    int "key1 y轴坐标"
+
+config MD_FTS_KEY2_CODE
+    int "key2 的键码"
+
+config MD_FTS_KEY2_X_COORDS
+    int "key2 x轴坐标"
+
+config MD_FTS_KEY2_Y_COORDS
+    int "key2 y轴坐标"
+
+config MD_FTS_KEY3_CODE
+    int "key3 的键码"
+
+config MD_FTS_KEY3_X_COORDS
+    int "key3 x轴坐标"
+
+config MD_FTS_KEY3_Y_COORDS
+    int "key3 y轴坐标"
+
+endmenu
+
+endmenu

@@ -1,0 +1,62 @@
+menu "camera设备列表"
+
+# x2000 cameras
+source package/devices/camera/x2000/sc031_mipi/Config.in
+source package/devices/camera/x2000/sc031_dvp/Config.in
+source package/devices/camera/x2000/sc035_mipi/Config.in
+source package/devices/camera/x2000/sc1345_mipi/Config.in
+source package/devices/camera/x2000/sc2310_mipi/Config.in
+source package/devices/camera/x2000/sc2310_dvp/Config.in
+source package/devices/camera/x2000/sc2355_mipi/Config.in
+source package/devices/camera/x2000/sc301_mipi/Config.in
+source package/devices/camera/x2000/sc4238_mipi/Config.in
+source package/devices/camera/x2000/ov2735_mipi/Config.in
+source package/devices/camera/x2000/ov5693_mipi/Config.in
+source package/devices/camera/x2000/ov7251_mipi/Config.in
+source package/devices/camera/x2000/ov9281_mipi/Config.in
+source package/devices/camera/x2000/ov9282_dvp/Config.in
+source package/devices/camera/x2000/ov9732_mipi/Config.in
+source package/devices/camera/x2000/ov9732_dvp/Config.in
+source package/devices/camera/x2000/os05a20_mipi/Config.in
+source package/devices/camera/x2000/gc0308_dvp/Config.in
+source package/devices/camera/x2000/gc0329/Config.in
+source package/devices/camera/x2000/gc1054_dvp/Config.in
+source package/devices/camera/x2000/gc2053_mipi/Config.in
+source package/devices/camera/x2000/gc2053_dvp/Config.in
+source package/devices/camera/x2000/gc2145_dvp/Config.in
+source package/devices/camera/x2000/gc2375_mipi/Config.in
+source package/devices/camera/x2000/gc5035_mipi/Config.in
+source package/devices/camera/x2000/jxf37_mipi/Config.in
+source package/devices/camera/x2000/jxh62_mipi/Config.in
+source package/devices/camera/x2000/imx335_mipi/Config.in
+source package/devices/camera/x2000/pag7930_mipi/Config.in
+source package/devices/camera/x2000/ar0230/Config.in
+source package/devices/camera/x2000/jz0378_dvp/Config.in
+source package/devices/camera/x2000/gvm8666b_mipi/Config.in
+
+# x1830 cameras
+source package/devices/camera/x1830/ov2735/Config.in
+
+
+# x1520 cameras
+source package/devices/camera/x1520/ov9732/Config.in
+
+
+# x1000 cameras
+source package/devices/camera/x1000/gc0308/Config.in
+source package/devices/camera/x1000/gc2155/Config.in
+source package/devices/camera/x1000/gc0328/Config.in
+
+# x1021 cameras
+source package/devices/camera/x1021/gc0308/Config.in
+source package/devices/camera/x1021/gc0328/Config.in
+source package/devices/camera/x1021/ov9732/Config.in
+
+# x1600 cameras
+source package/devices/camera/x1600/sc031_mipi/Config.in
+source package/devices/camera/x1600/sc031_dvp/Config.in
+source package/devices/camera/x1600/sc1345_mipi/Config.in
+source package/devices/camera/x1600/gc0329_dvp/Config.in
+source package/devices/camera/x1600/gc0308_dvp/Config.in
+
+endmenu

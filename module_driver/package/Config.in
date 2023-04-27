@@ -1,0 +1,5 @@
+source package/vendor/Config.in
+source package/build/Config.in
+source package/devices/Config.in
+source package/drivers/Config.in
+source package/soc/Config.in

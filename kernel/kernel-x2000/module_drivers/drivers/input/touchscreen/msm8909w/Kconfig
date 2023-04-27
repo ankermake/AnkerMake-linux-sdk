@@ -1,0 +1,16 @@
+#
+# MSM8909W Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_MSM8909W
+    bool "msm8909w Touchscreen"
+    default n
+    help
+      Say Y here if you have MSM8909W touch panel.
+      If unsure, say N.
+
+config TOUCHSCREEN_MSM8909W_DIRECTORY
+    string "msm8909w ts directory name"
+    default "msm8909w"
+    depends on TOUCHSCREEN_MSM8909W
+

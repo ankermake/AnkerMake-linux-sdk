@@ -1,0 +1,13 @@
+menuconfig MD_SPI_GPIO
+    bool "gpio spi 驱动/设备"
+
+source "package/drivers/spi_gpio/spi_gpio0.in"
+source "package/drivers/spi_gpio/spi_gpio1.in"
+source "package/drivers/spi_gpio/spi_gpio2.in"
+source "package/drivers/spi_gpio/spi_gpio3.in"
+source "package/drivers/spi_gpio/spi_gpio4.in"
+source "package/drivers/spi_gpio/spi_gpio5.in"
+source "package/drivers/spi_gpio/spi_gpio6.in"
+source "package/drivers/spi_gpio/spi_gpio7.in"
+
+endmenu

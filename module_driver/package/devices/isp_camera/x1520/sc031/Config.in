@@ -1,0 +1,29 @@
+menuconfig MD_X1520_SENSOR_ISP_SC031
+    bool "sensor sc031gs (dvp,raw8)"
+    depends on MD_SOC_X1520
+
+config MD_X1520_SC031_120FPS_SUPPORT
+    bool "sensor 640*480 120fps (选择120fps)"
+
+config MD_X1520_SC031_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1520_SC031_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+source soc/x1520/camera/dvp_gpio_func.in
+
+config MD_X1520_SC031_DVP_GPIO_FUNC
+    string "dvp_gpio_func(dvp 接口选择使用的位数)"
+    choice from SENSOR_DVP_GPIO_FUNC
+    default -1
+
+config MD_X1520_SC031_ISPCLK
+    int "isp clk (isp 时钟频率)"
+    default 90000000
+
+endmenu # MD_X1520_SENSOR_SC031

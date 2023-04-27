@@ -1,0 +1,10 @@
+menuconfig APP_usb_mtp_server
+    bool "usb mtp 媒体传输"
+
+config APP_usb_mtp_conf_path
+    string "    usb mtp 配置文件本地路径"
+    default rootfs_config/file/usb_mtp/umtprd.conf
+    help
+        "usb mtp 配置路径 例:rootfs_config/file/usb_mtp/umtprd.conf"
+
+endmenu

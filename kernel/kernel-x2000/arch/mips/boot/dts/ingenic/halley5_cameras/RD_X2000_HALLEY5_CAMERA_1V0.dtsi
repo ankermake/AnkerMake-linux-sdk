@@ -1,0 +1,67 @@
+&i2c1 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1_pc>;
+
+	AR0234_0:AR0234@0x10 {
+		status = "ok";
+		compatible = "onsemi,ar0234";
+		reg = <0x10>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cim_vic_mclk_pc>;
+
+		ingenic,rst-gpio = <&gpb 3 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		ingenic,expo-gpio = <&gpa 15 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		ingenic,oe-gpio = <&gpb 4 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		pwen-supply = <&cam_ar0234_pwen>;
+		shutdown-supply = <&cam_ar0234_shutdown>;
+
+		port {
+			AR0234_ep0:endpoint {
+				remote-endpoint = <&isp0_ep>;
+			};
+		};
+	};
+};
+
+&i2c3 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pa>;
+
+	AR0144_0:AR0144@0x10 {
+		status = "ok";
+		compatible = "onsemi,ar0144";
+		reg = <0x10>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cim_vic_mclk_pe>;
+
+		ingenic,rst-gpio = <&gpa 7 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		ingenic,expo-gpio = <&gpa 15 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		ingenic,oe-gpio = <&gpa 6 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		pwen-supply = <&cam_ar0144_pwen>;
+
+		port {
+			AR0144_ep0:endpoint {
+				remote-endpoint = <&isp1_ep>;
+			};
+		};
+	};
+};
+
+&isp0_ep {
+	remote-endpoint = <&AR0234_ep0>;
+	data-lanes = <0 1>;
+	clk-lanes = <2>;
+};
+
+&isp1_ep {
+	remote-endpoint = <&AR0144_ep0>;
+	data-lanes = <3 4>;
+	clk-lanes = <5>;
+};
+

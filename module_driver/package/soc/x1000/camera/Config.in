@@ -1,0 +1,8 @@
+menuconfig MD_X1000_CAMERA
+    bool "camera 驱动(cim控制器)"
+
+config MD_X1000_CAMERA_FRAME_NUMS
+    int "camera帧缓冲数"
+    default 2
+
+endmenu

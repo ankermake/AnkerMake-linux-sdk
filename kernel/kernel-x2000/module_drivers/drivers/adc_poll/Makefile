@@ -1,0 +1,1 @@
+obj-$(CONFIG_INGENIC_ADC_POLL_X1600) += adc_poll.o adc_poll_hal.o

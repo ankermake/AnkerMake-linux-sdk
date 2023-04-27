@@ -1,0 +1,92 @@
+menuconfig FB_JZ_V14
+	tristate "JZ LCDC framebuffer V1.4"
+	depends on FB
+	select FB_CFB_FILLRECT
+	select FB_CFB_COPYAREA
+	select FB_CFB_IMAGEBLIT
+	help
+	  Framebuffer support for the x1830/x1630/T30 SoC.
+
+choice
+	depends on FB_JZ_V14
+	prompt "set lcd gpio"
+	default LCD_V14_TFT_18BIT
+
+config LCD_V14_TFT_18BIT
+	bool "lcd v14 tft 18bit"
+
+config LCD_V14_SLCD_8BIT
+	bool "lcd v14 8bit slcd"
+
+config LCD_V14_SLCD_9BIT
+	bool "lcd v14 9bit slcd"
+
+config LCD_V14_SLCD_16BIT
+	bool "lcd v14 16bit slcd"
+endchoice
+
+choice
+	depends on FB_JZ_V14
+	prompt "set lcd frame buffer num"
+	default CONFIG_ONE_FRAME_BUFFERS
+
+config LCD_V14_ONE_FRAME_BUFFERS
+	bool "one frame buffer"
+
+config LCD_V14_TWO_FRAME_BUFFERS
+	bool "two frame buffers"
+
+config LCD_V14_THREE_FRAME_BUFFERS
+	bool "three frame buffers"
+
+endchoice
+
+config LCD_V14_SLCD_CS
+	bool "use slcd cs pin function"
+	depends on FB_JZ_V14 && (LCD_V14_SLCD_8BIT || LCD_V14_SLCD_9BIT || LCD_V14_SLCD_16BIT)
+	default n
+	help
+		use slcd te function
+
+config LCD_V14_SLCD_TE
+	bool "use slcd te pin function"
+	depends on FB_JZ_V14 && (LCD_V14_SLCD_8BIT || LCD_V14_SLCD_9BIT || LCD_V14_SLCD_16BIT)
+	default n
+	help
+		use slcd te function
+
+config LCD_V14_SLCD_RDY
+	bool "use slcd ready pin function"
+	depends on FB_JZ_V14 && (LCD_V14_SLCD_8BIT || LCD_V14_SLCD_9BIT || LCD_V14_SLCD_16BIT)
+	default n
+	help
+		use slcd ready function
+
+config FB_JZ_V14_DISPLAY_TEST
+	bool "dispaly test"
+	depends on FB_JZ_V14
+
+config FB_JZ_V14_DELAY_BACKLIGHT
+	int "delay to turn on the backlight"
+	depends on FB_JZ_V14_DISPLAY_TEST
+	range 0 1000000000
+	default "0"
+	help
+		delay to turn on the backlight
+		unit: us
+
+config FB_JZ_LOGO
+	bool "display logo"
+	depends on FB_JZ_V14_DISPLAY_TEST
+	select LOGO
+	default n
+	help
+		display ingenic logo
+
+config FB_JZ_DEBUG
+	bool "fb test for displaying color bar"
+	depends on FB_JZ_V14_DISPLAY_TEST
+	default n
+	help
+	fb test for displaying color bar in your board.
+

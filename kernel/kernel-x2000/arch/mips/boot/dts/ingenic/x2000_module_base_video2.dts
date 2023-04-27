@@ -1,0 +1,147 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "x2000-v12.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <generated/autoconf.h>
+/*
+    reserved-memory 大小说明：（需要的最小值）
+    1.fb使用的内存大小，(fb0_frames + fb1_frames + fb2_frames + fb3_frames + fb_srdma_frames) * frame_size
+    2.isp 使用的内存大小，frame_size * isp_frames
+    3.解码使用的内存大小， 使用libhardware2的解码接口：(felix->max_frames_buffer + 1) * frame_size
+    4.编码使用的内存大小， 使用libhardware2的编码接口：(3 + 1) *frame_size
+
+    例如：x2000 darwin 开发板，1080p视频的编解码，需要预留的内存大小：
+        1. fb_mem:
+         frame_size = 600 * 1024 *4 = 2457600
+         fb0_frames = 2; fb1_frames = 1; fb_srdma_frames = 2;
+         fb_mem = (fb0_frames + fb1_frames + fb_srdma_frames) * frame_size
+                = (2+2+1)*2457600
+                = 1228000 = 11.8M
+        2. isp_mem:
+         frame_size = 1920 * 1080 * 3 / 2 = 3110400; isp_frames = 3;
+         isp_mem = frame_size * isp_frames
+                 = 3110400 * 3
+                 = 9331200 = 8.9M
+        3. dec_mem:
+         frame_size = 1920 * 1080 * 3 / 2 = 3110400;
+         felix->max_frames_buffer = 6（默认等于6，可以通过修改模块参数的值来修改,例如：
+                                       echo 3 > /sys/module/ingenic_felix/parameters/max_frame_buffers)
+         dec_mem = max_frames_buffer + 1 * frame_size
+                     = (6 + 1) * 3110400
+                     = 20.8M
+
+        4. enc_mem:
+         frame_size = 1920 * 1080 * 3 / 2 = 3110400;
+         enc_mem = (3 + 1) * 3110400
+                 = 11.9M
+
+        预览 + 编码（录像）：reserved-mem = fb_mem + isp_mem + enc_mem
+                                = 11.8 + 8.9 + 11.9 = 32.6M
+
+        解码 + 显示（播放）：reserved-mem = fb_mem + dec_mem
+                                       = 11.8 + 20.8 = 32.6M
+
+        ps:
+          1.计算出来的内存为极限值，需要多预留
+          2.此为使用libhardware2 接口内存计算方式，若使用ffmpeg以ffmpeg实际使用为准
+*/
+
+/ {
+	compatible = "ingenic,x2000_module_base", "ingenic,x2000-v12";
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges =<>;
+
+		reserved_memory: reserved_mem@0x5000000{
+		      compatible = "shared-dma-pool";
+		      reg = <0x05000000 0x3000000>;
+		};
+	};
+
+    md_rmem: md_rmem {
+        status = "okay";
+        compatible = "ingenic,md-rmem-src";
+        memory-region=<&reserved_memory>;
+    };
+};
+
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pd>;
+};
+
+&uart3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart3_pd>;
+};
+
+&cpufreq {
+	status = "okay";
+	operating-points = <
+		/*KHZ uV */
+		1200000	900000
+		750000	900000
+		600000	900000
+		500000	900000
+		400000	900000
+		375000	900000
+		300000	900000
+		200000	900000
+			>;
+
+};
+
+&pinctrl {
+	ingenic,gpa_voltage = <GPIO_VOLTAGE_1V8>;
+};
+
+&pdma {
+	status = "okay";
+};
+
+&sfc {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&sfc_pe>;
+	ingenic,sfc-init-frequency = <200000000>;
+	ingenic,sfc-max-frequency = <320000000>;
+	ingenic,use_ofpart_info  = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0>;
+
+
+};
+
+&otg {
+	// g-use-dma;
+	dr_mode = "otg";
+	status = "okay";
+};
+
+&otg_phy {
+	dr_mode = "otg";
+	compatible = "ingenic,innophy", "syscon";
+	status = "okay";
+};
+
+&felix {
+	status = "okay";
+	memory-region=<&reserved_memory>;
+};
+
+&helix {
+	status = "okay";
+	memory-region=<&reserved_memory>;
+};
+
+/ {
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+
+	};

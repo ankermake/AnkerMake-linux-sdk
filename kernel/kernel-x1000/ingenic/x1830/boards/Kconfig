@@ -1,0 +1,33 @@
+choice
+	prompt "Platform Type"
+	depends on SOC_X1830_DRIVERS
+	default PLATFORM_AUDIO
+
+config PLATFORM_AUDIO
+	bool	"audio"
+
+config PLATFORM_DARWIN
+	bool	"darwin"
+
+config PLATFORM_BASE
+	bool    "base"
+
+endchoice
+
+if PLATFORM_AUDIO
+source "ingenic/x1830/boards/audio/Kconfig"
+endif
+
+if PLATFORM_DARWIN
+source "ingenic/x1830/boards/darwin/Kconfig"
+endif
+
+if PLATFORM_BASE
+source "ingenic/x1830/boards/base/Kconfig"
+endif
+
+config PLATFORM_NAME
+	string
+	default "audio" if PLATFORM_AUDIO
+	default "darwin" if PLATFORM_DARWIN
+	default "base" if PLATFORM_BASE

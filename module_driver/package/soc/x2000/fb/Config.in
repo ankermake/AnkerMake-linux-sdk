@@ -1,0 +1,241 @@
+array MD_X2000_FB_ROTATOR_ANGLE_LIST
+    int "rotator 旋转角度"
+    item "旋转0°" 0
+    item "旋转90°" 1
+    item "旋转180°" 2
+    item "旋转270°" 3
+
+menuconfig MD_X2000_FB
+    bool "framebuffer 驱动(lcd/dpu控制器)"
+    select MD_X2000_FB_LAYER_MIXER
+    select MD_X2000_ROTATOR
+    select MD_RMEM_MANAGER
+
+config MD_X2000_RTOS_BOOT_LOGO_FOR_KERNEL
+    bool "rtos 中已初始化过 lcd (此时无需再初始化)"
+    default n
+    help
+        rtos 中已初始化过 lcd, 无需再初始化
+
+config MD_X2000_FB_PAN_DISPLAY_SYNC
+    bool "pan_display 调用时等待帧刷新完成(单缓冲时选中)"
+    default y
+
+config MD_X2000_FB_ROTATOR
+    bool "旋转"
+    select MD_X2000_FB_MIXER_ENABLE
+
+config MD_X2000_FB_ROTATOR_ANGLE
+    int "旋转角度"
+    default 0
+    choice from MD_X2000_FB_ROTATOR_ANGLE_LIST
+    depends on MD_X2000_FB_ROTATOR
+
+config MD_X2000_FB_USE_DEFAULT_ORDER
+    bool "强制使用默认的层级配置（fb0为最低层，fb3为最顶层，应用配置无效）"
+
+config MD_X2000_FB_LAYER0_ENABLE
+    bool "使能fb0"
+
+config MD_X2000_FB_LAYER0_FRAMES
+    int "fb0 的帧缓冲数"
+    default 1
+
+config MD_X2000_FB_LAYER0_ALPHA
+    int "fb0 的透明度(0-255)"
+    default 128
+
+config MD_X2000_FB_LAYER1_ENABLE
+    bool "使能fb1"
+
+config MD_X2000_FB_LAYER1_FRAMES
+    int "fb1 的帧缓冲数"
+    default 1
+
+config MD_X2000_FB_LAYER1_ALPHA
+    int "fb1 的透明度(0-255)"
+    default 128
+
+config MD_X2000_FB_LAYER2_ENABLE
+    bool "使能fb2"
+
+config MD_X2000_FB_LAYER2_FRAMES
+    int "fb2 的帧缓冲数"
+    default 1
+
+config MD_X2000_FB_LAYER2_ALPHA
+    int "fb2 的透明度(0-255)"
+    default 128
+
+config MD_X2000_FB_LAYER3_ENABLE
+    bool "使能fb3"
+
+config MD_X2000_FB_LAYER3_FRAMES
+    int "fb3 的帧缓冲数"
+    default 1
+
+config MD_X2000_FB_LAYER3_ALPHA
+    int "fb3 的透明度(0-255)"
+    default 128
+
+config MD_X2000_FB_MIXER_ENABLE
+    bool "图像叠加到内存并显示到lcd"
+    help
+        使用fb_layer_mixer驱动接口叠加fb0～fb3数据到内存，
+        然后通过fb_srdma输出到lcd上，可通过最后一个fb节点获取叠加后的图像数据
+
+config MD_X2000_FB_SRDMA_FRAMES
+    int "叠加后输出的帧缓冲数"
+    default 2
+    depends on MD_X2000_FB_MIXER_ENABLE
+
+menuconfig MD_X2000_FB_ENABLE_USER_CONFIG
+    bool "自定义fb的尺寸"
+
+menuconfig MD_X2000_FB_LAYER0_USER_ENABLE
+    bool "使能fb0自定义"
+    default n
+
+config MD_X2000_FB_LAYER0_USER_WIDTH
+    int "fb0的宽"
+    default -1
+
+config MD_X2000_FB_LAYER0_USER_HEIGHT
+    int "fb0的高"
+    default -1
+
+config MD_X2000_FB_LAYER0_USER_XPOS
+    int "fb0的在lcd水平方向的偏移"
+    default 0
+
+config MD_X2000_FB_LAYER0_USER_YPOS
+    int "fb0的在lcd垂直的偏移"
+    default 0
+
+config MD_X2000_FB_LAYER0_USER_SCALING_ENABLE
+    bool "使能缩放"
+    default n
+
+config MD_X2000_FB_LAYER0_USER_SCALING_WIDTH
+    int "缩放后在lcd显示的宽度"
+    depends on MD_X2000_FB_LAYER0_USER_SCALING_ENABLE
+    default -1
+
+config MD_X2000_FB_LAYER0_USER_SCALING_HEIGHT
+    int "缩放后在lcd显示的长度"
+    depends on MD_X2000_FB_LAYER0_USER_SCALING_ENABLE
+    default -1
+
+endmenu
+
+menuconfig MD_X2000_FB_LAYER1_USER_ENABLE
+    bool "使能fb1自定义"
+    default n
+
+config MD_X2000_FB_LAYER1_USER_WIDTH
+    int "fb1的宽"
+    default -1
+
+config MD_X2000_FB_LAYER1_USER_HEIGHT
+    int "fb1的高"
+    default -1
+
+config MD_X2000_FB_LAYER1_USER_XPOS
+    int "fb1的在lcd水平方向的偏移"
+    default 0
+
+config MD_X2000_FB_LAYER1_USER_YPOS
+    int "fb1的在lcd垂直的偏移"
+    default 0
+
+config MD_X2000_FB_LAYER1_USER_SCALING_ENABLE
+    bool "使能缩放"
+    default n
+
+config MD_X2000_FB_LAYER1_USER_SCALING_WIDTH
+    int "缩放后在lcd显示的宽度"
+    depends on MD_X2000_FB_LAYER1_USER_SCALING_ENABLE
+    default -1
+
+config MD_X2000_FB_LAYER1_USER_SCALING_HEIGHT
+    int "缩放后在lcd显示的长度"
+    depends on MD_X2000_FB_LAYER1_USER_SCALING_ENABLE
+    default -1
+
+endmenu
+
+menuconfig MD_X2000_FB_LAYER2_USER_ENABLE
+    bool "使能fb2自定义"
+    default n
+
+config MD_X2000_FB_LAYER2_USER_WIDTH
+    int "fb2的宽"
+    default -1
+
+config MD_X2000_FB_LAYER2_USER_HEIGHT
+    int "fb2的高"
+    default -1
+
+config MD_X2000_FB_LAYER2_USER_XPOS
+    int "fb2的在lcd水平方向的偏移"
+    default 0
+
+config MD_X2000_FB_LAYER2_USER_YPOS
+    int "fb2的在lcd垂直的偏移"
+    default 0
+
+config MD_X2000_FB_LAYER2_USER_SCALING_ENABLE
+    bool "使能缩放"
+    default n
+
+config MD_X2000_FB_LAYER2_USER_SCALING_WIDTH
+    int "缩放后在lcd显示的宽度"
+    depends on MD_X2000_FB_LAYER2_USER_SCALING_ENABLE
+    default -1
+
+config MD_X2000_FB_LAYER2_USER_SCALING_HEIGHT
+    int "缩放后在lcd显示的长度"
+    depends on MD_X2000_FB_LAYER2_USER_SCALING_ENABLE
+    default -1
+
+endmenu
+
+menuconfig MD_X2000_FB_LAYER3_USER_ENABLE
+    bool "使能fb3自定义"
+    default n
+
+config MD_X2000_FB_LAYER3_USER_WIDTH
+    int "fb3的宽"
+    default -1
+
+config MD_X2000_FB_LAYER3_USER_HEIGHT
+    int "fb3的高"
+    default -1
+
+config MD_X2000_FB_LAYER3_USER_XPOS
+    int "fb3的在lcd水平方向的偏移"
+    default 0
+
+config MD_X2000_FB_LAYER3_USER_YPOS
+    int "fb3的在lcd垂直的偏移"
+    default 0
+
+config MD_X2000_FB_LAYER3_USER_SCALING_ENABLE
+    bool "使能缩放"
+    default n
+
+config MD_X2000_FB_LAYER3_USER_SCALING_WIDTH
+    int "缩放后在lcd显示的宽度"
+    depends on MD_X2000_FB_LAYER3_USER_SCALING_ENABLE
+    default -1
+
+config MD_X2000_FB_LAYER3_USER_SCALING_HEIGHT
+    int "缩放后在lcd显示的长度"
+    depends on MD_X2000_FB_LAYER3_USER_SCALING_ENABLE
+    default -1
+
+endmenu
+
+endmenu
+
+endmenu

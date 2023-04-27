@@ -1,0 +1,10 @@
+config REGULATOR_RICOH619
+        tristate "RICOH RICOH619 Power regulators"
+        depends on MFD_RICOH619
+        help
+          Select this option to enable the power regulator of RICOH
+          PMIC RN5T619.
+          This driver supports the control of different power rails of device
+          through regulator interface. The device supports multiple DCDC/LDO
+          outputs which can be controlled by i2c communication.
+

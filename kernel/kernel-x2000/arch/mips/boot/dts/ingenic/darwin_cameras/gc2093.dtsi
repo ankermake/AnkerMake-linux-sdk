@@ -1,0 +1,79 @@
+/* &i2c0 { */
+/* 	status = "okay"; */
+/* 	clock-frequency = <100000>; */
+/* 	timeout = <1000>; */
+/* 	pinctrl-names = "default"; */
+/* 	pinctrl-0 = <&i2c0_pa>; */
+
+/* 	gc2093:gc2093@0x37 { */
+/* 		status = "ok"; */
+/* 		compatible = "gc2093"; */
+/* 		reg = <0x37>; */
+/* 		pinctrl-names = "default"; */
+/* 		pinctrl-0 = <&cim1_vic_mclk_pc>; */
+
+/* 		ingenic,rst-gpio = <&gpa 10 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>; */
+/* 		ingenic,pwen-gpio = <&gpa 3  GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;	//module power-enable */
+/* 		ingenic,pwdn-gpio = <&gpa 4 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;	// sensor power down */
+
+/* 		//ingenic,ircutp-gpio = <&gpb 7 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>; */
+/* 		//ingenic,ircutn-gpio = <&gpb 1 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>; */
+
+
+/* 		port { */
+/* 			gc2093_ep0:endpoint { */
+/* 				remote-endpoint = <&isp1_ep>; */
+/* 			}; */
+/* 		}; */
+/* 	}; */
+/* }; */
+
+/* &isp1_ep { */
+/* 	remote-endpoint = <&gc2093_ep0>; */
+/* 	data-lanes = <0 1>; */
+/* 	clk-lanes = <2>; */
+/* }; */
+
+
+/* &csi1 { */
+/* 	settle_time = <0x8>; */
+/* }; */
+
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1_pa>;
+
+	/*RD_X2000_HALLEY5_CAMERA_V3.2*/
+	gc2093_0:gc2093@0x37 {
+		status = "ok";
+		compatible = "gc2093b";
+		reg = <0x37>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cim0_vic_mclk_pc>;
+
+		ingenic,rst-gpio = <&gpa 11 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		ingenic,pwen-gpio = <&gpa 3  GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;	//module power-enable
+		ingenic,pwdn-gpio = <&gpa 2 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;	// sensor power down
+
+		port {
+			gc2093_ep1:endpoint {
+				remote-endpoint = <&isp0_ep>;
+			};
+		};
+	};
+};
+
+&isp0_ep {
+	remote-endpoint = <&gc2093_ep1>;
+	data-lanes = <0 1>;
+	clk-lanes = <2>;
+};
+
+
+&csi0 {
+	settle_time = <0xc>;
+};

@@ -1,0 +1,38 @@
+choice
+	prompt "Board type"
+	depends on SOC_X1830_DRIVERS
+	default BOARD_HAWK_V10
+
+config BOARD_HAWK_V12
+	bool	"hawk-v12 (x1830)"
+
+config BOARD_HAWK_V10
+	bool	"hawk-v10 (x1830)"
+
+config BOARD_HAWK_V00
+	bool	"hawk-v00 (x1830)"
+
+config BOARD_MOTO_V10
+	bool	"moto-v10 (x1830)"
+
+config BOARD_ZNMOTO_V10
+	bool	"znmoto-v10 (x1830)"
+
+
+endchoice
+
+config BOARD_NAME
+	string
+	default "hawk-v12" if BOARD_HAWK_V12
+	default "hawk-v10" if BOARD_HAWK_V10
+	default "hawk-v00" if BOARD_HAWK_V00
+	default "moto-v10" if BOARD_MOTO_V10
+	default "znmoto-v10" if BOARD_ZNMOTO_V10
+
+config PRODUCT_NAME
+	string
+	default "hawk-v12" if BOARD_HAWK_V12
+	default "hawk-v10" if BOARD_HAWK_V10
+	default "hawk-v00" if BOARD_HAWK_V00
+	default "moto-v10" if BOARD_MOTO_V10
+	default "znmoto-v10" if BOARD_ZNMOTO_V10

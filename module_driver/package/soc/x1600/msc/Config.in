@@ -1,0 +1,26 @@
+menuconfig MD_X1600_MSC
+    bool "msc 控制器驱动"
+
+config MD_X1600_WIFI_POWER_ON
+    string "    wifi 模块供电引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1600_WIFI_POWER_LEVEL
+	string "wifi 初始化电平 (msc 模块加载前设置 wifi 供电引脚的电平,使 wifi 断电)"
+	default 0
+	choice from MD_GPIO_ACTIVE_LEVEL
+
+config MD_X1600_WIFI_REG_ON
+    string "    wifi 使能引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1600_WIFI_REG_LEVEL
+	string "wifi 初始化电平 (msc 模块加载前设置 wifi 使能引脚的电平,使 wifi 失能)"
+	default 0
+	choice from MD_GPIO_ACTIVE_LEVEL
+
+source package/soc/x1600/msc/msc0.in
+source package/soc/x1600/msc/msc1.in
+endmenu # MSC 总线

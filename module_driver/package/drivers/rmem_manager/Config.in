@@ -1,0 +1,5 @@
+config MD_RMEM_MANAGER
+    bool "预留内存管理模块"
+    default n
+    help
+        需先在uboot中分配内存给该模块管理

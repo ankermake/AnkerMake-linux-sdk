@@ -1,0 +1,19 @@
+menuconfig MD_X1520_SENSOR_ISP_SC132
+    bool "sensor sc132gs (mipi,raw10)"
+    depends on MD_SOC_X1520
+
+config MD_X1520_SC132_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1520_SC132_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1520_SC132_ISPCLK
+    int "isp clk (isp 时钟频率)"
+    default 90000000
+
+endmenu # MD_X1520_SENSOR_SC132

@@ -1,0 +1,325 @@
+diff -ru qtbase-everywhere-src-5.12.7/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp qtbase-everywhere-src-5.12.7_2/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
+--- qtbase-everywhere-src-5.12.7/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp	2020-01-24 13:54:31.000000000 +0800
++++ qtbase-everywhere-src-5.12.7_2/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp	2020-09-24 10:32:01.995174951 +0800
+@@ -101,7 +101,6 @@
+     QEvdevTouchScreenData(QEvdevTouchScreenHandler *q_ptr, const QStringList &args);
+ 
+     void processInputEvent(input_event *data);
+-    void assignIds();
+ 
+     QEvdevTouchScreenHandler *q;
+     int m_lastEventType;
+@@ -109,27 +108,24 @@
+     QList<QWindowSystemInterface::TouchPoint> m_lastTouchPoints;
+ 
+     struct Contact {
+-        int trackingId;
++        int id;
+         int x;
+         int y;
+         int maj;
+         int pressure;
+         Qt::TouchPointState state;
+-        QTouchEvent::TouchPoint::InfoFlags flags;
+-        Contact() : trackingId(-1),
+-            x(0), y(0), maj(-1), pressure(0),
+-            state(Qt::TouchPointPressed), flags(0) { }
++        int is_pending;
++        Contact() : id(-1),
++            x(-1), y(-1), maj(-1), pressure(0), state(Qt::TouchPointReleased)
++            { }
+     };
+     QHash<int, Contact> m_contacts; // The key is a tracking id for type A, slot number for type B.
+-    QHash<int, Contact> m_lastContacts;
+     Contact m_currentData;
+-    int m_currentSlot;
+ 
+     double m_timeStamp;
+     double m_lastTimeStamp;
+ 
+-    int findClosestContact(const QHash<int, Contact> &contacts, int x, int y, int *dist);
+-    void addTouchPoint(const Contact &contact, Qt::TouchPointStates *combinedStates);
++    void addTouchPoint(const Contact &contact);
+     void reportPoints();
+     void loadMultiScreenMappings();
+ 
+@@ -166,7 +162,6 @@
+ QEvdevTouchScreenData::QEvdevTouchScreenData(QEvdevTouchScreenHandler *q_ptr, const QStringList &args)
+     : q(q_ptr),
+       m_lastEventType(-1),
+-      m_currentSlot(0),
+       m_timeStamp(0), m_lastTimeStamp(0),
+       hw_range_x_min(0), hw_range_x_max(0),
+       hw_range_y_min(0), hw_range_y_max(0),
+@@ -472,13 +467,12 @@
+     m_device = nullptr;
+ }
+ 
+-void QEvdevTouchScreenData::addTouchPoint(const Contact &contact, Qt::TouchPointStates *combinedStates)
++void QEvdevTouchScreenData::addTouchPoint(const Contact &contact)
+ {
+     QWindowSystemInterface::TouchPoint tp;
+-    tp.id = contact.trackingId;
+-    tp.flags = contact.flags;
++    tp.id = contact.id;
++    tp.flags = 0;
+     tp.state = contact.state;
+-    *combinedStates |= tp.state;
+ 
+     // Store the HW coordinates for now, will be updated later.
+     tp.area = QRectF(0, 0, contact.maj, contact.maj);
+@@ -504,157 +498,79 @@
+         if (data->code == ABS_MT_POSITION_X || (m_singleTouch && data->code == ABS_X)) {
+             m_currentData.x = qBound(hw_range_x_min, data->value, hw_range_x_max);
+             if (m_singleTouch)
+-                m_contacts[m_currentSlot].x = m_currentData.x;
+-            if (m_typeB) {
+-                m_contacts[m_currentSlot].x = m_currentData.x;
+-                if (m_contacts[m_currentSlot].state == Qt::TouchPointStationary)
+-                    m_contacts[m_currentSlot].state = Qt::TouchPointMoved;
+-            }
++                m_currentData.id = 0;
+         } else if (data->code == ABS_MT_POSITION_Y || (m_singleTouch && data->code == ABS_Y)) {
+             m_currentData.y = qBound(hw_range_y_min, data->value, hw_range_y_max);
+             if (m_singleTouch)
+-                m_contacts[m_currentSlot].y = m_currentData.y;
+-            if (m_typeB) {
+-                m_contacts[m_currentSlot].y = m_currentData.y;
+-                if (m_contacts[m_currentSlot].state == Qt::TouchPointStationary)
+-                    m_contacts[m_currentSlot].state = Qt::TouchPointMoved;
+-            }
++                m_currentData.id = 0;
+         } else if (data->code == ABS_MT_TRACKING_ID) {
+-            m_currentData.trackingId = data->value;
+-            if (m_typeB) {
+-                if (m_currentData.trackingId == -1) {
+-                    m_contacts[m_currentSlot].state = Qt::TouchPointReleased;
+-                } else {
+-                    m_contacts[m_currentSlot].state = Qt::TouchPointPressed;
+-                    m_contacts[m_currentSlot].trackingId = m_currentData.trackingId;
+-                }
+-            }
++            m_currentData.id = data->value;
+         } else if (data->code == ABS_MT_TOUCH_MAJOR) {
+             m_currentData.maj = data->value;
+-            if (data->value == 0)
+-                m_currentData.state = Qt::TouchPointReleased;
+-            if (m_typeB)
+-                m_contacts[m_currentSlot].maj = m_currentData.maj;
+         } else if (data->code == ABS_PRESSURE || data->code == ABS_MT_PRESSURE) {
+             m_currentData.pressure = qBound(hw_pressure_min, data->value, hw_pressure_max);
+-            if (m_typeB || m_singleTouch)
+-                m_contacts[m_currentSlot].pressure = m_currentData.pressure;
+         } else if (data->code == ABS_MT_SLOT) {
+-            m_currentSlot = data->value;
++            m_currentData.id = data->value;
+         }
+ 
+-    } else if (data->type == EV_KEY && !m_typeB) {
+-        if (data->code == BTN_TOUCH && data->value == 0)
+-            m_contacts[m_currentSlot].state = Qt::TouchPointReleased;
+-    } else if (data->type == EV_SYN && data->code == SYN_MT_REPORT && m_lastEventType != EV_SYN) {
+-
+-        // If there is no tracking id, one will be generated later.
+-        // Until that use a temporary key.
+-        int key = m_currentData.trackingId;
+-        if (key == -1)
+-            key = m_contacts.count();
+-
+-        m_contacts.insert(key, m_currentData);
+-        m_currentData = Contact();
++    } else if (data->type == EV_SYN && data->code == SYN_MT_REPORT) {
++        if (m_currentData.id != -1 && m_currentData.x != -1 && m_currentData.y != -1) {
++            QHash<int, Contact>::iterator it = m_contacts.find(m_currentData.id);
++            
++            m_currentData.state = Qt::TouchPointPressed;
++            m_currentData.is_pending = 1;
++
++            if (it != m_contacts.end()) {
++                Contact &oldData = it.value();
++                if (oldData.state != Qt::TouchPointReleased) {
++                    if (oldData.x == m_currentData.x && oldData.y == m_currentData.y)
++                        m_currentData.state = Qt::TouchPointStationary;
++                    else
++                        m_currentData.state = Qt::TouchPointMoved;
++                }
++            }
+ 
++            m_contacts.insert(m_currentData.id, m_currentData);
++            m_currentData = Contact();
++        }
+     } else if (data->type == EV_SYN && data->code == SYN_REPORT) {
+-
+-        // Ensure valid IDs even when the driver does not report ABS_MT_TRACKING_ID.
+-        if (!m_contacts.isEmpty() && m_contacts.constBegin().value().trackingId == -1)
+-            assignIds();
+-
+         if (m_filtered)
+             m_mutex.lock();
+ 
++        m_touchPoints.clear();
++
+         // update timestamps
+         m_lastTimeStamp = m_timeStamp;
+         m_timeStamp = data->time.tv_sec + data->time.tv_usec / 1000000.0;
+ 
+-        m_lastTouchPoints = m_touchPoints;
+-        m_touchPoints.clear();
+         Qt::TouchPointStates combinedStates;
+-        bool hasPressure = false;
+ 
+         QMutableHashIterator<int, Contact> it(m_contacts);
+         while (it.hasNext()) {
+             it.next();
+             Contact &contact(it.value());
+ 
+-            if (!contact.state)
+-                continue;
+-
+-            int key = m_typeB ? it.key() : contact.trackingId;
+-            if (!m_typeB && m_lastContacts.contains(key)) {
+-                const Contact &prev(m_lastContacts.value(key));
+-                if (contact.state == Qt::TouchPointReleased) {
+-                    // Copy over the previous values for released points, just in case.
+-                    contact.x = prev.x;
+-                    contact.y = prev.y;
+-                    contact.maj = prev.maj;
+-                } else {
+-                    contact.state = (prev.x == contact.x && prev.y == contact.y)
+-                            ? Qt::TouchPointStationary : Qt::TouchPointMoved;
+-                }
+-            }
+-
+-            // Avoid reporting a contact in released state more than once.
+-            if (!m_typeB && contact.state == Qt::TouchPointReleased
+-                    && !m_lastContacts.contains(key)) {
+-                it.remove();
+-                continue;
+-            }
+-
+-            if (contact.pressure)
+-                hasPressure = true;
+-
+-            addTouchPoint(contact, &combinedStates);
+-        }
+-
+-        // Now look for contacts that have disappeared since the last sync.
+-        it = m_lastContacts;
+-        while (it.hasNext()) {
+-            it.next();
+-            Contact &contact(it.value());
+-            int key = m_typeB ? it.key() : contact.trackingId;
+-            if (m_typeB) {
+-                if (contact.trackingId != m_contacts[key].trackingId && contact.state) {
+-                    contact.state = Qt::TouchPointReleased;
+-                    addTouchPoint(contact, &combinedStates);
+-                }
+-            } else {
+-                if (!m_contacts.contains(key)) {
++            int is_report = contact.is_pending;
++            contact.is_pending = 0;
++            if (!is_report) {
++                if (contact.state != Qt::TouchPointReleased) {
+                     contact.state = Qt::TouchPointReleased;
+-                    addTouchPoint(contact, &combinedStates);
++                    is_report = 1;
+                 }
+             }
+-        }
+-
+-        // Remove contacts that have just been reported as released.
+-        it = m_contacts;
+-        while (it.hasNext()) {
+-            it.next();
+-            Contact &contact(it.value());
+ 
+-            if (!contact.state)
+-                continue;
++            m_contacts.insert(contact.id, contact);
+ 
+-            if (contact.state == Qt::TouchPointReleased) {
+-                if (m_typeB)
+-                    contact.state = static_cast<Qt::TouchPointState>(0);
+-                else
+-                    it.remove();
+-            } else {
+-                contact.state = Qt::TouchPointStationary;
++            if (is_report) {
++                addTouchPoint(contact);
++//                fprintf(stderr, "fingure[%d] (%d,%d) %d\n", contact.id, contact.x, contact.y,
++//                (int)contact.state);
+             }
+         }
+ 
+-        m_lastContacts = m_contacts;
+-        if (!m_typeB && !m_singleTouch)
+-            m_contacts.clear();
+-
+-
+-        if (!m_touchPoints.isEmpty() && (hasPressure || combinedStates != Qt::TouchPointStationary))
++        if (!m_touchPoints.isEmpty()) {
+             reportPoints();
++        }
+ 
+         if (m_filtered)
+             m_mutex.unlock();
+@@ -663,59 +579,6 @@
+     m_lastEventType = data->type;
+ }
+ 
+-int QEvdevTouchScreenData::findClosestContact(const QHash<int, Contact> &contacts, int x, int y, int *dist)
+-{
+-    int minDist = -1, id = -1;
+-    for (QHash<int, Contact>::const_iterator it = contacts.constBegin(), ite = contacts.constEnd();
+-         it != ite; ++it) {
+-        const Contact &contact(it.value());
+-        int dx = x - contact.x;
+-        int dy = y - contact.y;
+-        int dist = dx * dx + dy * dy;
+-        if (minDist == -1 || dist < minDist) {
+-            minDist = dist;
+-            id = contact.trackingId;
+-        }
+-    }
+-    if (dist)
+-        *dist = minDist;
+-    return id;
+-}
+-
+-void QEvdevTouchScreenData::assignIds()
+-{
+-    QHash<int, Contact> candidates = m_lastContacts, pending = m_contacts, newContacts;
+-    int maxId = -1;
+-    QHash<int, Contact>::iterator it, ite, bestMatch;
+-    while (!pending.isEmpty() && !candidates.isEmpty()) {
+-        int bestDist = -1, bestId = 0;
+-        for (it = pending.begin(), ite = pending.end(); it != ite; ++it) {
+-            int dist;
+-            int id = findClosestContact(candidates, it->x, it->y, &dist);
+-            if (id >= 0 && (bestDist == -1 || dist < bestDist)) {
+-                bestDist = dist;
+-                bestId = id;
+-                bestMatch = it;
+-            }
+-        }
+-        if (bestDist >= 0) {
+-            bestMatch->trackingId = bestId;
+-            newContacts.insert(bestId, *bestMatch);
+-            candidates.remove(bestId);
+-            pending.erase(bestMatch);
+-            if (bestId > maxId)
+-                maxId = bestId;
+-        }
+-    }
+-    if (candidates.isEmpty()) {
+-        for (it = pending.begin(), ite = pending.end(); it != ite; ++it) {
+-            it->trackingId = ++maxId;
+-            newContacts.insert(it->trackingId, *it);
+-        }
+-    }
+-    m_contacts = newContacts;
+-}
+-
+ QRect QEvdevTouchScreenData::screenGeometry() const
+ {
+     if (m_forceToActiveWindow) {

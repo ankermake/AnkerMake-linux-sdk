@@ -1,0 +1,21 @@
+menuconfig MD_X2000_LCD_SPI_GC9106
+    bool "LCD SPI GC9106 (128*160) (x2000) (MCU-16/24bit串行模式)"
+    select MD_X2000_FB
+    depends on MD_SOC_X2000_BASE
+
+config MD_X2000_LCD_SPI_GC9106_RST
+    string "RST pin(复位)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_LCD_SPI_GC9106_POWER_EN
+    string "POWER_EN pin(电源)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_LCD_SPI_GC9106_CE
+    string "CE pin(片选)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+endmenu # MD_X2000_LCD_SPI_GC9106

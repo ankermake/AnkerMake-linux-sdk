@@ -1,0 +1,21 @@
+choice
+
+prompt "BOARD version"
+depends on PRODUCT_X1000_CANNA
+default BOARD_X1000_CANNA_V23
+
+config BOARD_X1000_CANNA_V23
+bool "board x1000 canna v23"
+depends on PRODUCT_X1000_CANNA
+
+config BOARD_X1000_CANNA_V10
+bool "board x1000 canna v10"
+depends on PRODUCT_X1000_CANNA
+
+
+endchoice
+
+config BOARD_NAME
+string
+default "canna_v23" if BOARD_X1000_CANNA_V23
+default "canna_v10" if BOARD_X1000_CANNA_V10

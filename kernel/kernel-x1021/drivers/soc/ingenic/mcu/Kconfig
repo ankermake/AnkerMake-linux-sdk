@@ -1,0 +1,24 @@
+#
+# MCU configuration
+#
+
+menuconfig MCUDEVICE
+	bool "PDMA MCU support"
+	depends on MACH_XBURST
+	help
+	  MCU in PDMA is a mini CPU compatible with XBurst-1
+	  ISA without implementing CACHE, MMU, DEBUG, FPU and
+	  MXU. It is very similar as the AUX in VPU but has
+	  different memory mapped control and status register.
+
+if MCUDEVICE
+
+comment "MCU Device"
+
+config XBURST_PDMA_MCU
+       bool "PDMA MCU support"
+       depends on MACH_XBURST
+       help
+         Support the XBURST PDMA MCU. Now only support the
+         SOC_X1000 chip.
+endif

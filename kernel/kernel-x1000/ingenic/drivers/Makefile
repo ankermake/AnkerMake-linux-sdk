@@ -1,0 +1,11 @@
+obj-y    += leds/
+obj-$(CONFIG_JZ_MICCHAR)    += mic/
+obj-y    += si1143/
+obj-y    += aw9163/
+obj-y    += sensory_license/
+obj-y    += im501/
+obj-$(CONFIG_GSL1680)    += gsl1680/
+obj-$(CONFIG_FINGERPRINT) += fingerprint/
+obj-$(CONFIG_TOUCHSCREEN_GT917S)    += gt917s/
+obj-$(CONFIG_AX88796C_SPI)    += ax88796c/
+obj-$(CONFIG_AW87519)    += aw87519/

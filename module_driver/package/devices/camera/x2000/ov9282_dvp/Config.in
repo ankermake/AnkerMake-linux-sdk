@@ -1,0 +1,40 @@
+menuconfig MD_X2000_SENSOR_OV9282_DVP
+    bool "sensor ov9282 (dvp,raw8)"
+    select MD_X2000_CAMERA_VIC
+    depends on MD_SOC_X2000_BASE
+
+source package/soc/x2000/camera/interface_type.in
+
+config MD_X2000_OV9282_SENSOR_NAME
+    string "sensor module name"
+    default "ov9282"
+
+config MD_X2000_OV9282_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_OV9282_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_OV9282_GPIO_POWER
+    string "gpio power(sensor 电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_OV9282_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+config MD_X2000_OV9282_I2C_ADDR
+    int "i2c device addr (sensor的i2c地址)"
+    default -1
+
+config MD_X2000_OV9282_CAMERA_INDEX
+    string "选择控制器(sensor 连接soc控制器接口索引)"
+    choice from CAMERA_INTERFACE_TYPE_SELECT
+    default -1
+
+endmenu # MD_X2000_SENSOR_OV9282_DVP

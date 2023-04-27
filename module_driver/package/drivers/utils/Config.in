@@ -1,0 +1,38 @@
+
+array MD_GPIO_ACTIVE_LEVEL
+    int "gpio 使能电平"
+    item "0(低电平使能)" 0
+    item "1(高电平使能)" 1
+
+menu "utils (基础实用工具集)"
+
+config MD_UTILS_LOG
+    bool "log 日志buffer,应用层可以使用"
+    default y
+
+config MD_UTILS_STRING
+    bool "string 相关的实用工具"
+    default y
+
+config MD_UTILS_GPIO
+    bool "gpio 相关的实用工具"
+    select MD_UTILS_STRING
+    default y
+
+config MD_UTILS_I2C
+    bool "i2c 相关的实用工具"
+    default y
+
+config MD_UTILS_SPI
+    bool "spi 相关的实用工具"
+    default y
+
+config MD_UTILS_CLOCK
+    bool "clock 相关的实用工具"
+    default y
+
+config MD_UTILS_RING_MEM
+    bool "ring_mem 环形缓冲区"
+    default y
+
+endmenu

@@ -1,0 +1,1 @@
+package-$(MD_PWM_BATTERY) += package/devices/other/pwm_battery/pwm_battery.mk

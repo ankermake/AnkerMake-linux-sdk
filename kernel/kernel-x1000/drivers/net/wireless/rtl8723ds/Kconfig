@@ -1,0 +1,19 @@
+config RTL8723DS
+	tristate "Realtek 8723D SDIO or SPI WiFi"
+	---help---
+	  Help message of RTL8723DS
+
+if RTL8723DS
+choice
+    prompt "select efuse map for rtl8723ds"
+    default RTL8723DS_DEFUALT_EFUSE_MAP
+
+config RTL8723DS_DEFUALT_EFUSE_MAP
+	bool "default efuse map"
+
+config RTL8723DS_SUNING_ALARM_EFUSE_MAP
+	bool "board suning alarm efuse map"
+
+endchoice
+
+endif

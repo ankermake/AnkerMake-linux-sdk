@@ -1,0 +1,2 @@
+config MD_X2000_WATCHDOG
+    bool "watchdog 驱动(看门狗)"

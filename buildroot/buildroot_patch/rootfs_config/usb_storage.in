@@ -1,0 +1,24 @@
+menuconfig APP_br_usb_storage
+    bool "usb_storage相关设置"
+
+config APP_br_mount_as_usb
+    bool "开机挂载指定镜像文件到PC端"
+    default y
+    help
+        选项描述：开发板作为usb设备挂载到PC端
+
+config APP_br_mount_as_usb_file
+    string "镜像文件名"
+    default /usr/data/fat32.img
+    depends on APP_br_mount_as_usb
+
+config APP_br_mount_as_usb_file_size
+    int "镜像文件大小(MB)"
+    default 4
+    depends on APP_br_mount_as_usb
+
+config APP_br_sdcard_automatic_mount_to_mass_storage
+    bool "sd 卡自动挂载到 PC端(电脑)"
+    default y
+
+endmenu

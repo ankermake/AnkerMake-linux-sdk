@@ -1,0 +1,117 @@
+comment "X1830 gpio funcion fin select"
+
+menu "PWM function pin select"
+	depends on JZ_PWM
+
+config PWM_CH0_FUNC
+	bool "pwm0 func pin select"
+	default n
+if PWM_CH0_FUNC
+choice
+	prompt "pwm0"
+	default JZ_PWM_GPIO_PC11
+config JZ_PWM_GPIO_PC11
+	bool "gpc11"
+config JZ_PWM_GPIO_PB17
+	bool "gpb17"
+endchoice
+endif	#PWM_CH0_FUNC
+
+config PWM_CH1_FUNC
+	bool "pwm1 func pin select"
+	default n
+if PWM_CH1_FUNC
+choice
+	prompt "pwm1"
+	default JZ_PWM_GPIO_PC12
+config JZ_PWM_GPIO_PC12
+	bool "gpc12"
+config JZ_PWM_GPIO_PB18
+	bool "gpb18"
+endchoice
+endif	#PWM_CH1_FUNC
+
+config PWM_CH2_FUNC
+	bool "pwm2 func pin select"
+	default n
+if PWM_CH2_FUNC
+choice
+	prompt "pwm2"
+	default JZ_PWM_GPIO_PC13
+config JZ_PWM_GPIO_PC13
+	bool "gpc13"
+config JZ_PWM_GPIO_PC8
+	bool "gpc8"
+endchoice
+endif	#PWM_CH2_FUNC
+
+config PWM_CH3_FUNC
+	bool "pwm3 func pin select"
+	default n
+if PWM_CH3_FUNC
+choice
+	prompt "pwm3"
+	default JZ_PWM_GPIO_PC14
+config JZ_PWM_GPIO_PC14
+	bool "gpc14"
+config JZ_PWM_GPIO_PC9
+	bool "gpc9"
+endchoice
+endif	#PWM_CH3_FUNC
+
+config PWM_CH4_FUNC
+	bool "pwm4 func pin select"
+	default n
+if PWM_CH4_FUNC
+choice
+	prompt "pwm4"
+	default JZ_PWM_GPIO_PC15
+config JZ_PWM_GPIO_PC15
+	bool "gpc15"
+config JZ_PWM_GPIO_PC25
+	bool "gpc10"
+endchoice
+endif	#PWM_CH4_FUNC
+
+config PWM_CH5_FUNC
+	bool "pwm5 func pin select"
+	default n
+if PWM_CH5_FUNC
+choice
+	prompt "pwm5"
+	default JZ_PWM_GPIO_PC16
+config JZ_PWM_GPIO_PC16
+	bool "gpc16"
+config JZ_PWM_GPIO_PC26
+	bool "gpc26"
+endchoice
+endif	#PWM_CH5_FUNC
+
+config PWM_CH6_FUNC
+	bool "pwm6 func pin select"
+	default n
+if PWM_CH6_FUNC
+choice
+	prompt "pwm6"
+	default JZ_PWM_GPIO_PC17
+config JZ_PWM_GPIO_PC17
+	bool "gpc17"
+config JZ_PWM_GPIO_PC27
+	bool "gpc27"
+endchoice
+endif	#PWM_CH6_FUNC
+
+config PWM_CH7_FUNC
+	bool "pwm7 func pin select"
+	default n
+if PWM_CH7_FUNC
+choice
+	prompt "pwm7"
+	default JZ_PWM_GPIO_PC18
+config JZ_PWM_GPIO_PC18
+	bool "gpc18"
+config JZ_PWM_GPIO_PC28
+	bool "gpc28"
+endchoice
+endif	#PWM_CH7_FUNC
+endmenu	#PWM function pin select

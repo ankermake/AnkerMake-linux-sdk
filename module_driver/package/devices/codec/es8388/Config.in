@@ -1,0 +1,2 @@
+config MD_CODEC_ES8388
+    bool "codec ES8388"

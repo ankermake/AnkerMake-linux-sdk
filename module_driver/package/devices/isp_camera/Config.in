@@ -1,0 +1,19 @@
+menu "isp camera设备列表(支持X1520/X1830)"
+
+# x1520 isp cameras
+source package/devices/isp_camera/x1520/ov9281_mipi/Config.in
+source package/devices/isp_camera/x1520/sc031/Config.in
+source package/devices/isp_camera/x1520/ov9732/Config.in
+source package/devices/isp_camera/x1520/ov5693/Config.in
+source package/devices/isp_camera/x1520/sc132/Config.in
+
+# x1830 isp cameras
+source package/devices/isp_camera/x1830/ov2735/Config.in
+source package/devices/isp_camera/x1830/s5k6a1/Config.in
+# source package/devices/isp_camera/x1830/ov9732/Config.in
+# source package/devices/isp_camera/x1830/imx307/Config.in
+source package/devices/isp_camera/x1830/gc2375/Config.in
+source package/devices/isp_camera/x1830/ar0230/Config.in
+source package/devices/isp_camera/x1830/ar0522/Config.in
+source package/devices/isp_camera/x1830/bf2253l/Config.in
+endmenu

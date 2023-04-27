@@ -1,0 +1,587 @@
+diff --git a/libavdevice/Makefile b/libavdevice/Makefile
+index 7e456f2..531c807 100644
+--- a/libavdevice/Makefile
++++ b/libavdevice/Makefile
+@@ -27,6 +27,7 @@ OBJS-$(CONFIG_FBDEV_INDEV)               += fbdev_dec.o \
+                                             fbdev_common.o
+ OBJS-$(CONFIG_FBDEV_OUTDEV)              += fbdev_enc.o \
+                                             fbdev_common.o
++OBJS-$(CONFIG_FBDEV_OUTDEV)              += x2000_fb_enc.o
+ OBJS-$(CONFIG_GDIGRAB_INDEV)             += gdigrab.o
+ OBJS-$(CONFIG_IEC61883_INDEV)            += iec61883.o
+ OBJS-$(CONFIG_JACK_INDEV)                += jack.o timefilter.o
+diff --git a/libavdevice/alldevices.c b/libavdevice/alldevices.c
+index 0e34b76..9916616 100644
+--- a/libavdevice/alldevices.c
++++ b/libavdevice/alldevices.c
+@@ -35,6 +35,7 @@ extern AVOutputFormat ff_decklink_muxer;
+ extern AVInputFormat  ff_dshow_demuxer;
+ extern AVInputFormat  ff_fbdev_demuxer;
+ extern AVOutputFormat ff_fbdev_muxer;
++extern AVOutputFormat ff_x2000_fb_muxer;
+ extern AVInputFormat  ff_gdigrab_demuxer;
+ extern AVInputFormat  ff_iec61883_demuxer;
+ extern AVInputFormat  ff_jack_demuxer;
+diff --git a/libavdevice/x2000_fb.c b/libavdevice/x2000_fb.c
+new file mode 100644
+index 0000000..08a2d8e
+--- /dev/null
++++ b/libavdevice/x2000_fb.c
+@@ -0,0 +1,274 @@
++#include <linux/fb.h>
++#include <sys/mman.h>
++
++enum fb_fmt {
++    fb_fmt_RGB555,
++    fb_fmt_RGB565,
++    fb_fmt_RGB888,
++    fb_fmt_ARGB8888,
++    fb_fmt_NV12,
++    fb_fmt_NV21,
++    fb_fmt_yuv422,
++};
++
++struct fb_device_info {
++    unsigned int xres;
++    unsigned int yres;
++    enum fb_fmt fb_fmt;
++    unsigned int line_length;
++    unsigned int bits_per_pixel;
++    unsigned int frame_size;
++    unsigned int frame_nums;
++    void *mapped_mem;
++
++    struct fb_fix_screeninfo fix;
++    struct fb_var_screeninfo var;
++};
++
++/* 计算每个像素点所占字节数 */
++static unsigned int (*fb_bytes_per_pixel)(enum fb_fmt fb_fmt);
++
++/**
++ * @brief 获得fb设备句柄
++ * @param dev_path fb设备路径,如/dev/fb0
++ * @param info 需要初始化的fb信息结构体,不能为NULL
++ * @return 成功返回设备句柄,失败返回-1
++ */
++static int (*fb_open)(const char *dev_path, struct fb_device_info *info);
++
++/**
++ * @brief 关闭fb设备句柄
++ * @param fd fb设备句柄,由fb_open()函数获得
++ * @param info fb的信息,由fb_open()函数初始化
++ * @return 成功返回0,失败返回-1
++ */
++static int (*fb_close)(int fd, struct fb_device_info *info);
++
++/**
++ * @brief 使能fb设备,上电
++ * @param fd fb设备句柄,由fb_open()函数获得
++ * @return 成功返回0,失败返回负数
++ */
++static int (*fb_enable)(int fd);
++
++/**
++ * @brief 关闭fb设备,掉电
++ * @param fd fb设备句柄,由fb_open()函数获得
++ * @return 成功返回0,失败返回负数
++ */
++static int (*fb_disable)(int fd);
++
++/**
++ * @brief 显示/刷新fb指定的帧
++ * @param fd fb设备句柄,由fb_open()函数获得
++ * @param info fb的信息,由fb_open()函数初始化
++ * @param frame_index 要显示的帧的序号,0 到 (info.frame_nums - 1)
++ * @return 成功返回0,失败返回负数
++ */
++static int (*fb_pan_display)(int fd, struct fb_device_info *info, unsigned int frame_index);
++
++
++/*
++ * x1830 提供layer叠加的功能,以及NV12格式的显示
++ */
++
++enum lcdc_layer_order {
++    lcdc_layer_top,
++    lcdc_layer_bottom,
++    lcdc_layer_0,
++    lcdc_layer_1,
++    lcdc_layer_2,
++    lcdc_layer_3,
++};
++
++struct lcdc_layer {
++    /* layer 的格式 */
++    enum fb_fmt fb_fmt;
++
++    /* layer 的大小 */
++    unsigned int xres;
++    unsigned int yres;
++
++    /* layer 在屏幕上的偏移 */
++    unsigned int xpos;
++    unsigned int ypos;
++
++    /* layer 的所在的层级 */
++    enum lcdc_layer_order layer_order;
++
++    /* 是否使能 layer */
++    int layer_enable;
++
++    /* rgb 格式时使用 */
++    struct {
++        void *mem;
++        unsigned int stride; // 单位： 字节
++    } rgb;
++
++    /* NV12,NV21 格式时使用 */
++    struct {
++        void *mem;
++        unsigned int stride; // 单位： 字节
++    } y;
++
++    /* NV12,NV21 格式时使用 */
++    struct {
++        void *mem;
++        unsigned int stride; // 单位： 字节
++    } uv;
++
++    struct {
++        unsigned char enable;
++        unsigned char value;
++    } alpha;
++
++    struct {
++        unsigned char enable;
++        unsigned int xres;
++        unsigned int yres;
++    } scaling;
++};
++
++/**
++ * @brief pan display 时选择用户的配置
++ * @param fd fb设备句柄,由fb_open()函数获得
++ * @return 成功返回0,失败返回负数
++ */
++static int (*fb_pan_display_enable_user_cfg)(int fd);
++
++/**
++ * @brief pan display 时选择驱动的配置
++ * @param fd fb设备句柄,由fb_open()函数获得
++ * @return 成功返回0,失败返回负数
++ */
++static int (*fb_pan_display_disable_user_cfg)(int fd);
++
++/**
++ * @brief 设置用户的配置
++ * @param fd fb设备句柄,由fb_open()函数获得
++ * @param cfg lcd 控制器layer的设置
++ * @return 成功返回0,失败返回负数
++ */
++static int (*fb_pan_display_set_user_cfg)(int fd, struct lcdc_layer *cfg);
++
++/**
++ * @brief 读slcd寄存器的值
++ * @param fd fb设备句柄,由fb_open()函数获得
++ * @param reg 要读数据地址
++ * @param buffer 接收读到的数据
++ * @param count 读取次数
++ * @return 成功返回0,失败返回负数
++ */
++static int (*fb_slcd_read_reg_8)(int fd, int reg, char *buffer, int count);
++
++/*
++ * rmem API
++ */
++struct rmem_alloc_data {
++    unsigned int size;
++    void *mem;
++};
++
++static int (*rmem_open)(void);
++static void (*rmem_close)(int fd);
++static void *(*rmem_alloc)(int fd, unsigned long *phy_addr, int size);
++static void (*rmem_free)(int fd, void *mmaped_rmem, unsigned long phy_addr, int size);
++
++static void *load_x2000_fb_lib(void)
++{
++    void *handle;
++    char *error;
++
++    handle = dlopen("libhardware2.so", RTLD_LAZY);
++    if (!handle) {
++        fprintf(stderr, "Could not open libhardware2.so\n");
++        return NULL;
++    }
++    dlerror(); /* Clear any existing error */
++
++    fb_open = dlsym(handle, "fb_open");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    fb_close = dlsym(handle, "fb_close");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    fb_enable = dlsym(handle, "fb_enable");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    fb_disable = dlsym(handle, "fb_disable");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    fb_pan_display = dlsym(handle, "fb_pan_display");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    fb_bytes_per_pixel = dlsym(handle, "fb_bytes_per_pixel");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    fb_pan_display_enable_user_cfg = dlsym(handle, "fb_pan_display_enable_user_cfg");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    fb_pan_display_disable_user_cfg = dlsym(handle, "fb_pan_display_disable_user_cfg");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    fb_pan_display_set_user_cfg = dlsym(handle, "fb_pan_display_set_user_cfg");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    fb_slcd_read_reg_8 = dlsym(handle, "fb_slcd_read_reg_8");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++
++    /* rmem API */
++    rmem_open = dlsym(handle, "rmem_open");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    rmem_close = dlsym(handle, "rmem_close");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    rmem_alloc = dlsym(handle, "rmem_alloc");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++    rmem_free = dlsym(handle, "rmem_free");
++    error = dlerror();
++    if (error)
++        goto dl_error;
++
++
++    return handle;
++
++dl_error:
++    dlclose(handle);
++    fprintf(stderr, "libhardware2.so not have need function\n");
++    return NULL;
++}
++
++static void unload_x2000_fb_lib(void *handle)
++{
++    if (handle)
++        dlclose(handle);
++}
+diff --git a/libavdevice/x2000_fb_enc.c b/libavdevice/x2000_fb_enc.c
+new file mode 100644
+index 0000000..9a607e4
+--- /dev/null
++++ b/libavdevice/x2000_fb_enc.c
+@@ -0,0 +1,277 @@
++#include <unistd.h>
++#include <fcntl.h>
++#include <sys/ioctl.h>
++#include <dlfcn.h>
++#include "libavutil/pixdesc.h"
++#include "libavutil/log.h"
++#include "libavutil/mem.h"
++#include "libavutil/opt.h"
++#include "libavformat/avformat.h"
++#include "fbdev_common.h"
++#include "avdevice.h"
++
++#include "x2000_fb.c"
++
++typedef struct {
++    AVClass *class;                   ///< class for private options
++    int xoffset;                      ///< x coordinate of top left corner
++    int yoffset;                      ///< y coordinate of top left corner
++    struct fb_device_info info; ///< framebuffer info
++    int fd;                           ///< framebuffer device file descriptor
++    void *handle;           ///< dlopen handle
++    int rmem_fd;
++    unsigned long rmem_paddr;
++    unsigned long rmem_vaddr;
++    unsigned long rmem_size;
++} JZFBContext;
++
++static av_cold int jzfb_write_header(AVFormatContext *h)
++{
++    JZFBContext *fbdev = h->priv_data;
++    AVCodecParameters *par = h->streams[0]->codecpar;
++    int video_width = par->width;
++    int video_height = par->height;
++    const char* device;
++    char *error;
++
++    if (h->nb_streams != 1 || h->streams[0]->codecpar->codec_type != AVMEDIA_TYPE_VIDEO) {
++        av_log(fbdev, AV_LOG_ERROR, "Only a single video stream is supported.\n");
++        return AVERROR(EINVAL);
++    }
++
++    fbdev->handle = load_x2000_fb_lib();
++    if (!fbdev->handle) {
++        av_log(h, AV_LOG_ERROR, "Could not open libhardware2.so\n");
++        return AVERROR(ENODEV);
++    }
++
++    if (h->url[0])
++        device = h->url;
++    else
++        device = ff_fbdev_default_device();
++
++    if ((fbdev->fd = fb_open(device, &fbdev->info)) == -1) {
++        unload_x2000_fb_lib(fbdev->handle);
++        av_log(h, AV_LOG_ERROR, "Could not open framebuffer device '%s': %d\n", device, AVERROR(errno));
++        return AVERROR(errno);
++    }
++
++    if (fb_enable(fbdev->fd)) {
++        fb_close(fbdev->fd, &fbdev->info);
++        unload_x2000_fb_lib(fbdev->handle);
++        av_log(h, AV_LOG_ERROR, "Framebuffer device %s power on fail\n", device);
++        return AVERROR(errno);
++    }
++
++    fbdev->rmem_fd = rmem_open();
++    if (fbdev->rmem_fd < 0) {
++        av_log(h, AV_LOG_ERROR, "jzfb write header rmem open device failed\n");
++        return AVERROR(EINVAL);
++    }
++    enum AVPixelFormat video_pix_fmt = par->format;
++    switch (video_pix_fmt) {
++    case AV_PIX_FMT_BGRA:
++        fbdev->rmem_size = video_width * video_height * 4;
++        break;
++
++    case AV_PIX_FMT_NV12:
++    case AV_PIX_FMT_NV21:
++        fbdev->rmem_size = video_width * video_height * 3 / 2;
++        break;
++    default:
++        av_log(h, AV_LOG_ERROR, "Pixel format %s is not supported\n", av_get_pix_fmt_name(video_pix_fmt));
++        return AVERROR(EINVAL);
++    }
++
++    fbdev->rmem_vaddr = rmem_alloc(fbdev->rmem_fd, &fbdev->rmem_paddr, fbdev->rmem_size);
++    if (!fbdev->rmem_vaddr) {
++        av_log(h, AV_LOG_ERROR, "jzfb write header rmem alloc size(%d) failed\n", fbdev->rmem_size);
++        return AVERROR(EINVAL);
++    }
++
++    return 0;
++}
++
++static void video_buf_to_fb(uint8_t *pin, uint8_t *pout, int src_line_size, int disp_height, int fb_line_size)
++{
++    int i;
++
++    for (i = 0; i < disp_height; i++) {
++        memcpy(pout, pin, fb_line_size);
++        pout += fb_line_size;
++        pin  += src_line_size;
++    }
++}
++
++static int jzfb_write_packet(AVFormatContext *h, AVPacket *pkt)
++{
++    JZFBContext *fbdev = h->priv_data;
++    AVCodecParameters *par = h->streams[0]->codecpar;
++    enum AVPixelFormat video_pix_fmt = par->format;
++    int video_width = par->width;
++    int video_height = par->height;
++    int disp_height, disp_width;
++    struct lcdc_layer cfg;
++
++    disp_width = FFMIN(fbdev->info.xres, video_width);
++    disp_height = FFMIN(fbdev->info.yres, video_height);
++
++    memset(&cfg, 0, sizeof(cfg));
++
++    switch (video_pix_fmt)
++    {
++        case AV_PIX_FMT_BGRA:
++            cfg.fb_fmt = fb_fmt_ARGB8888;
++            cfg.rgb.stride = video_width * 4;
++            cfg.rgb.mem = (void *)fbdev->rmem_paddr;
++            //video_buf_to_fb(pkt->data, fbdev->rmem_vaddr, video_width * 4, video_height, cfg.rgb.stride);
++            memcpy(fbdev->rmem_vaddr, pkt->data, video_width * video_height * 4);
++            break;
++        case AV_PIX_FMT_NV12:
++        case AV_PIX_FMT_NV21:
++            if (video_pix_fmt == AV_PIX_FMT_NV12)
++                cfg.fb_fmt = fb_fmt_NV12;
++            else
++                cfg.fb_fmt = fb_fmt_NV21;
++
++            disp_width -= disp_width % 4;
++            disp_height -= disp_height % 2;
++            cfg.y.stride = video_width;
++            cfg.y.mem = (void *)fbdev->rmem_paddr;
++            //video_buf_to_fb(pkt->data, fbdev->rmem_vaddr, video_width, video_height, cfg.y.stride);
++			memcpy(fbdev->rmem_vaddr, pkt->data, video_width * video_height);
++            cfg.uv.stride = video_width;
++            cfg.uv.mem = (void *)(fbdev->rmem_paddr + video_width * video_height);
++            //video_buf_to_fb(pkt->data + (video_width * video_height), (uint8_t *)fbdev->rmem_vaddr + (video_width * video_height), \
++                    video_width, video_height / 2, cfg.uv.stride);
++			memcpy(fbdev->rmem_vaddr + (video_width * video_height), pkt->data + (video_width * video_height), video_width * video_height / 2);
++
++            break;
++        default:
++            av_log(h, AV_LOG_ERROR, "Pixel format %s is not supported\n", av_get_pix_fmt_name(video_pix_fmt));
++            return AVERROR(EINVAL);
++    }
++
++
++    /* 把 pic_w * pic_h 的图片 显示到 屏幕上， 并居中 */
++    int pic_w = video_width;
++    int pic_h = video_height;
++    int display_w = disp_width;
++    int display_h = disp_height;
++    int enabled_scale = 0;
++    int scale_w = 0;
++    int scale_h = 0;
++    int enabled_crop = 0;
++    int crop_x = 0;
++    int crop_y = 0;
++    int crop_w = 0;
++    int crop_h = 0;
++    assert(0 == (pic_w % 2));
++    assert(0 == (pic_h % 2));
++    assert(0 == (display_w % 2));
++    assert(0 == (display_h % 2));
++    float r1 = 1.0 * pic_w / display_w;
++    float r2 = 1.0 * pic_h / display_h;
++
++    if (r1 > r2) {
++        //按宽缩放
++        scale_w = display_w;
++        scale_h = pic_h * display_w / pic_w;
++        enabled_scale = pic_w != scale_w;
++    } else {
++        //按高缩放
++        scale_w = pic_w * display_h / pic_h;
++        scale_h = display_h;
++        enabled_scale = pic_h != scale_h;
++    }
++    scale_w = scale_w / 2 * 2;
++    scale_h = scale_h / 2 * 2;
++    crop_x = (display_w - scale_w) / 2;
++    crop_y = (display_h - scale_h) / 2;
++    crop_x = crop_x / 2 * 2;
++    crop_y = crop_y / 2 * 2;
++    enabled_crop = (display_w != scale_w) || (display_h != scale_h);
++    crop_w = scale_w;
++    crop_h = scale_h;
++
++    /* 计算结果赋值 */
++    fbdev->xoffset = crop_x;
++    fbdev->yoffset = crop_y;
++
++    cfg.xres = pic_w;
++    cfg.yres = pic_h;
++    cfg.xpos = crop_x;
++    cfg.ypos = crop_y;
++    cfg.layer_order = lcdc_layer_bottom;
++    cfg.layer_enable = 1;
++
++    cfg.alpha.enable = 0;
++    cfg.alpha.value = 0xFF;
++
++    cfg.scaling.enable = enabled_scale;
++    cfg.scaling.xres = scale_w;
++    cfg.scaling.yres = scale_h;
++
++    if (fb_pan_display_set_user_cfg(fbdev->fd, &cfg)) {
++        av_log(h, AV_LOG_ERROR, "fb_pan_display_set_user_cfg error\n");
++        return AVERROR(EINVAL);
++    }
++
++    if (fb_pan_display_enable_user_cfg(fbdev->fd)) {
++        av_log(h, AV_LOG_ERROR, "fb_pan_display_enable_user_cfg error\n");
++        return AVERROR(EINVAL);
++    }
++
++    if (fb_pan_display(fbdev->fd, &fbdev->info, 0)) {
++        av_log(h, AV_LOG_ERROR, "fb_pan_display error\n");
++        return AVERROR(EINVAL);
++    }
++
++    return 0;
++}
++
++static av_cold int jzfb_write_trailer(AVFormatContext *h)
++{
++    JZFBContext *fbdev = h->priv_data;
++    rmem_free(fbdev->rmem_fd, fbdev->rmem_vaddr, fbdev->rmem_paddr, fbdev->rmem_size);
++    rmem_close(fbdev->rmem_fd);
++    fb_disable(fbdev->fd);
++    fb_close(fbdev->fd, &fbdev->info);
++    unload_x2000_fb_lib(fbdev->handle);
++    return 0;
++}
++
++static int fbdev_get_device_list(AVFormatContext *s, AVDeviceInfoList *device_list)
++{
++    return ff_fbdev_get_device_list(device_list);
++}
++
++#define OFFSET(x) offsetof(JZFBContext, x)
++#define ENC AV_OPT_FLAG_ENCODING_PARAM
++static const AVOption options[] = {
++    { "xoffset", "set x coordinate of top left corner", OFFSET(xoffset), AV_OPT_TYPE_INT, {.i64 = 0}, 0, INT_MAX, ENC },
++    { "yoffset", "set y coordinate of top left corner", OFFSET(yoffset), AV_OPT_TYPE_INT, {.i64 = 0}, 0, INT_MAX, ENC },
++    { NULL }
++};
++
++static const AVClass jzfb_class = {
++    .class_name = "jzfb outdev",
++    .item_name  = av_default_item_name,
++    .option     = options,
++    .version    = LIBAVUTIL_VERSION_INT,
++    .category   = AV_CLASS_CATEGORY_DEVICE_VIDEO_OUTPUT,
++};
++
++AVOutputFormat ff_x2000_fb_muxer = {
++    .name           = "x2000_fb",
++    .long_name      = NULL_IF_CONFIG_SMALL("Linux framebuffer"),
++    .priv_data_size = sizeof(JZFBContext),
++    .audio_codec    = AV_CODEC_ID_NONE,
++    .video_codec    = AV_CODEC_ID_RAWVIDEO,
++    .write_header   = jzfb_write_header,
++    .write_packet   = jzfb_write_packet,
++    .write_trailer  = jzfb_write_trailer,
++    .get_device_list = fbdev_get_device_list,
++    .flags          = AVFMT_NOFILE | AVFMT_VARIABLE_FPS | AVFMT_NOTIMESTAMPS,
++    .priv_class     = &jzfb_class,
++};

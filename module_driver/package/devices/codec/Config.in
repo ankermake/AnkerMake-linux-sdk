@@ -1,0 +1,4 @@
+menu "codec设备列表"
+
+source package/devices/codec/ak4493/Config.in
+endmenu

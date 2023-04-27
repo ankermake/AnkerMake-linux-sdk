@@ -1,0 +1,92 @@
+menuconfig MD_X2000_SENSOR_GC2053_MIPI
+    bool "sensor gc2053 (mipi,raw10)"
+    select MD_X2000_CAMERA_VIC
+    depends on MD_SOC_X2000_BASE
+
+#choice "       单双摄模组选择"
+#config SINGLE_SENSOR_MODULE
+#	bool "单摄模组"
+#config DOUBLE_SENSOR_MODULE
+#	bool "双摄模组"
+#endchoice
+
+menuconfig MD_X2000_SENSOR0_GC2053
+	bool "sensor0 config"
+
+config MD_X2000_GC2053_SENSOR0_NAME
+	string "sensor module name"
+	default "gc2053-vis"
+
+config MD_X2000_GC2053_GPIO_RESET0
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GC2053_GPIO_PWDN0
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GC2053_GPIO_POWER0
+	string "gpio power(sensor 电源控制引脚, 高有效)"
+	choice from SOC_GPIO_PINS
+	default -1
+
+config MD_X2000_GC2053_SENSOR0_REGULATOR_NAME
+	string "regulator name(通过名字获取 sensor module 电源管理器)"
+	default "GPIO-POWER0"
+
+config MD_X2000_GC2053_I2C_BUSNUM0
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+config MD_X2000_GC2053_I2C_ADDR0
+	int "i2c device addr (sensor的i2c地址)"
+	default -1
+
+config MD_X2000_GC2053_CAM_BUSNUM0
+	int "cam bus num (sensor 挂接的vic/cim总线号)"
+	default -1
+endmenu
+
+menuconfig MD_X2000_SENSOR1_GC2053
+	bool "sensor1 config"
+
+config MD_X2000_GC2053_SENSOR1_NAME
+	string "sensor module name"
+	default "gc2053-ir"
+
+
+config MD_X2000_GC2053_GPIO_RESET1
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GC2053_GPIO_PWDN1
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_GC2053_GPIO_POWER1
+	string "gpio power(sensor 电源控制引脚, 高有效)"
+	choice from SOC_GPIO_PINS
+	default -1
+
+config MD_X2000_GC2053_SENSOR1_REGULATOR_NAME
+	string "regulator name(通过名字获取 sensor module 电源管理器)"
+	default "GPIO-POWER0"
+
+config MD_X2000_GC2053_I2C_BUSNUM1
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+config MD_X2000_GC2053_I2C_ADDR1
+	int "i2c device addr (sensor的i2c地址)"
+	default -1
+
+config MD_X2000_GC2053_CAM_BUSNUM1
+	int "cam bus num (sensor 挂接的vic/cim总线号)"
+	default -1
+endmenu
+
+endmenu # MD_X2000_SENSOR_GC2053_MIPI

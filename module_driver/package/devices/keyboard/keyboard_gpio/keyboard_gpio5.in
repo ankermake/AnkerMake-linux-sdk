@@ -1,0 +1,24 @@
+config MD_KEYBOARD_GPIO5
+    bool "添加一个按键"
+    default n
+
+config MD_KEYBOARD_GPIO5_WAKEUP
+    bool "  休眠时按键可唤醒"
+    depends on MD_KEYBOARD_GPIO5
+
+config MD_KEYBOARD_GPIO5_GPIO
+    string "  gpio"
+    choice from SOC_GPIO_PINS
+    depends on MD_KEYBOARD_GPIO5
+
+config MD_KEYBOARD_GPIO5_CODE
+    string "  按键值"
+    default KEY_HOME
+    choice from MD_KEYBOARD_GPIO_KEYS
+    depends on MD_KEYBOARD_GPIO5
+
+config MD_KEYBOARD_GPIO5_ACTIVE_LEVEL
+    int "  按键触发电平"
+    default 0
+    choice from MD_GPIO_ACTIVE_LEVEL
+    depends on MD_KEYBOARD_GPIO5

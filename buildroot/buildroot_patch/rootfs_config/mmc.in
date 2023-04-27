@@ -1,0 +1,14 @@
+menuconfig APP_br_mmc_setting
+    bool "mmc文件系统相关设置"
+
+config APP_br_mmc_ext4_mount_usr_data
+    bool "开机挂载 userdata 分区到 /usr/data/ 目录"
+    select APP_br_sh_utils_mount_mmc_ext4
+    default y
+
+config APP_br_mmc_fat_mount_usr_rtosdata
+    bool "开机挂载 rtosdata 分区到 /usr/rtosdata/ 目录"
+    select APP_br_sh_utils_mount_mmc_fat
+    default n
+
+endmenu

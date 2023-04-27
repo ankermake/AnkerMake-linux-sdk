@@ -1,0 +1,17 @@
+menuconfig INGENIC_MODULE
+	bool "options for module drivers"
+	default n
+	help
+		say Y if you have module drivers
+
+if INGENIC_MODULE
+
+config INGENIC_MODULE_FB
+    bool "select fb drivers for module"
+    default n
+    select FB
+    select FB_CFB_FILLRECT
+    select FB_CFB_COPYAREA
+    select FB_CFB_IMAGEBLIT
+
+endif

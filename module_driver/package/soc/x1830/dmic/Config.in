@@ -1,0 +1,2 @@
+config MD_X1830_DMIC
+    bool "dmic(外接数字mic)"

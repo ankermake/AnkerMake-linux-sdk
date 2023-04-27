@@ -1,0 +1,11 @@
+menuconfig WL_CYPRESS_MODULE
+	bool "Cypress Module Wireless LAN support"
+	---help---
+	  This section contains support for all the wireless drivers
+	  for cypress modules, such as AW-NB197SM(43438), AW-NM288SM(43362)
+	  and AW-CM256SM (43455).
+
+if WL_CYPRESS_MODULE
+
+source "drivers/net/wireless/cypress_module/bcmdhd_1.363.125.7/Kconfig"
+endif #WL_CYPRESS_MODULE

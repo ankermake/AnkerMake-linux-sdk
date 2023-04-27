@@ -1,0 +1,33 @@
+menuconfig SOC_X1830_DRIVERS
+    tristate "X1830 drivers&boards"
+    depends on SOC_X1830
+    help
+        x1830 drivers & boards
+
+source "ingenic/x1830/Kconfig.gpiofunc"
+source "ingenic/x1830/boards/Kconfig"
+
+config x1800_MIC
+    bool "x1800 mic driver"
+    help
+        x1800 mic driver
+if x1800_MIC
+choice
+	prompt "choice dmic data"
+	default DMIC_DATA_DOUBLE
+	config DMIC_DATA_DOUBLE
+		bool "dmic data_double"
+	config DMIC_DATA0
+		bool "dmic data0"
+	config DMIC_DATA1
+		bool "dmic data1"
+endchoice
+endif
+
+
+config X1800_MIC_SND_INTERNAL_CODEC
+     bool "x1800 snd internal codec"
+     depends on x1800_MIC
+     help
+        x1800 internal codec with alsa in mic driver
+

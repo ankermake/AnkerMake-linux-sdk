@@ -1,0 +1,20 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+mainmenu "Linux/$ARCH $KERNELVERSION Kernel Configuration"
+
+config SRCARCH
+	string
+	option env="SRCARCH"
+config OUTSIDE_DRIVERS
+	string
+	option env="OUTSIDE_DRIVERS"
+	default "module_drivers"
+
+config OUTSIDE_BUILD
+	string
+	option env="OUTSIDE_BUILD"
+source "arch/$SRCARCH/Kconfig"
+source "$OUTSIDE_DRIVERS/Kconfig"
+source "$OUTSIDE_BUILD/Kconfig"

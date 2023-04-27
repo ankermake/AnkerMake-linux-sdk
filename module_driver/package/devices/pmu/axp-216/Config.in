@@ -1,0 +1,270 @@
+array MD_X2000_BOOT_STATUS
+    string "启动时状态"
+    item "启动时使能" enable
+    item "启动时失能" disable
+
+menuconfig MD_X2000_AXP_POWER
+    bool "AXP 216"
+
+config MD_X2000_AXP216_INT_GPIO
+    string "pmu interrupt gpio(电源管理外设设置中断脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_AXP216_I2C_BUSNUM
+    int "pmu i2c bus num (电源管理外设挂接的i2c总线号)"
+    default -1
+
+menu "RTCLDO 配置"
+
+config MD_X2000_AXP216_RTCLDO_NAME
+    string "rtcldo_name"
+    default RTCLDO
+
+config MD_X2000_AXP216_RTCLDO_BOOTON
+    string "rtcldo_boot_status (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_RTCLDO_WORK_VOLTAGE
+    int "rtcldo_work_voltage (工作时电压, 单位：uV)"
+    default 3000000
+
+config MD_X2000_AXP216_RTCLDO_SUSPEND_VOLTAGE
+    int "rtcldo_suspend_voltage (休眠时电压, 单位：uV)"
+    default 3000000
+
+endmenu
+
+
+menu "ALDO1 配置"
+
+config MD_X2000_AXP216_ALDO1_NAME
+    string "aldo1_name"
+    default ALDO1
+
+config MD_X2000_AXP216_ALDO1_BOOTON
+    string "aldo1_boot_status (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_ALDO1_WORK_VOLTAGE
+    int "aldo1_work_voltage (工作时电压, 单位：uV)"
+    default 2800000
+
+config MD_X2000_AXP216_ALDO1_SUSPEND_VOLTAGE
+    int "aldo1_suspend_voltage (休眠时电压, 单位：uV)"
+    default 2800000
+
+endmenu
+
+menu "ALDO2 配置"
+
+config MD_X2000_AXP216_ALDO2_NAME
+    string "aldo2_name"
+    default ALDO2
+
+config MD_X2000_AXP216_ALDO2_BOOTON
+    string "aldo2_boot_on (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_ALDO2_WORK_VOLTAGE
+    int "aldo2_work_voltage (工作时电压, 单位：uV)"
+    default 3300000
+
+config MD_X2000_AXP216_ALDO2_SUSPEND_VOLTAGE
+    int "aldo2_suspend_voltage (休眠时电压, 单位：uV)"
+    default 3300000
+
+endmenu
+
+menu "ALDO3 配置"
+
+config MD_X2000_AXP216_ALDO3_NAME
+    string "aldo3_name"
+    default ALDO3
+
+config MD_X2000_AXP216_ALDO3_BOOTON
+    string "aldo3_boot_on (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default disable
+
+config MD_X2000_AXP216_ALDO3_WORK_VOLTAGE
+    int "aldo3_work_voltage (工作时电压, 单位：uV)"
+    default 1400000
+
+config MD_X2000_AXP216_ALDO3_SUSPEND_VOLTAGE
+    int "aldo3_suspend_voltage (休眠时电压, 单位：uV)"
+    default 1400000
+
+endmenu
+
+menu "ELDO1 配置"
+
+config MD_X2000_AXP216_ELDO1_NAME
+    string "eldo1_name"
+    default ELDO1
+
+config MD_X2000_AXP216_ELDO1_BOOTON
+    string "eldo1_boot_on (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_ELDO1_WORK_VOLTAGE
+    int "eldo1_work_voltage (工作时电压, 单位：uV)"
+    default 1800000
+
+config MD_X2000_AXP216_ELDO1_SUSPEND_VOLTAGE
+    int "eldo1_suspend_voltage (休眠时电压, 单位：uV)"
+    default 1800000
+
+endmenu
+
+menu "ELDO2 配置"
+
+config MD_X2000_AXP216_ELDO2_NAME
+    string "eldo2_name"
+    default ELDO2
+
+config MD_X2000_AXP216_ELDO2_BOOTON
+    string "eldo2_boot_on (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_ELDO2_WORK_VOLTAGE
+    int "eldo2_work_voltage (工作时电压, 单位：uV)"
+    default 1800000
+
+config MD_X2000_AXP216_ELDO2_SUSPEND_VOLTAGE
+    int "eldo2_suspend_voltage (休眠时电压, 单位：uV)"
+    default 1800000
+
+endmenu
+
+menu "DCDC1 配置"
+
+config MD_X2000_AXP216_DCDC1_NAME
+    string "dcdc1_name"
+    default DCDC1
+
+config MD_X2000_AXP216_DCDC1_BOOTON
+    string "dcdc1_boot_status (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_DCDC1_WORK_VOLTAGE
+    int "dcdc1_work_voltage (工作时电压, 单位：uV)"
+    default 3300000
+
+config MD_X2000_AXP216_DCDC1_SUSPEND_VOLTAGE
+    int "dcdc1_suspend_voltage (休眠时电压, 单位：uV)"
+    default 3300000
+
+endmenu
+
+menu "DCDC2 配置"
+
+config MD_X2000_AXP216_DCDC2_NAME
+    string "dcdc2_name"
+    default DCDC2
+
+config MD_X2000_AXP216_DCDC2_BOOTON
+    string "dcdc2_boot_status (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_DCDC2_WORK_VOLTAGE
+    int "dcdc2_work_voltage (工作时电压, 单位：uV)"
+    default 1200000
+
+config MD_X2000_AXP216_DCDC2_SUSPEND_VOLTAGE
+    int "dcdc2_suspend_voltage (休眠时电压, 单位：uV)"
+    default 1200000
+
+endmenu
+
+menu "DCDC3 配置"
+
+config MD_X2000_AXP216_DCDC3_NAME
+    string "dcdc3_name"
+    default DCDC3
+
+config MD_X2000_AXP216_DCDC3_BOOTON
+    string "dcdc3_boot_status (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_DCDC3_WORK_VOLTAGE
+    int "dcdc3_work_voltage (工作时电压, 单位：uV)"
+    default 900000
+
+config MD_X2000_AXP216_DCDC3_SUSPEND_VOLTAGE
+    int "dcdc3_suspend_voltage (休眠时电压, 单位：uV)"
+    default 900000
+
+endmenu
+
+menu "DCDC4 配置"
+
+config MD_X2000_AXP216_DCDC4_NAME
+    string "dcdc4_name"
+    default DCDC4
+
+config MD_X2000_AXP216_DCDC4_BOOTON
+    string "dcdc4_boot_status (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_DCDC4_WORK_VOLTAGE
+    int "dcdc4_work_voltage (工作时电压, 单位：uV)"
+    default 1540000
+
+config MD_X2000_AXP216_DCDC4_SUSPEND_VOLTAGE
+    int "dcdc4_suspend_voltage (休眠时电压, 单位：uV)"
+    default 1540000
+
+endmenu
+
+menu "DCDC5 配置"
+
+config MD_X2000_AXP216_DCDC5_NAME
+    string "dcdc5_name"
+    default DCDC5
+
+config MD_X2000_AXP216_DCDC5_BOOTON
+    string "dcdc5_boot_status (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_DCDC5_WORK_VOLTAGE
+    int "dcdc5_work_voltage (工作时电压, 单位：uV)"
+    default 1800000
+
+config MD_X2000_AXP216_DCDC5_SUSPEND_VOLTAGE
+    int "dcdc5_suspend_voltage (休眠时电压, 单位：uV)"
+    default 1800000
+
+endmenu
+
+menu "GPIOLDO1 配置"
+
+config MD_X2000_AXP216_GPIOLDO1_NAME
+    string "gpiolod1_name"
+    default GPIOLDO1
+
+config MD_X2000_AXP216_GPIOLDO1_BOOTON
+    string "gpioldo1_boot_on (启动时是否使能)"
+    choice from MD_X2000_BOOT_STATUS
+    default enable
+
+config MD_X2000_AXP216_GPIOLDO1_WORK_VOLTAGE
+    int "gpioldo1_work_voltage (工作时电压, 单位：uV)"
+    default 3300000
+
+config MD_X2000_AXP216_GPIOLDO1_SUSPEND_VOLTAGE
+    int "gpioldo1_suspend_voltage (休眠时电压, 单位：uV)"
+    default 3300000
+endmenu
+
+endmenu

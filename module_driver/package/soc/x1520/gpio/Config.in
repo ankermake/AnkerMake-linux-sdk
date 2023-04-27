@@ -1,0 +1,2 @@
+config MD_X1520_GPIO
+    bool "gpio 辅助驱动(应用层对接)"

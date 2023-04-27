@@ -1,0 +1,134 @@
+menuconfig MD_X2000_510_I2C
+    bool "i2c 控制器驱动"
+
+
+config MD_X2000_510_I2C0_BUS
+    bool "选择I2C0"
+
+choice "              选择I2C0 GPIO"
+    default MD_X2000_510_I2C0_PC
+    depends on MD_X2000_510_I2C0_BUS
+
+config MD_X2000_510_I2C0_PC
+    bool "SCL:GPIO_PC(13) SDA:GPIO_PC(14)"
+
+endchoice
+
+config MD_X2000_510_I2C0_RATE
+    int "       I2C0 速度 "
+    default 400000
+    depends on MD_X2000_510_I2C0_BUS
+
+
+
+config MD_X2000_510_I2C1_BUS
+    bool "选择I2C1"
+
+choice "              选择I2C1 GPIO"
+    default MD_X2000_510_I2C1_PC
+    depends on MD_X2000_510_I2C1_BUS
+
+config MD_X2000_510_I2C1_PC
+    bool "SCL:GPIO_PC(23) SDA:GPIO_PC(24)"
+
+config MD_X2000_510_I2C1_PD
+    bool "SCL:GPIO_PD(11) SDA:GPIO_PD(12)"
+
+endchoice
+
+config MD_X2000_510_I2C1_RATE
+    int "        I2C1 速度 "
+    default 400000
+    depends on MD_X2000_510_I2C1_BUS
+
+
+
+config MD_X2000_510_I2C2_BUS
+    bool "选择I2C2"
+
+choice "              选择I2C2 GPIO"
+    default MD_X2000_510_I2C2_PB
+    depends on MD_X2000_510_I2C2_BUS
+
+config MD_X2000_510_I2C2_PB
+    bool "SCL:GPIO_PB(22) SDA:GPIO_PB(23)"
+
+config MD_X2000_510_I2C2_PD
+    bool "SCL:GPIO_PD(20) SDA:GPIO_PD(21)"
+
+config MD_X2000_510_I2C2_PE
+    bool "SCL:GPIO_PE(19) SDA:GPIO_PE(20)"
+
+endchoice
+
+config MD_X2000_510_I2C2_RATE
+    int "       I2C2 速度 "
+    default 400000
+    depends on MD_X2000_510_I2C2_BUS
+
+
+
+config MD_X2000_510_I2C3_BUS
+    bool "选择I2C3"
+
+choice "              选择I2C3 GPIO"
+    default MD_X2000_510_I2C3_PA
+    depends on MD_X2000_510_I2C3_BUS
+
+config MD_X2000_510_I2C3_PA
+    bool "SCL:GPIO_PA(16) SDA:GPIO_PA(17)"
+
+config MD_X2000_510_I2C3_PD
+    bool "SCL:GPIO_PD(30) SDA:GPIO_PD(31)"
+
+endchoice
+
+config MD_X2000_510_I2C3_RATE
+    int "        I2C3 速度 "
+    default 400000
+    depends on MD_X2000_510_I2C3_BUS
+
+
+
+config MD_X2000_510_I2C4_BUS
+    bool "选择I2C4"
+
+choice "              选择I2C4 GPIO"
+    default MD_X2000_510_I2C4_PC
+    depends on MD_X2000_510_I2C4_BUS
+
+config MD_X2000_510_I2C4_PC
+    bool "SCL:GPIO_PC(25) SDA:GPIO_PC(26)"
+
+config MD_X2000_510_I2C4_PD
+    bool "SCL:GPIO_PD(0) SDA:GPIO_PD(1)"
+
+endchoice
+
+config MD_X2000_510_I2C4_RATE
+    int "        I2C4 速度 "
+    default 400000
+    depends on MD_X2000_510_I2C4_BUS
+
+
+
+config MD_X2000_510_I2C5_BUS
+    bool "选择I2C5"
+
+choice "              选择I2C5 GPIO"
+    default MD_X2000_510_I2C5_PC
+    depends on MD_X2000_510_I2C5_BUS
+
+config MD_X2000_510_I2C5_PC
+    bool "SCL:GPIO_PC(27) SDA:GPIO_PC(28)"
+
+config MD_X2000_510_I2C5_PD
+    bool "SCL:GPIO_PD(4) SDA:GPIO_PD(5)"
+
+endchoice
+
+config MD_X2000_510_I2C5_RATE
+    int "        I2C5 速度 "
+    default 400000
+    depends on MD_X2000_510_I2C5_BUS
+endmenu

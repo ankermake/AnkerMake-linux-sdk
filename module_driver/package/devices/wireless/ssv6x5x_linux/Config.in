@@ -1,0 +1,29 @@
+menuconfig MD_SSV6X5X
+    bool "SSV6X5X wireless cards support"
+
+config MD_SSV6X5X_MMC_NUM
+	int "wlan_mmc_num (mmc/sdio 总线号)"
+	default -1
+	help
+	  wifi 挂接在哪个 mmc 总线,比如 0, 1
+
+config MD_SSV6X5X_WIFI_POWER_EN
+	string "gpio_wifi_en(控制wifi的供电)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_SSV6X5X_WIFI_RESET
+	string "gpio_wifi_rst(控制wifi的初始上电重置)"
+	default -1
+	choice from SOC_GPIO_PINS
+
+config MD_SSV6X5X_WIFI_POWER_VALID_LEVEL
+	string "wifi_power_valid_level(wifi模块供电引脚的有效电平)"
+	default 0
+	choice from MD_GPIO_ACTIVE_LEVEL
+
+config MD_SSV6X5X_STACFG_PATH
+	string "stacfgpath"
+	default "ssv6x5x-wifi.cfg"
+
+endmenu

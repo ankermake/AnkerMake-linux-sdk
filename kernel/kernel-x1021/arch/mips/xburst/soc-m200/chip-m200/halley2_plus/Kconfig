@@ -1,0 +1,14 @@
+choice
+	prompt "BOARD type"
+	depends on BOARD_HALLEY2_PLUS
+	default BOARD_HALLEY2_PLUS_V10
+
+config BOARD_HALLEY2_PLUS_V10
+       bool "halley2 plus v1.0"
+       depends on BOARD_HALLEY2_PLUS
+
+endchoice
+
+config BOARD_NAME
+	string
+	default "halley2_plus_v10" if BOARD_HALLEY2_PLUS_V10

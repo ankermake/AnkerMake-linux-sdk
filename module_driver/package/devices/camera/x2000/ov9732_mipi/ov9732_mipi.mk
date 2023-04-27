@@ -1,0 +1,55 @@
+#-------------------------------------------------------
+package_name = sensor_ov9732_mipi
+package_depends = utils soc_camera
+package_module_src = devices/camera/x2000/ov9732_mipi
+package_make_hook =
+package_init_hook =
+package_finalize_hook = sensor_ov9732_mipi_finalize_hook
+package_clean_hook =
+#-------------------------------------------------------
+
+shell_sensor_init_file = output/sensor_ov9732_mipi.sh
+
+define sensor_ov9732_mipi_install_hook
+#	$(Q)mkdir -p $(FS_TARGET_DIR)/etc/sensor
+#	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)cp -rf package/devices/camera/x2000/ov9732_mipi/$(MD_X2000_OV9732_SENSOR0_NAME)-x2000.bin  $(FS_TARGET_DIR)/etc/sensor/)
+#	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)cp -rf package/devices/camera/x2000/ov9732_mipi/$(MD_X2000_OV9732_SENSOR1_NAME)-x2000.bin  $(FS_TARGET_DIR)/etc/sensor/)
+endef
+
+define sensor_ov9732_mipi_install_clean_hook
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)rm -rf $(FS_TARGET_DIR)/etc/sensor/$(MD_X2000_OV9732_SENSOR0_NAME)-x2000.bin)
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)rm -rf $(FS_TARGET_DIR)/etc/sensor/$(MD_X2000_OV9732_SENSOR1_NAME)-x2000.bin)
+endef
+
+TARGET_INSTALL_HOOKS += sensor_ov9732_mipi_install_hook
+TARGET_INSTALL_CLEAN_HOOKS += sensor_ov9732_mipi_install_clean_hook
+
+
+
+define sensor_ov9732_mipi_finalize_hook
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)cp devices/camera/x2000/ov9732_mipi/sensor0_ov9732_mipi.ko output/)
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)echo -n 'insmod sensor0_ov9732_mipi.ko' > $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)echo -n ' power_gpio=$(MD_X2000_OV9732_GPIO_POWER0)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)echo -n ' reset_gpio=$(MD_X2000_OV9732_GPIO_RESET0)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)echo -n ' pwdn_gpio=$(MD_X2000_OV9732_GPIO_PWDN0)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)echo -n ' regulator_name=$(MD_X2000_OV9732_SENSOR0_REGULATOR_NAME)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)echo -n ' i2c_bus_num=$(MD_X2000_OV9732_I2C_BUSNUM0)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)echo -n ' i2c_addr=$(MD_X2000_OV9732_I2C_ADDR0)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)echo -n ' cam_bus_num=$(MD_X2000_OV9732_CAM_BUSNUM0)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR0_OV9732), $(Q)echo -n ' sensor_name=$(MD_X2000_OV9732_SENSOR0_NAME)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo  >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)cp devices/camera/x2000/ov9732_mipi/sensor1_ov9732_mipi.ko output/)
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo -n 'insmod sensor1_ov9732_mipi.ko' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo -n ' power_gpio=$(MD_X2000_OV9732_GPIO_POWER1)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo -n ' reset_gpio=$(MD_X2000_OV9732_GPIO_RESET1)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo -n ' pwdn_gpio=$(MD_X2000_OV9732_GPIO_PWDN1)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo -n ' regulator_name=$(MD_X2000_OV9732_SENSOR1_REGULATOR_NAME)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo -n ' i2c_bus_num=$(MD_X2000_OV9732_I2C_BUSNUM1)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo -n ' i2c_addr=$(MD_X2000_OV9732_I2C_ADDR1)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo -n ' cam_bus_num=$(MD_X2000_OV9732_CAM_BUSNUM1)' >> $(shell_sensor_init_file))
+	$(if $(MD_X2000_SENSOR1_OV9732), $(Q)echo -n ' sensor_name=$(MD_X2000_OV9732_SENSOR1_NAME)' >> $(shell_sensor_init_file))
+
+	$(Q)echo  >> $(shell_sensor_init_file)
+
+endef
+

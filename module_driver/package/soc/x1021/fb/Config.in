@@ -1,0 +1,41 @@
+menuconfig MD_X1021_FB
+    bool "fb 显示驱动"
+    help
+        Framebuffer support for the x1000 SoC.
+        kernel must select those options
+        select FB
+        select FB_CFB_FILLRECT
+        select FB_CFB_COPYAREA
+        select FB_CFB_IMAGEBLIT
+
+
+config MD_X1021_FB_FRAME_NUM
+    int "帧缓冲数量"
+    default 1
+
+config MD_X1021_FB_PAN_DISPLAY_SYNC
+    bool "pan_display 调用时等待帧刷新完成(单缓冲时选中)"
+    default y
+
+choice "       选择LCD接口的引脚定义"
+    default MD_X1021_SLCD_GPIOB
+
+config MD_X1021_SLCD_GPIOB
+    bool "1.使用GPIO_PB中的相关引脚"
+    help
+        D0:PB06  D1:PB07  D2:PB08
+        D3:PB09  D4:PB10  D5:PB11
+        D6:PB13  D7:PB14  WR:PB15
+        TE:PB16  CS:PB17  DC:PB18
+
+config MD_X1021_SLCD_GPIOC
+    bool "2.使用GPIO_PC中的相关引脚"
+    help
+        D0:PC02  D1:PC03  D2:PC04
+        D3:PC05  D4:PC06  D5:PC07
+        D6:PC17  D7:PC18  WR:PC15
+        TE:PC16  CS:PC09  DC:PC08
+
+endchoice
+
+endmenu

@@ -1,0 +1,21 @@
+menuconfig MD_X2000_510_DMIC
+    bool "dmic(外接数字mic)"
+    select MD_X2000_510_AUDIO_DMA
+
+config MD_X2000_510_DMIC_INT0
+    bool "使能dmic通道0,1（PC21）"
+    default y
+
+config MD_X2000_510_DMIC_INT1
+    bool "使能dmic通道2,3（PC22）"
+    default n
+
+config MD_X2000_510_DMIC_INT2
+    bool "使能dmic通道4,5（PC23）"
+    default n
+
+config MD_X2000_510_DMIC_INT3
+    bool "使能dmic通道6,7（PC24）"
+    default n
+
+endmenu

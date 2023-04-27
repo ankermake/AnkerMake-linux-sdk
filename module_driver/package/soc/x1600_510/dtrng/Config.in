@@ -1,0 +1,2 @@
+config MD_X1600_510_DTRNG
+    bool "dtrng 驱动(获取随机数功能)"

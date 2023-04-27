@@ -1,0 +1,15 @@
+config DT_KALE
+	bool "x2100 kale board."
+config DT_ROBAM_CQ925
+	bool "x2100 robam cq925 board."
+config DT_ROBAM_DB620
+	bool "x2100 robam db620 board."
+config DT_ROBAM_9YC05
+	bool "x2100 robam 9yc05 board."
+config DT_HUABY
+	bool "x2100 huaby board."
+config DT_WICOM_KALE_PANEL
+    bool "x2100 wicom kale panel"
+config DT_WICOM_KALE_PANEL_KD050
+    bool "x2100 wicom kale panel kd050"
+

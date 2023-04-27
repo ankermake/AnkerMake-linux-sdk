@@ -1,0 +1,31 @@
+menuconfig MD_X2000_LCD_MA0060
+    bool "SLCD MA0060 (720x1280) (X2000) (mipi接口)"
+    select MD_X2000_FB
+    depends on MD_SOC_X2000_BASE
+
+config MD_X2000_MA0060_BACKLIGHT_EN
+    string "gpio backlight enable(lcd backlight背光使能)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_MA0060_RST
+    string "gpio reset(lcd 复位引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_MA0060_POWER_EN
+    string "gpio power enable(lcd power使能引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_MA0060_POWER_VALID
+    string "power valid(lcd power 有效电平引脚)"
+    choice from POWER_VALID_LEVELS
+    default 0
+
+endmenu # MD_X2000_LCD_MA0060
+
+array POWER_VALID_LEVELS
+    int "power 活跃电平"
+    item "power_valid_low" 0
+    item "power_valid_high" 1

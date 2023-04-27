@@ -1,0 +1,14 @@
+#
+# MMC core configuration
+#
+comment "MMC Core configuration"
+
+config MMC_CORE_INIT_SEQUENCE_DELAY
+    bool "MMC CORE spec init sequence delay"
+    default n
+
+config MMC_CORE_INIT_DELAY_TIME_MS
+    int "mmc card core spec init delay unit:ms"
+    range 0 100
+    default 10
+    depends on MMC_CORE_INIT_SEQUENCE_DELAY

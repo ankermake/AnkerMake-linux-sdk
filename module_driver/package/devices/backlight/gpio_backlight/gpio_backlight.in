@@ -1,0 +1,34 @@
+menuconfig MD_GPIO_BACKLIGHT
+    bool "GPIO背光"
+
+config MD_GPIO_BACKLIGHT0
+    bool "gpio_backlight0"
+
+config MD_GPIO_BACKLIGHT0_GPIO
+    string "gpio 引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+    depends on MD_GPIO_BACKLIGHT0
+
+config MD_GPIO_BACKLIGHT0_ACTIVE_LEVEL
+    string "gpio 有效电平"
+    choice from GPIO_ACTIVE_LEVELS
+    default 1
+    depends on MD_GPIO_BACKLIGHT0
+
+config MD_GPIO_BACKLIGHT0_DEV_NAME
+    string "背光设备名"
+    default "backlight_gpio0"
+    depends on MD_GPIO_BACKLIGHT0
+
+config MD_GPIO_BACKLIGHT0_ENABLE
+    bool "背光默认使能"
+    default y
+    depends on MD_GPIO_BACKLIGHT0
+
+endmenu
+
+array GPIO_ACTIVE_LEVELS
+    int "gpio 使能背光有效电平"
+    item "GPIO_active_low" 0
+    item "GPIO_active_high" 1

@@ -1,0 +1,34 @@
+menuconfig MD_X1830_MAC
+    bool "mac 以太网控制器驱动"
+
+config MD_X1830_PHY_PROBE_MASK
+    int "PHY探测屏蔽(范围：0x0～0xffffffff)"
+    default 0x0
+    help
+        phy探测屏蔽为32位代表32个地址(0:使能探测 1:屏蔽探测)
+        例如：0xfffffff0(探测前4个地址)
+
+config MD_X1830_PHY_CLK_DELAY_US
+    int "PHY CLK 使能后延迟时间再通讯(单位：us)"
+    default 0
+
+config MD_X1830_PHY_RESET_TIME_US
+    int "PHY复位时间(单位：us)"
+    default 10000
+
+config MD_X1830_PHY_RESET_GPIO
+    string "PHY 复位引脚"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_PHY_VALID_LEVEL
+    string "PHY 复位电平"
+    choice from PHY_RESET_LEVEL
+    default 0
+
+endmenu
+
+array PHY_RESET_LEVEL
+    string "RESET_LEVEL"
+    item "RESET_LEVEL" 0
+    item "RESET_LEVEL" 1

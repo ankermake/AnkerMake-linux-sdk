@@ -1,0 +1,1 @@
+obj-$(CONFIG_AX88796C_SPI) += ax88796c_main.o ax88796c_ioctl.o ax88796c_spi.o

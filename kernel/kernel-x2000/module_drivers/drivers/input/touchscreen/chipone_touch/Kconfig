@@ -1,0 +1,16 @@
+#
+# Focaltech Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_CHIPONE
+    tristate "chipone Touchscreen"
+    default n
+    help
+      Say Y here if you have chipone touch panel.
+      If unsure, say N.
+
+config TOUCHSCREEN_CHIPONE_DIRECTORY
+    string "chipone tp directory name"
+    default "chipone_touch"
+    depends on TOUCHSCREEN_CHIPONE
+

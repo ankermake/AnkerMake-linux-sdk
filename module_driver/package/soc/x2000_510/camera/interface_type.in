@@ -1,0 +1,5 @@
+array CAMERA_INTERFACE_TYPE_SELECT
+    string "X2000 Camera Interface type"
+    item "VIC0" 0
+    item "VIC1" 1
+    item "CIM"  2

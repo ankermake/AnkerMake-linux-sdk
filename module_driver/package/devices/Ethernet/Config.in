@@ -1,0 +1,5 @@
+menu "Ethernet(以太网设备)"
+
+source package/devices/Ethernet/ax88796c_spi/Config.in
+
+endmenu

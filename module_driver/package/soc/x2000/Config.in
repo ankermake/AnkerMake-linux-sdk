@@ -1,0 +1,45 @@
+menuconfig MD_SOC_X2000
+    bool "x2000驱动列表"
+    depends on MD_CHOICE_SOC_X2000
+
+config MD_SOC_DIR
+    string
+    default soc/x2000
+
+source package/soc/x2000/adc/Config.in
+source package/soc/x2000/gpio/Config.in
+source package/soc/x2000/watchdog/Config.in
+source package/soc/x2000/dtrng/Config.in
+source package/soc/x2000/i2c/Config.in
+source package/soc/x2000/dmic/Config.in
+source package/soc/x2000/spi/Config.in
+source package/soc/x2000/pwm/Config.in
+source package/soc/x2000/fb/Config.in
+source package/soc/x2000/fb_layer_mixer/Config.in
+source package/soc/x2000/camera/Config.in
+source package/soc/x2000/audio_dma/Config.in
+source package/soc/x2000/mac/Config.in
+source package/soc/x2000/aic/Config.in
+source package/soc/x2000/icodec/Config.in
+source package/soc/x2000/hash/Config.in
+
+source package/soc/x2000/def_gpio_pins.in
+
+source package/soc/x2000/efuse/Config.in
+source package/soc/x2000/utils/Config.in
+source package/soc/x2000/msc/Config.in
+source package/soc/x2000/uart/Config.in
+source package/soc/x2000/spdif/Config.in
+source package/soc/x2000/mcu/Config.in
+source package/soc/x2000/tcu/Config.in
+source package/soc/x2000/conn/Config.in
+source package/soc/x2000/rotator/Config.in
+source package/soc/x2000/conn_vic/Config.in
+source package/soc/x2000/conn_fb/Config.in
+source package/soc/x2000/conn_isp/Config.in
+source package/soc/x2000/conn_pcm/Config.in
+source package/soc/x2000/conn_fs/Config.in
+
+source package/soc/x2000/aes/Config.in
+endmenu
+

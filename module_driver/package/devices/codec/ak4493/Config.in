@@ -1,0 +1,28 @@
+menuconfig MD_CODEC_AK4493
+    bool "codec ak4493"
+
+config MD_AK4493_GPIO_PDN
+    string "gpio pdn(codec 电源控制引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_AK4493_GPIO_MUTE
+    string "gpio mute(codec 音频控制引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_AK4493_GPIO_CD_SEL
+    string "gpio cd_sel(74LVC244APW 信号缓冲器 OE1)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_AK4493_GPIO_UBW_SEL
+    string "gpio usb/bt/wifi_sel(74LVC244APW 信号缓冲器 OE2)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_AK4493_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+endmenu # MD_CODEC_AK4493

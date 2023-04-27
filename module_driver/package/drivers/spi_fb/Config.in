@@ -1,0 +1,8 @@
+menuconfig MD_SPI_FB
+    bool "spi framebuffer 驱动"
+
+config MD_X2000_FB0_FREMES
+    int "spi framebuffer(fb0的帧缓冲数)"
+    default 2
+
+endmenu # MD_SPI_FB

@@ -1,0 +1,3 @@
+config MD_X2000_510_AIC
+    bool "aic 驱动"
+    select MD_X2000_510_AUDIO_DMA

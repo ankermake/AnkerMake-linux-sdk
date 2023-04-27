@@ -1,0 +1,406 @@
+/dts-v1/;
+
+#include <dt-bindings/input/input.h>
+#include "x2000-v12.dtsi"
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <generated/autoconf.h>
+
+/ {
+	compatible = "ingenic,zebra", "ingenic,x2000";
+};
+
+&uart0 {
+	status = "disable";
+};
+&uart1 {
+	status = "disable";
+};
+&uart3 {
+	status = "disable";
+};
+
+
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pd>;
+};
+
+&cpufreq {
+	status = "okay";
+	operating-points = <
+		/*KHZ uV */
+		1200000	900000
+		750000	900000
+		600000	900000
+		500000	900000
+		400000	900000
+		375000	900000
+		300000	900000
+		200000	900000
+			>;
+
+};
+
+&pinctrl {
+	ingenic,gpa_voltage = <GPIO_VOLTAGE_1V8>;
+};
+
+&i2c4 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c4_pc>;
+
+	pmu: rn5t567@0x32{
+		status = "okay";
+		compatible = "ricoh,rn5t567";
+		reg = <0x32>;
+
+		regulators {
+			DCDC1: dcdc1 {
+				regulator-compatible = "DCDC1";
+				regulator-name = "DC1_0v9";
+				regulator-min-microvolt = <900000>;
+				regulator-max-microvolt = <1000000>;
+				regulator-boot-on;
+				regulator-always-on;
+				sleep-slot = <13>;
+			};
+			DCDC2: dcdc2 {
+				regulator-compatible = "DCDC2";
+				regulator-name = "DC2_3v3";
+				regulator-min-microvolt = <3135000>;
+				regulator-max-microvolt = <3465000>;
+				regulator-boot-on;
+				regulator-always-on;
+				sleep-slot = <13>;
+			};
+			DCDC3: dcdc3 {
+				regulator-compatible = "DCDC3";
+				regulator-name = "DC3_1v8";
+				regulator-min-microvolt = <1710000>;
+				regulator-max-microvolt = <1890000>;
+				regulator-boot-on;
+				regulator-always-on;
+				sleep-slot = <15>;
+			};
+			DCDC4: dcdc4 {
+				regulator-compatible = "DCDC4";
+				regulator-name = "DC4_1v2";
+				regulator-min-microvolt = <1140000>;
+				regulator-max-microvolt = <1300000>;
+				regulator-boot-on;
+				regulator-always-on;
+				sleep-slot = <15>;
+			};
+			ldo1: ldo1 {
+				regulator-compatible = "LDO1";
+				regulator-name = "DAC_3v3";
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+			};
+			ldo2: ldo2 {
+				regulator-compatible = "LDO2";
+				regulator-name = "EFUSE_1v8";
+				regulator-min-microvolt = <1800000>;
+				regulator-max-microvolt = <1800000>;
+			};
+			ldo3: ldo3 {
+				regulator-compatible = "LDO3";
+				regulator-name = "LCD_3v3";
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+			};
+
+
+	};
+      };
+};
+
+&felix {
+	status = "disable";
+};
+
+&helix {
+	status = "disable";
+};
+
+&ispcam0 {
+	status = "disable";
+};
+
+&ispcam1 {
+	status = "disable";
+};
+
+&pdma {
+	status = "okay";
+};
+
+&msc0 {
+	status = "disable";
+	pinctrl-names ="default";
+	pinctrl-0 = <&msc0_8bit>;
+	mmc-hs200-1_8v;
+	cap-mmc-highspeed;
+	non-removable;
+	max-frequency = <200000000>;
+	bus-width = <8>;
+	non-removable;
+	voltage-ranges = <1800 3300>;
+
+	/* special property */
+	ingenic,rst-gpios = <0>;
+};
+
+&msc1 {
+	status = "disable";
+	pinctrl-names ="default","enable", "disable";
+	pinctrl-0 = <&msc1_4bit>;
+	pinctrl-1 = <&rtc32k_enable>;
+	pinctrl-2 = <&rtc32k_disable>;
+
+	sd-uhs-sdr104;
+	max-frequency = <150000000>;
+	bus-width = <4>;
+	voltage-ranges = <1800 3300>;
+	non-removable;
+
+	ingenic,sdio_clk = <1>;
+	keep-power-in-suspend;
+
+	/* special property */
+	ingenic,sdr-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+	ingenic,removal-manual; /*removal-dontcare, removal-nonremovable, removal-removable, removal-manual*/
+
+	bcmdhd_wlan: bcmdhd_wlan {
+		 compatible = "android,bcmdhd_wlan";
+		 ingenic,sdio-irq = <&gpd 20 IRQ_TYPE_LEVEL_HIGH INGENIC_GPIO_NOBIAS>;
+		 ingenic,sdio-reset = <&gpd 19 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	};
+};
+
+
+&msc2 {
+	status = "disable";
+	pinctrl-names ="default";
+	pinctrl-0 = <&msc2_4bit>;
+	/*mmc-hs200-1_8v;*/
+	/*cap-mmc-highspeeda;*/
+	sd-uhs-sdr104;
+	non-removable;
+	max-frequency = <50000000>;
+	bus-width = <4>;
+	non-removable;
+	voltage-ranges = <1800 3300>;
+
+	/* special property */
+	ingenic,sdr-gpios = <&gpb 5 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	ingenic,wp-gpios = <0>;
+	ingneic,cd-gpios = <0>;
+	ingenic,rst-gpios = <0>;
+};
+
+/*
+&mac0 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac0_rmii_p0_normal>, <&mac0_rmii_p1_normal>;
+	pinctrl-1 = <&mac0_rmii_p0_rst>, <&mac0_rmii_p1_normal>;
+	status = "okay";
+	ingenic,no_phy_connect;
+	ingenic,rst-gpio = <&gpb 0 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RMII>;
+	ingenic,mode-reg = <0xb00000e4>;
+};
+
+&mac1 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac1_rmii_p0_normal>, <&mac1_rmii_p1_normal>;
+	pinctrl-1 = <&mac1_rmii_p0_rst>, <&mac1_rmii_p1_normal>;
+	status = "okay";
+	ingenic,no_phy_connect;
+	ingenic,rst-gpio = <&gpb 26 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RMII>;
+	ingenic,mode-reg = <0xb00000e8>;
+};
+*/
+
+&mac0 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac0_rgmii_p0_normal>, <&mac0_rgmii_p1_normal>;
+	pinctrl-1 = <&mac0_rgmii_p0_rst>, <&mac0_rgmii_p1_normal>;
+	status = "disable";
+	ingenic,rst-gpio = <&gpb 0 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RGMII>;
+	ingenic,no_phy_connect;
+	ingenic,mode-reg = <0xb00000e4>;
+	ingenic,rx-clk-delay = <0x66>;
+	ingenic,tx-clk-delay = <0x66>;
+	ingenic,phy-clk-freq = <25000000>;
+};
+
+&mac1 {
+	pinctrl-names = "default", "reset";
+	pinctrl-0 = <&mac1_rgmii_p0_normal>, <&mac1_rgmii_p1_normal>;
+	pinctrl-1 = <&mac1_rgmii_p0_rst>, <&mac1_rgmii_p1_normal>;
+	status = "disable";
+	ingenic,rst-gpio = <&gpb 26 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+	ingenic,rst-ms = <10>;
+	ingenic,mac-mode = <RGMII>;
+	ingenic,no_phy_connect;
+	ingenic,mode-reg = <0xb00000e8>;
+	ingenic,rx-clk-delay = <0x0>;
+	ingenic,tx-clk-delay = <0x0>;
+	ingenic,phy-clk-freq = <25000000>;
+};
+
+
+&sfc {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&sfc_pe>;
+	ingenic,sfc-init-frequency = <200000000>;
+	ingenic,sfc-max-frequency = <400000000>;
+	ingenic,use_ofpart_info  = /bits/ 8 <0>;
+	ingenic,spiflash_param_offset = <0>;
+
+	norflash@0 {
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			/* spi nor flash partition */
+			uboot@0 {
+				label = "uboot";
+				reg = <0x0000000 0x40000>;
+				/*read-only;*/
+			};
+
+			kernel@40000 {
+				label = "kernel";
+				reg = <0x40000 0x300000>;
+			};
+
+			rootfs@360000 {
+				label = "rootfs";
+				reg = <0x360000 0xca0000>;
+			};
+		};
+	};
+
+	nandflash@1 {
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			/* spi nand flash partition */
+			partition@0 {
+				label = "uboot";
+				reg = <0x0000000 0x100000>;
+				/*read-only;*/
+			};
+
+			partition@100000 {
+				label = "kernel";
+				reg = <0x100000 0x800000>;
+			};
+
+			partition@900000 {
+				label = "rootfs";
+				reg = <0x900000 0x2800000>;
+			};
+
+			partition@3100000 {
+				label = "userdata";
+				reg = <0x3100000 0xcf00000>;
+			};
+		};
+	};
+
+};
+
+&pwm {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pwm0_pd>;
+	status = "disable";
+};
+
+&otg {
+	g-use-dma;
+	dr_mode = "otg"; // host,peripheral,otg
+	status = "okay";
+};
+
+&otg_phy {
+	compatible = "ingenic,innophy", "syscon";
+	ingenic,drvvbus-gpio = <&gpe 22 GPIO_ACTIVE_HIGH INGENIC_GPIO_NOBIAS>;
+	status = "okay";
+};
+
+&as_dmic {
+	pinctrl-names = "default";
+	pinctrl-0 = <&dmic_pc_4ch>;
+	status = "disable";
+};
+
+&as_spdif {
+	status = "disable";
+};
+
+&as_aux_mixer {
+	status = "disable";
+};
+
+&as_be_baic {
+	status = "disable";
+};
+
+&as_platform {
+	status = "disable";
+};
+
+&as_fmtcov {
+	status = "disable";
+};
+&as_fe_dsp {
+	status = "disable";
+};
+&icodec {
+	status = "disable";
+};
+
+&dpu {
+	status = "disable";
+	port {
+		dpu_out_ep: endpoint {
+	/*		remote-endpoint = <&panel_ma0060_ep>;*/
+	    };
+	};
+};
+
+
+/ {
+
+	extclk: extclk {
+		clock-frequency = <24000000>;
+	};
+
+	gpio_keys: gpio_keys {
+		   compatible = "gpio-keys";
+
+		   wakeup {
+			   label = "WAKEUP";
+			   linux,code = <KEY_WAKEUP>;
+			   gpios = <&gpe 31 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+			   gpio-key,wakeup;
+		   };
+	   };
+};

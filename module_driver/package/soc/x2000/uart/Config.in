@@ -1,0 +1,435 @@
+menuconfig MD_X2000_UART
+    bool "uart tty驱动 dma模式接收"
+
+config MD_X2000_UART0
+    bool "uart 0"
+
+config MD_X2000_UART0_RX
+    string "    rx gpio"
+    choice from UART0_RX_PINS
+    depends on MD_X2000_UART0
+    default -1
+
+config MD_X2000_UART0_TX
+    string "    tx gpio"
+    choice from UART0_TX_PINS
+    depends on MD_X2000_UART0
+    default -1
+
+config MD_X2000_UART0_CTS
+    string "    cts gpio"
+    choice from UART0_CTS_PINS
+    depends on MD_X2000_UART0
+    default -1
+
+config MD_X2000_UART0_RTS
+    string "    rts gpio"
+    choice from UART0_RTS_PINS
+    depends on MD_X2000_UART0
+    default -1
+
+config MD_X2000_UART1
+    bool "uart 1"
+
+config MD_X2000_UART1_RX
+    string "    rx gpio"
+    choice from UART1_RX_PINS
+    depends on MD_X2000_UART1
+    default -1
+
+config MD_X2000_UART1_TX
+    string "    tx gpio"
+    choice from UART1_TX_PINS
+    depends on MD_X2000_UART1
+    default -1
+
+config MD_X2000_UART1_CTS
+    string "    cts gpio"
+    choice from UART1_CTS_PINS
+    depends on MD_X2000_UART1
+    default -1
+
+config MD_X2000_UART1_RTS
+    string "    rts gpio"
+    choice from UART1_RTS_PINS
+    depends on MD_X2000_UART1
+    default -1
+
+
+config MD_X2000_UART2
+    bool "uart 2"
+
+config MD_X2000_UART2_RX
+    string "    rx gpio"
+    choice from UART2_RX_PINS
+    depends on MD_X2000_UART2
+    default -1
+
+config MD_X2000_UART2_TX
+    string "    tx gpio"
+    choice from UART2_TX_PINS
+    depends on MD_X2000_UART2
+    default -1
+
+config MD_X2000_UART2_CTS
+    string "    cts gpio"
+    default -1
+    depends on MD_X2000_UART2
+
+config MD_X2000_UART2_RTS
+    string "    rts gpio"
+    default -1
+    depends on MD_X2000_UART2
+
+
+config MD_X2000_UART3
+    bool "uart 3"
+
+config MD_X2000_UART3_RX
+    string "    rx gpio"
+    choice from UART3_RX_PINS
+    depends on MD_X2000_UART3
+    default -1
+
+config MD_X2000_UART3_TX
+    string "    tx gpio"
+    choice from UART3_TX_PINS
+    depends on MD_X2000_UART3
+    default -1
+
+config MD_X2000_UART3_CTS
+    string "    cts gpio"
+    choice from UART3_CTS_PINS
+    depends on MD_X2000_UART3
+    default -1
+
+config MD_X2000_UART3_RTS
+    string "    rts gpio"
+    choice from UART3_RTS_PINS
+    depends on MD_X2000_UART3
+    default -1
+
+
+config MD_X2000_UART4
+    bool "uart 4"
+
+config MD_X2000_UART4_RX
+    string "    rx gpio"
+    choice from UART4_RX_PINS
+    depends on MD_X2000_UART4
+    default -1
+
+config MD_X2000_UART4_TX
+    string "    tx gpio"
+    choice from UART4_TX_PINS
+    depends on MD_X2000_UART4
+    default -1
+
+config MD_X2000_UART4_CTS
+    string "    cts gpio"
+    choice from UART4_CTS_PINS
+    depends on MD_X2000_UART4
+    default -1
+
+config MD_X2000_UART4_RTS
+    string "    rts gpio"
+    choice from UART4_RTS_PINS
+    depends on MD_X2000_UART4
+    default -1
+
+
+config MD_X2000_UART5
+    bool "uart 5"
+
+config MD_X2000_UART5_RX
+    string "    rx gpio"
+    choice from UART5_RX_PINS
+    depends on MD_X2000_UART5
+    default -1
+
+config MD_X2000_UART5_TX
+    string "    tx gpio"
+    choice from UART5_TX_PINS
+    depends on MD_X2000_UART5
+    default -1
+
+config MD_X2000_UART5_CTS
+    string "    cts gpio"
+    default -1
+    depends on MD_X2000_UART5
+
+config MD_X2000_UART5_RTS
+    string "    rts gpio"
+    default -1
+    depends on MD_X2000_UART5
+
+
+config MD_X2000_UART6
+    bool "uart 6"
+
+config MD_X2000_UART6_RX
+    string "    rx gpio"
+    choice from UART6_RX_PINS
+    depends on MD_X2000_UART6
+    default -1
+
+config MD_X2000_UART6_TX
+    string "    tx gpio"
+    choice from UART6_TX_PINS
+    depends on MD_X2000_UART6
+    default -1
+
+config MD_X2000_UART6_CTS
+    string "    cts gpio"
+    default -1
+    depends on MD_X2000_UART6
+
+config MD_X2000_UART6_RTS
+    string "    rts gpio"
+    default -1
+    depends on MD_X2000_UART6
+
+
+config MD_X2000_UART7
+    bool "uart 7"
+
+config MD_X2000_UART7_RX
+    string "    rx gpio"
+    choice from UART7_RX_PINS
+    depends on MD_X2000_UART7
+    default -1
+
+config MD_X2000_UART7_TX
+    string "    tx gpio"
+    choice from UART7_TX_PINS
+    depends on MD_X2000_UART7
+    default -1
+
+config MD_X2000_UART7_CTS
+    string "    cts gpio"
+    default -1
+    depends on MD_X2000_UART7
+
+config MD_X2000_UART7_RTS
+    string "    rts gpio"
+    default -1
+    depends on MD_X2000_UART7
+
+
+config MD_X2000_UART8
+    bool "uart 8"
+
+config MD_X2000_UART8_RX
+    string "    rx gpio"
+    choice from UART8_RX_PINS
+    depends on MD_X2000_UART8
+    default -1
+
+config MD_X2000_UART8_TX
+    string "    tx gpio"
+    choice from UART8_TX_PINS
+    depends on MD_X2000_UART8
+    default -1
+
+config MD_X2000_UART8_CTS
+    string "    cts gpio"
+    default -1
+    depends on MD_X2000_UART8
+
+config MD_X2000_UART8_RTS
+    string "    rts gpio"
+    default -1
+    depends on MD_X2000_UART8
+
+
+config MD_X2000_UART9
+    bool "uart 9"
+
+config MD_X2000_UART9_RX
+    string "    rx gpio"
+    choice from UART9_RX_PINS
+    depends on MD_X2000_UART9
+    default -1
+
+config MD_X2000_UART9_TX
+    string "    tx gpio"
+    choice from UART9_TX_PINS
+    depends on MD_X2000_UART9
+    default -1
+
+config MD_X2000_UART9_CTS
+    string "    cts gpio"
+    default -1
+    depends on MD_X2000_UART9
+
+config MD_X2000_UART9_RTS
+    string "    rts gpio"
+    default -1
+    depends on MD_X2000_UART9
+
+endmenu
+
+
+
+array UART0_RX_PINS
+    string "uart0 rx 引脚"
+    item "PD23" PD23
+    item "GPIO_NULL  " -1
+
+array UART0_TX_PINS
+    string "uart0 tx 引脚"
+    item "PD24" PD24
+    item "GPIO_NULL  " -1
+
+array UART0_CTS_PINS
+    string "uart0 cts 引脚"
+    item "PD25" PD25
+    item "GPIO_NULL  " -1
+
+array UART0_RTS_PINS
+    string "uart0 rts 引脚"
+    item "PD26" PD26
+    item "GPIO_NULL  " -1
+
+
+array UART1_RX_PINS
+    string "uart1 rx 引脚"
+    item "PC23" PC23
+    item "GPIO_NULL  " -1
+
+array UART1_TX_PINS
+    string "uart1 tx 引脚"
+    item "PC24" PC24
+    item "GPIO_NULL  " -1
+
+array UART1_CTS_PINS
+    string "uart1 cts 引脚"
+    item "PC21" PC21
+    item "GPIO_NULL  " -1
+
+array UART1_RTS_PINS
+    string "uart1 rts 引脚"
+    item "PC22" PC22
+    item "GPIO_NULL  " -1
+
+
+array UART2_RX_PINS
+    string "uart2 rx 引脚"
+    item "PD30" PD30
+    item "GPIO_NULL  " -1
+
+array UART2_TX_PINS
+    string "uart2 tx 引脚"
+    item "PD31" PD31
+    item "GPIO_NULL  " -1
+
+
+array UART3_RX_PINS
+    string "uart3 rx 引脚"
+    item "PD02" PD02
+    item "PC25" PC25
+    item "GPIO_NULL  " -1
+
+array UART3_TX_PINS
+    string "uart3 tx 引脚"
+    item "PD03" PD03
+    item "PC26" PC26
+    item "GPIO_NULL  " -1
+
+array UART3_CTS_PINS
+    string "uart3 cts 引脚"
+    item "PD00" PD00
+    item "PC27" PC27
+    item "GPIO_NULL  " -1
+
+array UART3_RTS_PINS
+    string "uart3 cts 引脚"
+    item "PD01" PD01
+    item "PC28" PC28
+    item "GPIO_NULL  " -1
+
+
+array UART4_RX_PINS
+    string "UART4 rx 引脚"
+    item "PA02" PA02
+    item "PC11" PC11
+    item "GPIO_NULL  " -1
+
+array UART4_TX_PINS
+    string "UART4 tx 引脚"
+    item "PA03" PA03
+    item "PC12" PC12
+    item "GPIO_NULL  " -1
+
+array UART4_CTS_PINS
+    string "UART4 cts 引脚"
+    item "PA00" PA00
+    item "PC09" PC09
+    item "GPIO_NULL  " -1
+
+array UART4_RTS_PINS
+    string "UART4 rts 引脚"
+    item "PA01" PA01
+    item "PC10" PC10
+    item "GPIO_NULL  " -1
+
+
+array UART5_RX_PINS
+    string "UART5 rx 引脚"
+    item "PA04" PA04
+    item "PC05" PC05
+    item "GPIO_NULL  " -1
+
+array UART5_TX_PINS
+    string "UART5 tx 引脚"
+    item "PA05" PA05
+    item "PC06" PC06
+    item "GPIO_NULL  " -1
+
+
+array UART6_RX_PINS
+    string "UART6 rx 引脚"
+    item "PA06" PA06
+    item "PC07" PC07
+    item "GPIO_NULL  " -1
+
+array UART6_TX_PINS
+    string "UART6 tx 引脚"
+    item "PA07" PA07
+    item "PC08" PC08
+    item "GPIO_NULL  " -1
+
+
+array UART7_RX_PINS
+    string "UART7 rx 引脚"
+    item "PA08" PA08
+    item "PC01" PC01
+    item "GPIO_NULL  " -1
+
+array UART7_TX_PINS
+    string "UART7 tx 引脚"
+    item "PA09" PA09
+    item "PC02" PC02
+    item "GPIO_NULL  " -1
+
+
+array UART8_RX_PINS
+    string "UART8 rx 引脚"
+    item "PB28" PB28
+    item "GPIO_NULL  " -1
+
+array UART8_TX_PINS
+    string "UART8 tx 引脚"
+    item "PB29" PB29
+    item "GPIO_NULL  " -1
+
+
+array UART9_RX_PINS
+    string "UART9 rx 引脚"
+    item "PB30" PB30
+    item "GPIO_NULL  " -1
+
+array UART9_TX_PINS
+    string "UART9 tx 引脚"
+    item "PB31" PB31
+    item "GPIO_NULL  " -1

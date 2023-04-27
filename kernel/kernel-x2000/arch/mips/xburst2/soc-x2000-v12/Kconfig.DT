@@ -1,0 +1,47 @@
+config DT_HALLEY5_V10
+	bool "x2000-v12 halley5_v10"
+
+config DT_HALLEY5_V20
+	bool "x2000-v12 halley5_v20"
+
+config DT_HALLEY5_V30
+	bool "x2000-v12 halley5_v30"
+
+config DT_HALLEY5_V20_QT
+	bool "x2000-v12 halley5_v20_qt"
+
+config DT_ZEBRA
+	bool "x2000-v12 zebra"
+
+config DT_ZEBRA_ISP
+	bool "x2000-v12 zebra with isp camera board."
+
+config DT_ZEBRA_CIM
+	bool "x2000-v12 zebra with cim camera board."
+
+config DT_X2000_EVB
+	bool "x2000-v12 x2000_evb"
+
+config DT_X2000_MODULE_BASE
+	bool "x2000-v12 base for module drivers"
+
+config DT_WICOM_CUSTOMER
+	bool "x2000-v12 Wicom Customer platform"
+
+config DT_FULLCOLOR_7INCH
+	bool "x2000-v12 Fullcolor 7inch platform"
+
+config DT_ZEBRA_POWER
+	bool "x2000-v12 zebra with cim power test."
+
+config DT_WICOM_HALLEY5_PANEL
+    bool "x2000-v12 wicom halley5 panel."
+
+config DT_X2000_YIAN_V10
+    bool "x2000 yian v10 board"
+
+config DT_LIFESMART_480P
+    bool "x2000 liftsmart_86 480p"
+
+config DT_X2000_HUABY
+    bool "x2000 huaby panel 1024 x 600"

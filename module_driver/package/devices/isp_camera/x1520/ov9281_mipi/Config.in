@@ -1,0 +1,36 @@
+menuconfig MD_X1520_SENSOR_ISP_OV9281_MIPI
+    bool "sensor ov9281 (mipi,raw10)"
+    depends on MD_SOC_X1520
+
+choice "        ov9281 mipi 分辨率选择"
+    default MD_X1520_OV9281_MIPI_1280X720
+
+config MD_X1520_OV9281_MIPI_1280X800
+    bool "1280*800"
+
+config MD_X1520_OV9281_MIPI_1280X720
+    bool "1280*720"
+
+config MD_X1520_OV9281_MIPI_640X480
+    bool "640*480"
+
+config MD_X1520_OV9281_MIPI_640X400
+    bool "640*400"
+
+endchoice
+
+config MD_X1520_OV9281_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1520_OV9281_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1520_OV9281_ISPCLK
+    int "isp clk (isp 时钟频率)"
+    default 90000000
+
+endmenu # MD_X1520_SENSOR_OV9281_MIPI

@@ -1,0 +1,3 @@
+config MD_SPI_DEVICE
+    bool "spi设备驱动模块（spi设备驱动端）"
+    default n

@@ -1,0 +1,48 @@
+menuconfig MD_X2000_SENSOR_SC1345_MIPI
+    bool "sensor sc1345 (mipi,raw8)"
+    select MD_X2000_CAMERA_VIC
+    depends on MD_SOC_X2000_BASE
+
+
+config MD_X2000_SC1345_SENSOR_NAME
+    string "sensor module name"
+    default "sc1345"
+
+config MD_X2000_SC1345_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_SC1345_GPIO_PWDN
+    string "gpio pwdn(sensor power down 引脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_SC1345_GPIO_AVDD
+    string "gpio avdd(sensor AVDD电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_SC1345_GPIO_DVDD
+    string "gpio dvdd(sensor DVDD电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_SC1345_GPIO_DOVDD
+    string "gpio dovdd(sensor DOVDD电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_SC1345_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+config MD_X2000_SC1345_I2C_ADDR
+	int "i2c device addr (sensor的i2c地址)"
+	default -1
+
+config MD_X2000_SC1345_CAM_BUSNUM
+	int "cam bus num (sensor 挂接的vic/cim总线号)"
+	default -1
+
+endmenu

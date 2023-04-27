@@ -1,0 +1,59 @@
+menuconfig DRM_INGENIC
+	tristate "DRM Support for Ingenic LCDC Display Controller"
+	depends on DRM && OF
+	select DRM_KMS_HELPER
+	select DRM_KMS_FB_HELPER
+	select DRM_KMS_CMA_HELPER
+	select DRM_GEM_CMA_HELPER
+	select DRM_PANEL
+	select VIDEOMODE_HELPERS
+	select BACKLIGHT_CLASS_DEVICE
+	select BACKLIGHT_LCD_SUPPORT
+	help
+	  Choose this option if you have an Ingenic SoC with LCDC display
+	  controller
+
+config DRM_INGENIC_DISPLAYS_V10
+	tristate "Ingenic DPU Display Controller"
+	depends on DRM_INGENIC
+	help
+	  Choose this option if you want to use ingenic dpu controller.
+
+config DRM_INGENIC_CMP_CRTC
+	tristate "Ingenic Composition Display Controller"
+	depends on DRM_INGENIC_DISPLAYS_V10
+	help
+	  Select Composition Display Controller for 4 layers.
+
+config DRM_INGENIC_SRD_CRTC
+	tristate "Ingenic Simple Read Display Controller"
+	depends on DRM_INGENIC_DISPLAYS_V10
+	help
+	  Select Simple Read Display Controller for low consumption.
+
+choice
+	prompt "Ingenic drm display interfaces select"
+	depends on DRM_INGENIC_DISPLAYS_V10
+	default CONFIG_DRM_INGENIC_DISPLAY_INTERFACE_TFT
+
+config DRM_INGENIC_DISPLAY_INTERFACE_TFT
+	bool "dpi display interface for tft lcd"
+	help
+	  Select for tft lcd
+
+config DRM_INGENIC_DISPLAY_INTERFACE_SLCD
+	bool "dbi display interface for smart lcd"
+	help
+	  Select for smart lcd
+
+config DRM_INGENIC_DISPLAY_INTERFACE_MIPI_SLCD
+	bool "mipi-dsi display interface for smart lcd"
+	help
+	  Select for mipi-dsi smart lcd
+
+config DRM_INGENIC_DISPLAY_INTERFACE_MIPI_TFT
+	bool "mipi-dsi display interface for tft lcd"
+	help
+	  Select for mipi-dsi tft lcd
+endchoice
+source "drivers/gpu/drm/ingenic/panel/Kconfig"

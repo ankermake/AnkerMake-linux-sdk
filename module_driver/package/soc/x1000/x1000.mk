@@ -1,0 +1,14 @@
+package-$(MD_X1000_SPI) += package/soc/x1000/spi/spi.mk
+package-$(MD_X1000_EFUSE) += package/soc/x1000/efuse/efuse.mk
+package-$(MD_X1000_PWM) += package/soc/x1000/pwm/pwm.mk
+package-$(MD_X1000_WATCHDOG) += package/soc/x1000/watchdog/watchdog.mk
+package-$(MD_X1000_FB) += package/soc/x1000/fb/fb.mk
+package-$(MD_X1000_I2C) += package/soc/x1000/i2c/i2c.mk
+package-$(MD_X1000_DMIC) += package/soc/x1000/dmic/dmic.mk
+package-$(MD_X1000_CAMERA) += package/soc/x1000/camera/camera.mk
+package-$(MD_X1000_MAC) += package/soc/x1000/mac/mac.mk
+package-$(MD_X1000_GPIO) += package/soc/x1000/gpio/gpio.mk
+package-$(MD_X1000_UTILS) += package/soc/x1000/utils/utils.mk
+package-$(MD_X1000_ICODEC) += package/soc/x1000/icodec/icodec.mk
+package-$(MD_X1000_AIC) += package/soc/x1000/aic/aic.mk
+package-$(MD_X1000_MCU) += package/soc/x1000/mcu/mcu.mk

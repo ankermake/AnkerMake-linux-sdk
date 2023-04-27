@@ -1,0 +1,13 @@
+package-y += package/devices/keyboard/keyboard.mk
+package-y += package/devices/lcd/lcd.mk
+package-y += package/devices/backlight/backlight.mk
+package-y += package/devices/touchscreen/touchscreen.mk
+package-y += package/devices/camera/camera.mk
+package-y += package/devices/codec/codec.mk
+package-y += package/devices/wireless/wireless.mk
+package-y += package/devices/Ethernet/Ethernet.mk
+package-y += package/devices/alsa-sound-card/alsa-sound-card.mk
+package-y += package/devices/regulator/regulator.mk
+package-y += package/devices/other/other.mk
+package-y += package/devices/isp_camera/isp_camera.mk
+package-y += package/devices/pmu/pmu.mk

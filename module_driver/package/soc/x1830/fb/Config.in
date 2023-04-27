@@ -1,0 +1,23 @@
+menuconfig MD_X1830_FB
+    bool "framebuffer 驱动(lcd控制器)"
+
+config MD_X1830_FB_PAN_DISPLAY_SYNC
+    bool "pan_display 调用时等待帧刷新完成(单缓冲时选中)"
+    default y
+
+config MD_X1830_FB_LAYER0_FRAMES
+    int "fb0 的帧缓冲数"
+    default 1
+
+config MD_X1830_FB_LAYER1_ENABLE
+    bool "使能fb1(fb1在底层,fb0在顶层)"
+
+config MD_X1830_FB_LAYER1_FRAMES
+    int "fb1 的帧缓冲数(fb1使能时生效)"
+    default 1
+
+config MD_X1830_FB_LAYER0_ALPHA
+    int "fb0 的透明度(fb1使能时生效,0-255)"
+    default 128
+
+endmenu

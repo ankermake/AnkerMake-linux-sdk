@@ -1,0 +1,93 @@
+comment "tx-isp camera sensor drivers v120"
+
+
+config TX_ISP_CAMERA_SC2235
+	tristate "sc2235 camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the sc2235 sensor
+
+config TX_ISP_CAMERA_OV9732
+	tristate "ov9732 camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the ov9732 sensor
+
+config TX_ISP_CAMERA_GC2375A
+	tristate "gc2375a camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the gc2375a sensor
+
+config TX_ISP_CAMERA_OV9281_DVP
+	tristate "ov9281 dvp camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the ov9281 sensor
+
+config TX_ISP_CAMERA_OV9281_MIPI
+	tristate "ov9281 mipi camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the ov9281 sensor
+if TX_ISP_CAMERA_OV9281_MIPI
+	choice
+	    prompt "ov9281 mipi resolution select"
+	    default OV9281_MIPI_1280X720
+
+	    config OV9281_MIPI_1280X800
+			bool "1280*800"
+
+	    config OV9281_MIPI_1280X720
+			bool "1280*720"
+
+	    config OV9281_MIPI_640X480
+			bool "640*480"
+
+		config OV9281_MIPI_640X400
+			bool "640*400"
+	endchoice
+endif	  
+
+config TX_ISP_CAMERA_SC031GS
+	tristate "sc031gs camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the sc031gs sensor
+
+config TX_ISP_CAMERA_TW9912
+	tristate "tw9912 camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the tw9912 sensor
+	  
+config TX_ISP_CAMERA_OV5693
+	tristate "ov5693 camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the ov5693 sensor
+
+config TX_ISP_CAMERA_SC132GS
+	tristate "sc132gs camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the sc132gs sensor
+if TX_ISP_CAMERA_SC132GS
+	choice
+	    prompt "sc132gs resolution & fps select"
+	    default SC123GS_1072X1280_30FPS
+
+	    config SC123GS_1072X1280_30FPS
+			bool "1072*1280 30fps"
+
+	    config SC123GS_1072X1280_60FPS
+			bool "1072*1280 60fps"
+	endchoice
+endif	 	  
+
+config TX_ISP_CAMERA_AR0144_MIPI
+	tristate "ar0144_mipi camera support"
+	depends on I2C && VIDEO_TX_ISP_V120
+	help
+	  This is a tx-isp camera driver for the ar0144_mipi sensor
+

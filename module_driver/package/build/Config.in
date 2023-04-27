@@ -1,0 +1,11 @@
+menu "通用选项"
+
+config MD_INIT_ORDER_FILE
+    string "定义驱动初始化顺序的文件"
+    default package/default_driver_init_order.mk
+
+config MD_INIT_START_FILE
+    string "开机启动时调用模块驱动的文件"
+    default package/S11module_driver_default
+
+endmenu

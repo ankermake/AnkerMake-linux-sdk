@@ -1,0 +1,34 @@
+&i2c0 {
+	status = "okay";
+	clock-frequency = <100000>;
+	timeout = <1000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c0_pa>;
+
+	sc0132gs:sc0132gs@0x30 {
+		status = "ok";
+		compatible = "ovti,sc0132gs";
+		reg = <0x30>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cim0_vic_mclk_pc>;
+
+		/*ingenic,rst-gpio = <&gpc 4 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;*/
+		ingenic,vcc-en-gpio = <&gpc 0 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;
+		/*ingenic,ircutp-gpio = <&gpb 12 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;*/
+		/*ingenic,ircutn-gpio = <&gpb 14 GPIO_ACTIVE_LOW INGENIC_GPIO_NOBIAS>;*/
+
+		port {
+			sc0132gs_ep0:endpoint {
+				remote-endpoint = <&isp0_ep>;
+			};
+		};
+	};
+
+};
+
+&isp0_ep {
+	remote-endpoint = <&sc0132gs_ep0>;
+	data-lanes = <0 1>;
+	clk-lanes = <2>;
+};
+

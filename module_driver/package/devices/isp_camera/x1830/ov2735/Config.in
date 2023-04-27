@@ -1,0 +1,57 @@
+menuconfig MD_X1830_SENSOR_ISP_OV2735
+    bool "sensor ov2735 (dvp,raw10)"
+    depends on MD_SOC_X1830
+
+choice "        ov2735 dvp 分辨率选择"
+    default MD_X1830_OV2735_1920X1080
+
+config MD_X1830_OV2735_640X1072
+    bool "640*1072"
+
+config MD_X1830_OV2735_1280X1080
+    bool "1280*1080"
+
+config MD_X1830_OV2735_1440X1080
+    bool "1440*1080"
+
+config MD_X1830_OV2735_1920X1080
+    bool "1920*1080"
+
+endchoice
+
+config MD_X1830_OV2735_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_OV2735_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_OV2735_GPIO_POWER
+    string "gpio power(sensor 电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_OV2735_GPIO_I2C_SEL
+    string "gpio i2c select(sensor i2c 使能脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X1830_OV2735_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+source soc/x1830/camera/dvp_gpio_func.in
+
+config MD_X1830_OV2735_DVP_GPIO_FUNC
+    string "dvp_gpio_func(dvp 接口选择使用的位数)"
+    choice from SENSOR_DVP_GPIO_FUNC
+    default -1
+
+config MD_X1830_OV2735_ISPCLK
+    int "isp clk (isp 时钟频率)"
+    default 90000000
+
+endmenu # MD_X1830_SENSOR_OV2735

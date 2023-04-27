@@ -1,0 +1,41 @@
+menuconfig MD_X2000_SENSOR_IMX335_MIPI
+    bool "sensor imx335 (mipi,raw10)"
+    select MD_X2000_CAMERA_VIC
+    depends on MD_SOC_X2000_BASE
+
+config MD_X2000_IMX335_SENSOR_NAME
+    string "sensor module name"
+    default "imx335-vis"
+
+config MD_X2000_IMX335_GPIO_RESET
+    string "gpio reset(sensor 复位脚)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_IMX335_GPIO_PWDN
+    string "gpio pwdn(sensor 电源控制引脚, 低有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_IMX335_GPIO_POWER
+    string "gpio power(sensor 电源控制引脚, 高有效)"
+    choice from SOC_GPIO_PINS
+    default -1
+
+config MD_X2000_IMX335_SENSOR_REGULATOR_NAME
+	string "regulator name(通过名字获取 sensor module 电源管理器)"
+	default "GPIO-POWER0"
+
+config MD_X2000_IMX335_I2C_BUSNUM
+    int "i2c bus num (sensor 挂接的i2c总线号)"
+    default -1
+
+config MD_X2000_IMX335_I2C_ADDR
+	int "i2c device addr (sensor的i2c地址)"
+	default -1
+
+config MD_X2000_IMX335_CAM_BUSNUM
+	int "cam bus num (sensor 挂接的vic/cim总线号)"
+	default -1
+
+endmenu
